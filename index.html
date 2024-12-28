@@ -26,16 +26,16 @@
             padding: 0;
             direction: rtl;
             text-align: right;
-            background: linear-gradient(to top left, #1e88e5, #0d47a1);
-            animation: gradientBackground 15s infinite alternate;
+            background: linear-gradient(to top right, #1e88e5, #0d47a1);
+            animation: gradientBackground 5s infinite alternate;
             color: #333;
             overflow-y: auto;
             overflow-x: hidden;
         }
 
         @keyframes gradientBackground {
-            0% { background-position: 100% 0%; }
-            100% { background-position: 0% 100%; }
+            0% { background-color: #1e88e5; }
+            100% { background-color: #0d47a1; }
         }
 
         form {
@@ -79,6 +79,7 @@
             cursor: pointer;
             border-radius: 4px;
             font-size: 16px;
+            font-family: 'Vazir', Arial, sans-serif;
             box-sizing: border-box;
             text-align: center;
             transition: box-shadow 0.3s ease, background 0.3s ease;
@@ -140,13 +141,12 @@
         }
 
         #noteContainer p:nth-child(3) {
-            font-weight: normal;
-            font-size: 14px;
+            font-weight: bold;
         }
 
         h1 {
             text-align: center;
-            font-family: 'IRANSansBold', Arial, sans-serif;
+            font-family: 'Vazir', Arial, sans-serif;
             font-size: 50px;
             font-weight: bold;
             margin: 40px 0;
@@ -304,10 +304,10 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required style="width: calc(100% - 20px);"></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required style="width: calc(100% - 20px);"></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
         <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
@@ -341,6 +341,15 @@
             saveButton.disabled = progress < 100;
         }
 
+        function toggleOtherVideoDimensions(select) {
+            const otherDimensions = document.getElementById('otherVideoDimensions');
+            if (select.value === 'سایر') {
+                otherDimensions.style.display = 'block';
+            } else {
+                otherDimensions.style.display = 'none';
+            }
+        }
+
         form.addEventListener('input', updateProgress);
 
         saveButton.addEventListener('click', () => {
@@ -358,6 +367,8 @@
 
             if (valid) {
                 alert('فرم به صورت پی‌دی‌اف ذخیره شد');
+                popup.style.display = 'block';
+                popupBackground.style.display = 'block';
             } else {
                 alert('لطفاً تمام بخش‌های الزامی را تکمیل کنید.');
             }
