@@ -310,8 +310,8 @@
         }
 
         async function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+            async function generatePDF() {
+              const pdf = new jsPDF();
 
             const loadFont = async (url, fontName) => {
                 const fontData = await fetch(url).then(res => res.arrayBuffer());
@@ -337,7 +337,7 @@
                 }
             });
 
-            pdf.save('brief.pdf');
+            pdf.save('brief.pdf')
         }
 
         form.addEventListener('input', () => {
