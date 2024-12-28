@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بریف پروژه</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 10px;
+            direction: rtl;
+            text-align: right;
+            background: linear-gradient(35deg, #1e88e5, #0d47a1);
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 95%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #progressBar {
+            height: 10px;
+            width: 0;
+            background: linear-gradient(90deg, #1e88e5, #0d47a1);
+            transition: width 0.5s ease-in-out;
+            border-radius: 5px;
+        }
+
+        #progressContainer {
+            margin: 15px 0;
+            background: #f3f3f3;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 10px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        #progressText {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+        }
+
+        button[disabled] {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <form id="briefForm">
+        <h1>بریف پروژه</h1>
+
+        <label for="brandName">1. نام برند:</label>
+        <input type="text" id="brandName" name="نام برند" required>
+
+        <label for="clientName">2. نام کارفرما:</label>
+        <input type="text" id="clientName" name="نام کارفرما" required>
+
+        <label for="email">3. آدرس ایمیل:</label>
+        <input type="email" id="email" name="آدرس ایمیل" required>
+
+        <label for="phoneNumber">4. شماره تماس:</label>
+        <input type="text" id="phoneNumber" name="شماره تماس" required>
+
+        <label for="productionGoal">5. هدف از تولید:</label>
+        <select id="productionGoal" name="هدف از تولید" onchange="toggleOtherProductionGoal(this)" required>
+            <option value="">انتخاب کنید</option>
+            <option value="فروش و بازاریابی">فروش و بازاریابی</option>
+            <option value="معرفی محصول">معرفی محصول</option>
+            <option value="برندینگ">برندینگ</option>
+            <option value="سایر">سایر</option>
+        </select>
+        <input type="text" id="otherProductionGoal" name="هدف دیگر" placeholder="هدف دیگر را وارد کنید" style="display: none;">
+
+        <label for="duration">6. مدت زمان پیشنهادی:</label>
+        <select id="duration" name="مدت زمان پیشنهادی" required>
+            <option value="">انتخاب کنید</option>
+            <option value="کمتر از 30 ثانیه">کمتر از 30 ثانیه</option>
+            <option value="30 تا 60 ثانیه">30 تا 60 ثانیه</option>
+            <option value="60 تا 90 ثانیه">60 تا 90 ثانیه</option>
+            <option value="بیشتر از 90 ثانیه">بیشتر از 90 ثانیه</option>
+        </select>
+
+        <label for="deliveryDate">7. تاریخ تحویل پیشنهادی:</label>
+        <select id="deliveryDate" name="تاریخ تحویل پیشنهادی" required>
+            <option value="">انتخاب کنید</option>
+            <option value="ده روزه">ده روزه</option>
+            <option value="بیست روزه">بیست روزه</option>
+            <option value="سی روزه">سی روزه</option>
+            <option value="فوری">فوری</option>
+        </select>
+
+        <label for="competitorDifference">8. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" rows="4" required></textarea>
+
+        <label for="proposedBudget">9. بودجه پیشنهادی:</label>
+        <select id="proposedBudget" name="بودجه پیشنهادی" required>
+            <option value="">انتخاب کنید</option>
+            <option value="تا 10 میلیون">تا 10 میلیون</option>
+            <option value="تا 20 میلیون">تا 20 میلیون</option>
+            <option value="تا 30 میلیون">تا 30 میلیون</option>
+            <option value="بیش از 30 میلیون">بیش از 30 میلیون</option>
+        </select>
+
+        <label for="brandImage">10. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
+        <textarea id="brandImage" name="تصویر برند" rows="4" required></textarea>
+
+        <label for="audienceReaction">11. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
+        <textarea id="audienceReaction" name="واکنش مخاطب" rows="4" required></textarea>
+
+        <label for="scenario">12. سناریو پیشنهادی (درصورت نیاز):</label>
+        <textarea id="scenario" name="سناریو پیشنهادی" rows="4"></textarea>
+
+        <label for="additionalNotes">13. توضیحات تکمیلی (درصورت نیاز):</label>
+        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
+
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+        </div>
+        <div id="progressText">0% تکمیل شده</div>
+
+        <button type="button" id="saveButton" onclick="validateAndSave()" disabled>دانلود فایل بریف</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('briefForm');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const saveButton = document.getElementById('saveButton');
+
+        form.addEventListener('input', updateProgress);
+
+        function updateProgress() {
+            const requiredInputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+            const total = requiredInputs.length;
+            let filled = 0;
+
+            requiredInputs.forEach(input => {
+                if (input.value.trim()) {
+                    filled++;
+                }
+            });
+
+            const progress = Math.round((filled / total) * 100);
+            progressBar.style.width = progress + '%';
+            progressText.textContent = `${progress}% تکمیل شده`;
+
+            saveButton.disabled = progress < 100;
+        }
+
+        async function validateAndSave() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            // Load font from GitHub
+            const fontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/Vazir-Regular.ttf';
+            const fontResponse = await fetch(fontUrl);
+            const fontData = await fontResponse.arrayBuffer();
+            pdf.addFileToVFS('Vazir-Regular.ttf', btoa(String.fromCharCode(...new Uint8Array(fontData))));
+            pdf.addFont('Vazir-Regular.ttf', 'Vazir', 'normal');
+            pdf.setFont('Vazir');
+
+            const formData = new FormData(form);
+            let y = 20;
+
+            formData.forEach((value, key) => {
+                pdf.text(`${key}: ${value}`, 10, y, { align: 'right' });
+                y += 10;
+            });
+
+            pdf.save('brief.pdf');
+        }
+
+        function toggleOtherProductionGoal(select) {
+            const otherGoal = document.getElementById('otherProductionGoal');
+            otherGoal.style.display = select.value === 'سایر' ? 'block' : 'none';
+            if (select.value !== 'سایر') {
+                otherGoal.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
