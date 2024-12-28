@@ -261,6 +261,11 @@
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
 
+            // اضافه کردن فونت فارسی
+            pdf.addFileToVFS("Vazir-Regular.ttf", "BASE64_ENCODED_FONT_HERE");
+            pdf.addFont("Vazir-Regular.ttf", "Vazir", "normal");
+            pdf.setFont("Vazir");
+
             const formData = new FormData(form);
             let y = 40;
 
@@ -271,7 +276,7 @@
             formData.forEach((value, key) => {
                 if (value.trim()) {
                     pdf.setFontSize(12);
-                    pdf.text(`${key}: ${value}`, 10, y, { align: 'right' });
+                    pdf.text(`${key}: ${value}`, 190, y, { align: 'right' });
                     y += 10;
                 }
             });
