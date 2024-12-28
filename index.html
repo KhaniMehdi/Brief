@@ -15,11 +15,6 @@
             src: url('https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf') format('truetype');
         }
 
-        @font-face {
-            font-family: 'IRANSansRegular';
-            src: url('https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXRegular.ttf') format('truetype');
-        }
-
         body {
             font-family: 'Vazir', Arial, sans-serif;
             margin: 0;
@@ -85,7 +80,7 @@
             transition: box-shadow 0.3s ease, background 0.3s ease;
         }
 
-        button:hover {
+        button:hover:enabled {
             background: #0056b3;
             box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
         }
@@ -142,14 +137,19 @@
 
         #noteContainer p:nth-child(3) {
             font-weight: bold;
+            font-size: 14px;
+        }
+
+        #noteContainer p:nth-child(3) span {
+            font-weight: normal;
         }
 
         h1 {
             text-align: center;
             font-family: 'Vazir', Arial, sans-serif;
-            font-size: 50px;
+            font-size: 40px;
             font-weight: bold;
-            margin: 40px 0;
+            margin: 20px 10px;
         }
 
         #popup {
@@ -228,13 +228,13 @@
     <div id="noteContainer">
         <p>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
         <p>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
-        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<br>(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</p>
+        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<span>(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
     </div>
 
     <div id="popupBackground"></div>
     <div id="popup">
         <p>مرسی از شما بابت کامل کردن بریف<br>
-        شما نسخه پی دی اف این فرم رو دریافت کردید و اگر نیاز به اصلاح نیست فایل رو برای من هم ارسال بفرمایید<br>
+        فایل  PDF برای شما ارسال شد، بررسی بفرمایید و در صورت تایید برای ما ارسال کنید<br>
         ممنونم 🌹</p>
         <button onclick="closePopup()">بستن</button>
     </div>
@@ -271,7 +271,7 @@
             <option value="1080p افقی">1080p افقی</option>
             <option value="سایر">سایر</option>
         </select>
-        <input type="text" id="otherVideoDimensions" name="ابعاد دیگر" placeholder="مثال: 4K یا ابعاد دلخواه" style="display: none;">
+        <input type="text" id="otherVideoDimensions" name="ابعاد دیگر" placeholder="مثال: 4K یا ابعاد دلخواه" style="display: none;" required>
 
         <label for="duration">7. مدت زمان پیشنهادی:</label>
         <select id="duration" name="مدت زمان پیشنهادی" required>
@@ -304,10 +304,10 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required style="width: calc(100% - 20px);"></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required style="width: calc(100% - 20px);"></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
         <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
@@ -347,6 +347,7 @@
                 otherDimensions.style.display = 'block';
             } else {
                 otherDimensions.style.display = 'none';
+                otherDimensions.value = '';
             }
         }
 
