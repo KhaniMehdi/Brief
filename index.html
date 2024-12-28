@@ -306,15 +306,15 @@
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
 
-    const margin = 20; // حاشیه کلی
+    const margin = 20 ; // حاشیه کلی
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
     const columnGap = 10; // فاصله بین ستون‌ها
     const columnWidth = (pageWidth - 2 * margin - columnGap) / 2; // عرض ستون‌ها
-    const lineHeight = 10; // فاصله بین خطوط
+    const lineHeight = 17; // فاصله بین خطوط
     const fontSizeHeader = 35; // اندازه فونت هدر
     const fontSizeText = 12; // اندازه فونت متن
-    let y = margin + 100; // فاصله اولیه پس از هدر
+    let y = margin + 80; // فاصله اولیه پس از هدر
     let xColumn1 = margin + columnWidth + columnGap + (-25);
     let xColumn2 = margin + (-25);
 
