@@ -10,11 +10,6 @@
             src: url('https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf') format('truetype');
         }
 
-        @font-face {
-            font-family: 'IRANSansBold';
-            src: url('https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf') format('truetype');
-        }
-
         body {
             font-family: 'Vazir', Arial, sans-serif;
             margin: 0;
@@ -53,14 +48,6 @@
             box-sizing: border-box;
         }
 
-        input.invalid {
-            border-color: red;
-        }
-
-        textarea {
-            resize: none;
-        }
-
         button {
             display: inline-block;
             width: calc(100% - 40px);
@@ -88,15 +75,6 @@
             cursor: not-allowed;
         }
 
-        .download-btn {
-            background: #28a745;
-        }
-
-        .download-btn:hover:enabled {
-            background: #218838;
-            box-shadow: 0 0 10px rgba(40, 167, 69, 0.7);
-        }
-
         #progressContainer {
             margin: 15px 20px;
             background: #f3f3f3;
@@ -121,56 +99,6 @@
             text-align: center;
         }
 
-        #noteContainer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
-            font-family: 'Vazir', Arial, sans-serif;
-            font-size: 14px;
-            line-height: 2;
-            color: #333;
-            box-sizing: border-box;
-            animation: glow 0.8s infinite alternate;
-        }
-
-        @keyframes glow {
-            0% {
-                box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            }
-            100% {
-                box-shadow: 0 0 20px rgba(255, 255, 255, 1);
-            }
-        }
-
-        h1 {
-            text-align: center;
-            font-family: 'Vazir', Arial, sans-serif;
-            font-size: 36px;
-            font-weight: bold;
-            margin: 20px 10px;
-        }
-
-        p.bold {
-            font-weight: bold;
-        }
-
-        #popupBackground {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            z-index: 99;
-        }
-
         #popup {
             display: none;
             position: fixed;
@@ -181,7 +109,6 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-            z-index: 100;
             text-align: center;
         }
 
@@ -194,92 +121,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <div id="noteContainer">
-        <p class="bold">لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
-        <p class="bold">زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
-        <p><b>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.</b><span> (این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
-    </div>
-
-    <div id="popupBackground"></div>
-    <div id="popup">
-        <p>مرسی از شما بابت تکمیل بریف<br>
-        فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید.<br>
-        ممنونم 🌹</p>
-        <div>
-            <button class="download-btn" id="downloadButton">دانلود PDF</button>
-            <button onclick="closePopup()">بستن</button>
-        </div>
-    </div>
-
     <form id="briefForm">
         <h1>بریف پروژه</h1>
 
         <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required oninput="validateText(this);">
+        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required oninput="validateText(this);">
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
 
         <label for="email">3. آدرس ایمیل:</label>
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required oninput="validatePhoneNumber(this);">
-
-        <label for="productionGoal">5. هدف از تولید:</label>
-        <select id="productionGoal" name="هدف از تولید" required>
-            <option value="">انتخاب کنید</option>
-            <option value="فروش و بازاریابی">فروش و بازاریابی</option>
-            <option value="معرفی محصول">معرفی محصول</option>
-            <option value="برندینگ">برندینگ</option>
-        </select>
-
-        <label for="videoDimensions">6. ابعاد ویدیو:</label>
-        <select id="videoDimensions" name="ابعاد ویدیو" required>
-            <option value="">انتخاب کنید</option>
-            <option value="720p عمودی">720p عمودی</option>
-            <option value="1080p عمودی">1080p عمودی</option>
-            <option value="720p افقی">720p افقی</option>
-            <option value="1080p افقی">1080p افقی</option>
-        </select>
-
-        <label for="duration">7. مدت زمان پیشنهادی:</label>
-        <select id="duration" name="مدت زمان پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="کمتر از 30 ثانیه">کمتر از 30 ثانیه</option>
-            <option value="30 تا 60 ثانیه">30 تا 60 ثانیه</option>
-            <option value="60 تا 90 ثانیه">60 تا 90 ثانیه</option>
-            <option value="بیشتر از 90 ثانیه">بیشتر از 90 ثانیه</option>
-        </select>
-
-        <label for="deliveryDate">8. تاریخ تحویل پیشنهادی:</label>
-        <select id="deliveryDate" name="تاریخ تحویل پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="ده روزه">ده روزه</option>
-            <option value="بیست روزه">بیست روزه</option>
-            <option value="سی روزه">سی روزه</option>
-            <option value="فوری">فوری</option>
-        </select>
-
-        <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required oninput="validateText(this);"></textarea>
-
-        <label for="proposedBudget">10. بودجه پیشنهادی:</label>
-        <select id="proposedBudget" name="بودجه پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="تا 10 میلیون">تا 10 میلیون</option>
-            <option value="تا 20 میلیون">تا 20 میلیون</option>
-            <option value="تا 30 میلیون">تا 30 میلیون</option>
-            <option value="بیش از 30 میلیون">بیش از 30 میلیون</option>
-        </select>
-
-        <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required oninput="validateText(this);"></textarea>
-
-        <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this);"></textarea>
-
-        <!-- Placeholder for question 14 -->
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" required>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
@@ -289,85 +144,71 @@
         <button type="button" id="saveButton" disabled>تکمیل بریف</button>
     </form>
 
+    <div id="popup">
+        <p>فایل PDF آماده است. لطفاً دانلود کنید.</p>
+        <button id="downloadButton">دانلود</button>
+        <button onclick="closePopup()">بستن</button>
+    </div>
+
     <script>
         const saveButton = document.getElementById('saveButton');
-        const popupBackground = document.getElementById('popupBackground');
         const popup = document.getElementById('popup');
+        const downloadButton = document.getElementById('downloadButton');
         const form = document.getElementById('briefForm');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
 
         saveButton.addEventListener('click', () => {
+            console.log('Save button clicked. Generating PDF...');
             html2canvas(form, { scale: 2 }).then(canvas => {
+                console.log('Canvas generated successfully.');
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 190; // Width in mm
-                const pageHeight = 297; // A4 height in mm
+                const imgWidth = 190;
+                const pageHeight = 297;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-                let y = 0; // Starting position on PDF
+                let y = 0;
                 if (imgHeight > pageHeight) {
                     let heightLeft = imgHeight;
 
                     while (heightLeft > 0) {
                         pdf.addImage(imgData, 'PNG', 10, y, imgWidth, imgHeight);
                         heightLeft -= pageHeight;
-                        y = 0;
                         if (heightLeft > 0) pdf.addPage();
                     }
                 } else {
                     pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
                 }
 
-                // Show the popup
-                popupBackground.style.display = 'block';
                 popup.style.display = 'block';
-
-                // Attach download action
-                document.querySelector('.download-btn').onclick = () => {
+                downloadButton.onclick = () => {
                     pdf.save('brief.pdf');
                     closePopup();
                 };
+            }).catch(error => {
+                console.error('Error generating PDF:', error);
             });
         });
 
         function closePopup() {
-            popupBackground.style.display = 'none';
             popup.style.display = 'none';
         }
 
         form.addEventListener('input', () => {
-            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            const inputs = form.querySelectorAll('input[required]');
             let validCount = 0;
 
             inputs.forEach(input => {
-                if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
+                if (input.value.trim()) validCount++;
             });
 
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
-            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
-            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
-            saveButton.disabled = validCount !== inputs.length;
+            const progress = (validCount / inputs.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressBar.style.background = progress === 100 ? '#28a745' : '#1e88e5';
+            progressText.textContent = `${Math.round(progress)}% تکمیل شده`;
+            saveButton.disabled = progress !== 100;
         });
-
-        function validatePhoneNumber(input) {
-            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
-            if (input.value.length < 11) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
-
-        function validateText(input) {
-            if (input.type !== 'email' && input.id !== 'phoneNumber') {
-                input.value = input.value.replace(/[0-9]/g, '');
-            }
-            if (input.value.trim() === '') {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
     </script>
 </body>
 </html>
