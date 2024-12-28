@@ -21,7 +21,6 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
         }
 
         label {
@@ -88,16 +87,55 @@
         }
 
         #noteContainer {
-            margin-top: 20px;
-            padding: 10px;
-            background: #f9f9f9;
-            border-left: 4px solid #007BFF;
-            font-size: 14px;
-            line-height: 1.5;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-family: 'Vazir', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
         }
 
         #noteContainer p {
-            margin: 5px 0;
+            margin: 0 0 10px 0;
+        }
+
+        #noteContainer p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            form {
+                width: 100%;
+                padding: 20px;
+            }
+
+            #noteContainer {
+                width: 250px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #noteContainer {
+                width: 200px;
+                font-size: 12px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+        }
+
+        @font-face {
+            font-family: 'Vazir';
+            src: url('https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf') format('truetype');
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -179,41 +217,10 @@
     </form>
 
     <div id="noteContainer">
-    <p>لطفاً در صورت وجود موارد مهم یا جزئیات خاص در بخش توضیحات آن‌ها را به طور کامل ذکر کنید.</p>
-    <p>زمان و هزینه‌های ذکر شده صرفاً تخمینی و قابل تغییر هستند.</p>
-    <p>پنجاه درصد از مبلغ پروژه در ابتدای کار دریافت می‌شود.)</p>
-</div>
-
-<style>
-    @font-face {
-        font-family: 'Vazir';
-        src: url('https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf') format('truetype');
-    }
-
-    #noteContainer {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 250px;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        font-family: 'Vazir', Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.8;
-        color: #333;
-    }
-
-    #noteContainer p {
-        margin: 0 0 10px 0;
-    }
-
-    #noteContainer p:last-child {
-        margin-bottom: 0;
-    }
-</style>
-
+        <p>در صورت نیاز به توضیح یا اشاره به مسئله مهمی در بخش توضیحات ذکر بفرمایید.</p>
+        <p>(زمان و مبلغ‌ها تقریبی و حدودی هستند.)</p>
+        <p>(ابتدای شروع 50 درصد مبلغ پروژه دریافت می‌شود.)</p>
+    </div>
 
     <script>
         const form = document.getElementById('briefForm');
