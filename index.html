@@ -11,16 +11,6 @@
         }
 
         @font-face {
-            font-family: 'IRANSansBold';
-            src: url('https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf') format('truetype');
-        }
-
-        @font-face {
-            font-family: 'IRANSansRegular';
-            src: url('https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXRegular.ttf') format('truetype');
-        }
-
-        @font-face {
             font-family: 'Pix';
             src: url('https://github.com/KhaniMehdi/Brief/raw/main/pix.ttf') format('truetype');
         }
@@ -33,7 +23,8 @@
             text-align: right;
             background: linear-gradient(35deg, #1e88e5, #0d47a1);
             color: #333;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         #typing-container {
@@ -41,27 +32,27 @@
             top: 50%;
             left: 0;
             width: 100%;
-            transform: translateY(-50%);
             pointer-events: none;
+            transform: translateY(-50%);
+            z-index: 1;
         }
 
         .typing-text {
             position: absolute;
             font-family: 'Pix', Arial, sans-serif;
-            font-size: 4rem;
-            color: rgba(255, 255, 255, 0.3);
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.2);
             white-space: nowrap;
             overflow: hidden;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .typing-text.left {
             left: 10%;
-            text-align: left;
         }
 
         .typing-text.right {
             right: 10%;
-            text-align: right;
         }
 
         @keyframes typing {
@@ -140,36 +131,6 @@
             background: #0056b3;
         }
 
-        #progressBar {
-            height: 10px;
-            width: 0;
-            background: linear-gradient(90deg, #1e88e5, #0d47a1);
-            transition: width 0.5s ease-in-out;
-            border-radius: 5px;
-        }
-
-        #progressContainer {
-            margin: 15px 0;
-            background: #f3f3f3;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            height: 10px;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        #progressText {
-            margin-top: 5px;
-            font-size: 12px;
-            color: #555;
-            text-align: center;
-        }
-
-        button[disabled] {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
         h1 {
             text-align: center;
             font-size: 24px;
@@ -189,16 +150,6 @@
             font-size: 14px;
             line-height: 1.8;
             color: #333;
-            animation: glow 2s infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
-            }
         }
 
         @media (max-width: 768px) {
@@ -294,57 +245,39 @@
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
         <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
 
-        <div id="progressContainer">
-            <div id="progressBar"></div>
-        </div>
-        <div id="progressText">0% تکمیل شده</div>
-
-        <button type="button" id="saveButton" onclick="validateAndSave()" disabled>دانلود فایل بریف</button>
+        <button type="button" id="saveButton">دانلود فایل بریف</button>
     </form>
-
-    <div id="noteContainer">
-        <p>لطفاً در صورت وجود موارد مهم یا جزئیات خاص در بخش توضیحات آن‌ها را به طور کامل ذکر کنید.</p>
-        <p>زمان و هزینه‌های ذکر شده صرفاً تخمینی و قابل تغییر هستند.</p>
-        <p>پنجاه درصد از مبلغ پروژه در ابتدای کار دریافت می‌شود.</p>
-    </div>
 
     <script>
         const leftTyping = document.getElementById("typing-left");
         const rightTyping = document.getElementById("typing-right");
-        const words = ["Creativity", "Ideation", "Design"];
+        const words = ["Creat", "Idea", "Des"];
+        const continuations = ["ivity", "tion", "ign"];
 
         let wordIndex = 0;
-        let charIndex = 0;
         let isDeleting = false;
-        let currentSide = "left";
+        let charIndex = 0;
 
         function typeWords() {
-            const currentWord = words[wordIndex];
+            if (!isDeleting) {
+                leftTyping.textContent = words[wordIndex].substring(0, charIndex);
+                rightTyping.textContent = continuations[wordIndex].substring(0, charIndex);
+                charIndex++;
 
-            if (isDeleting) {
-                if (currentSide === "left") {
-                    leftTyping.textContent = currentWord.substring(0, charIndex--);
-                } else {
-                    rightTyping.textContent = currentWord.substring(0, charIndex--);
+                if (charIndex > words[wordIndex].length) {
+                    isDeleting = true;
+                    setTimeout(typeWords, 2000); // Pause before deleting
+                    return;
                 }
             } else {
-                if (currentSide === "left") {
-                    leftTyping.textContent = currentWord.substring(0, charIndex++);
-                } else {
-                    rightTyping.textContent = currentWord.substring(0, charIndex++);
+                charIndex--;
+                leftTyping.textContent = words[wordIndex].substring(0, charIndex);
+                rightTyping.textContent = continuations[wordIndex].substring(0, charIndex);
+
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    wordIndex = (wordIndex + 1) % words.length;
                 }
-            }
-
-            if (!isDeleting && charIndex === currentWord.length) {
-                isDeleting = true;
-                setTimeout(typeWords, 2000); // Pause before deleting
-                return;
-            }
-
-            if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                wordIndex = (wordIndex + 1) % words.length;
-                currentSide = currentSide === "left" ? "right" : "left";
             }
 
             setTimeout(typeWords, isDeleting ? 50 : 100);
@@ -363,49 +296,12 @@
         function toggleOtherProductionGoal(select) {
             const otherGoal = document.getElementById('otherProductionGoal');
             otherGoal.style.display = select.value === 'سایر' ? 'block' : 'none';
-            if (select.value !== 'سایر') {
-                otherGoal.value = '';
-            }
         }
 
         function toggleOtherVideoDimensions(select) {
             const otherDimensions = document.getElementById('otherVideoDimensions');
             otherDimensions.style.display = select.value === 'سایر' ? 'block' : 'none';
-            if (select.value !== 'سایر') {
-                otherDimensions.value = '';
-            }
         }
-
-        async function validateAndSave() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-
-            pdf.addFileToVFS("IRANSansXBold.ttf", "BASE64_BOLD_FONT_HERE");
-            pdf.addFont("IRANSansXBold.ttf", "IRANSansBold", "normal");
-
-            pdf.addFileToVFS("IRANSansXRegular.ttf", "BASE64_REGULAR_FONT_HERE");
-            pdf.addFont("IRANSansXRegular.ttf", "IRANSansRegular", "normal");
-
-            pdf.setFont("IRANSansBold");
-            pdf.setFontSize(16);
-            pdf.text('بریف پروژه', 105, 20, { align: 'center' });
-
-            const formData = new FormData(document.getElementById('briefForm'));
-            let y = 40;
-
-            formData.forEach((value, key) => {
-                if (value.trim()) {
-                    if (key.includes("نام") || key.includes("هدف") || key.includes("ابعاد")) {
-                        pdf.setFont("IRANSansBold");
-                    } else {
-                        pdf.setFont("IRANSansRegular");
-                    }
-                    pdf.setFontSize(12);
-                    pdf.text(`${key}: ${value}`, 190, y, { align: 'right' });
-                    y += 10;
-                }
-            });
-
-            pdf.save('brief.pdf');
-        }
-   
+    </script>
+</body>
+</html>
