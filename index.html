@@ -20,11 +20,6 @@
             src: url('https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXRegular.ttf') format('truetype');
         }
 
-        @font-face {
-            font-family: 'Pix';
-            src: url('https://github.com/KhaniMehdi/Brief/raw/main/pix.ttf') format('truetype');
-        }
-
         body {
             font-family: 'Vazir', Arial, sans-serif;
             margin: 0;
@@ -48,7 +43,7 @@
 
         .typing-text {
             position: absolute;
-            font-family: 'Pix', Arial, sans-serif;
+            font-family: 'IRANSansRegular', Arial, sans-serif;
             font-size: 4rem;
             color: rgba(255, 255, 255, 0.2);
             white-space: nowrap;
@@ -161,12 +156,32 @@
             animation: glow 2s infinite;
         }
 
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-family: 'Vazir', Arial, sans-serif;
+            text-align: center;
+            color: #333;
+            z-index: 1000;
+        }
+
+        #popup span {
+            text-decoration: underline;
+        }
+
         @keyframes glow {
             0%, 100% {
-                box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
             }
             50% {
-                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
+                box-shadow: 0 0 20px rgba(255, 0, 0, 1);
             }
         }
 
@@ -181,8 +196,14 @@
 </head>
 <body>
     <div id="typing-container">
-        <div class="typing-text left" id="typing-left"></div>
-        <div class="typing-text right" id="typing-right"></div>
+        <div class="typing-text left" id="typing-left">محمد</div>
+        <div class="typing-text right" id="typing-right">محمدی</div>
+    </div>
+
+    <div id="noteContainer">
+        <p>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
+        <p>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
+        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است. <br><span style="font-size: 0.9em; color: #555">(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
     </div>
 
     <form id="briefForm">
@@ -271,11 +292,16 @@
         <button type="button" id="saveButton" onclick="validateAndSave()" disabled>دانلود فایل بریف</button>
     </form>
 
+    <div id="popup">
+        <p>مرسی از شما بابت کامل کردن بریف</p>
+        <p>شما نسخه پی دی اف این فرم رو دریافت کردید و اگر نیاز به اصلاح نیست <span>فایل رو برای من هم ارسال بفرمایید</span>.</p>
+        <p>ممنونم 🌸</p>
+    </div>
+
     <script>
         const leftTyping = document.getElementById("typing-left");
         const rightTyping = document.getElementById("typing-right");
-        const words = ["Creat", "Idea", "Des"];
-        const continuations = ["ivity", "tion", "ign"];
+        const words = ["محمد", "محمدی"];
 
         let wordIndex = 0;
         let charIndex = 0;
@@ -283,23 +309,22 @@
 
         function typeWords() {
             if (!isDeleting) {
-                leftTyping.textContent = words[wordIndex].substring(0, charIndex);
-                rightTyping.textContent = continuations[wordIndex].substring(0, charIndex);
+                leftTyping.textContent = words[0].substring(0, charIndex);
+                rightTyping.textContent = words[1].substring(0, charIndex);
                 charIndex++;
 
-                if (charIndex > words[wordIndex].length) {
+                if (charIndex > words[0].length) {
                     isDeleting = true;
-                    setTimeout(typeWords, 2000); // Pause before deleting
+                    setTimeout(typeWords, 2000);
                     return;
                 }
             } else {
                 charIndex--;
-                leftTyping.textContent = words[wordIndex].substring(0, charIndex);
-                rightTyping.textContent = continuations[wordIndex].substring(0, charIndex);
+                leftTyping.textContent = words[0].substring(0, charIndex);
+                rightTyping.textContent = words[1].substring(0, charIndex);
 
                 if (charIndex === 0) {
                     isDeleting = false;
-                    wordIndex = (wordIndex + 1) % words.length;
                 }
             }
 
