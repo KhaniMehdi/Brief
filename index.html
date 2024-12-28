@@ -214,10 +214,10 @@
         <h1>بریف پروژه</h1>
 
         <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required oninput="validateText(this);">
+        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required oninput="validateText(this, false);">
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required oninput="validateText(this);">
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required oninput="validateText(this, false);">
 
         <label for="email">3. آدرس ایمیل:</label>
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
@@ -261,7 +261,7 @@
         </select>
 
         <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required oninput="validateText(this);"></textarea>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required oninput="validateText(this, false);"></textarea>
 
         <label for="proposedBudget">10. بودجه پیشنهادی:</label>
         <select id="proposedBudget" name="بودجه پیشنهادی" required>
@@ -273,16 +273,16 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required oninput="validateText(this);"></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required oninput="validateText(this, false);"></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this);"></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this, false);"></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4" oninput="validateText(this);"></textarea>
+        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4" oninput="validateText(this, false);"></textarea>
 
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4" oninput="validateText(this);"></textarea>
+        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4" oninput="validateText(this, false);"></textarea>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
@@ -298,87 +298,4 @@
         const popup = document.getElementById('popup');
         const form = document.getElementById('briefForm');
 
-        saveButton.addEventListener('click', () => {
-            generatePDF();
-            popupBackground.style.display = 'block';
-            popup.style.display = 'block';
-        });
-
-        function closePopup() {
-            popupBackground.style.display = 'none';
-            popup.style.display = 'none';
-        }
-
-        async function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'px',
-                format: 'a4'
-            });
-
-            const loadFont = async (url, fontName) => {
-                try {
-                    const fontData = await fetch(url).then(res => res.arrayBuffer());
-                    pdf.addFileToVFS(`${fontName}.ttf`, fontData);
-                    pdf.addFont(`${fontName}.ttf`, fontName, "normal");
-                } catch (error) {
-                    console.error(`Failed to load font ${fontName}:`, error);
-                }
-            };
-
-            // Load fonts
-            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf", "Vazir");
-            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf", "IRANSansBold");
-
-            pdf.setFont("Vazir", "normal");
-            pdf.setFontSize(16);
-
-            // Start generating the content
-            let y = 50;
-            pdf.text("بریف پروژه", pdf.internal.pageSize.getWidth() / 2, y, { align: 'center', lang: 'fa' });
-            y += 30;
-
-            const formData = new FormData(document.getElementById('briefForm'));
-            formData.forEach((value, key) => {
-                if (value.trim() !== "") {
-                    pdf.text(`${key}: ${value}`, pdf.internal.pageSize.getWidth() - 20, y, { align: 'right', lang: 'fa' });
-                    y += 25;
-                }
-            });
-
-            try {
-                pdf.save('brief.pdf');
-            } catch (error) {
-                console.error("Error generating PDF:", error);
-            }
-        }
-
-        form.addEventListener('input', () => {
-            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-            let validCount = 0;
-            inputs.forEach(input => {
-                if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
-            });
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
-            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
-            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
-            saveButton.disabled = validCount !== inputs.length;
-        });
-
-        function downloadPDF() {
-            generatePDF();
-        }
-
-        function validatePhoneNumber(input) {
-            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
-            if (input.value.length < 11) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
-
-        function validateText(input) {
-            if (input.type !== 'email' &&
+        saveButton.addEventListener
