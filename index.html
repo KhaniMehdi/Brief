@@ -114,16 +114,6 @@
             font-size: 14px;
             line-height: 1.8;
             color: #333;
-            animation: glow 2s infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
-            }
         }
 
         h1 {
@@ -131,13 +121,46 @@
             font-size: 24px;
             font-weight: bold;
         }
+
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 100;
+        }
+
+        #popup p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        #popup button {
+            margin-top: 10px;
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #popup button:hover {
+            background: #d32f2f;
+        }
     </style>
 </head>
 <body>
     <div id="noteContainer">
         <p>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
         <p>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
-        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.</p>
+        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<br>(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</p>
     </div>
 
     <form id="briefForm">
@@ -146,14 +169,14 @@
         <label for="brandName">1. نام برند:</label>
         <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
 
-        <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" maxlength="11" required>
+                <label for="clientName">2. نام کارفرما:</label>
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
 
         <label for="email">3. آدرس ایمیل:</label>
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" pattern="\d*" required>
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" pattern="\\d{11}" required>
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
@@ -162,6 +185,18 @@
             <option value="معرفی محصول">معرفی محصول</option>
             <option value="برندینگ">برندینگ</option>
         </select>
+
+        <label for="videoDimensions">6. ابعاد ویدیو:</label>
+<select id="videoDimensions" name="ابعاد ویدیو" onchange="toggleOtherVideoDimensions(this)" required>
+    <option value="">انتخاب کنید</option>
+    <option value="720p عمودی">720p عمودی</option>
+    <option value="1080p عمودی">1080p عمودی</option>
+    <option value="720p افقی">720p افقی</option>
+    <option value="1080p افقی">1080p افقی</option>
+    <option value="سایر">سایر</option>
+</select>
+<input type="text" id="otherVideoDimensions" name="ابعاد دیگر" placeholder="مثال: 4K یا ابعاد دلخواه" style="display: none;">
+
 
         <label for="duration">7. مدت زمان پیشنهادی:</label>
         <select id="duration" name="مدت زمان پیشنهادی" required>
@@ -194,10 +229,10 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4"></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4"></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
         <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
@@ -205,14 +240,6 @@
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
         <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
 
-        <label for="videoDimensions">6. ابعاد ویدیو:</label>
-        <select id="videoDimensions" name="ابعاد ویدیو" required>
-            <option value="">انتخاب کنید</option>
-            <option value="720p عمودی">720p عمودی</option>
-            <option value="1080p عمودی">1080p عمودی</option>
-            <option value="720p افقی">720p افقی</option>
-            <option value="1080p افقی">1080p افقی</option>
-        </select>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
@@ -222,14 +249,22 @@
         <button type="button" id="saveButton">دانلود فایل بریف</button>
     </form>
 
+    <div id="popup">
+        <p>مرسی از شما بابت کامل کردن بریف<br>
+        شما نسخه پی دی اف این فرم رو دریافت کردید و اگر نیاز به اصلاح نیست فایل رو برای من هم ارسال بفرمایید<br>
+        ممنونم 🌹</p>
+        <button onclick="closePopup()">بستن</button>
+    </div>
+
     <script>
         const saveButton = document.getElementById('saveButton');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
+        const popup = document.getElementById('popup');
         const form = document.getElementById('briefForm');
 
         function updateProgress() {
-            const inputs = Array.from(form.querySelectorAll('input, select, textarea'));
+            const inputs = Array.from(form.querySelectorAll('input[required], select[required]'));
             const filled = inputs.filter(input => input.value.trim() !== '').length;
             const progress = (filled / inputs.length) * 100;
             progressBar.style.width = `${progress}%`;
@@ -252,11 +287,21 @@
             });
 
             if (valid) {
-                alert('فرم با موفقیت ثبت شد!');
+                setTimeout(() => {
+                    popup.style.display = 'block';
+                }, 1000);
             } else {
                 alert('لطفاً تمام بخش‌های الزامی را تکمیل کنید.');
             }
         });
+
+        function closePopup() {
+            popup.style.display = 'none';
+        }
+function toggleOtherVideoDimensions(select) {
+        const otherDimensions = document.getElementById('otherVideoDimensions');
+        otherDimensions.style.display = select.value === 'سایر' ? 'block' : 'none';
+    }
     </script>
 </body>
 </html>
