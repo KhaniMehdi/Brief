@@ -9,16 +9,43 @@
        
 
         body {
-    font-family: 'Vazirmatn', Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    direction: rtl;
-    text-align: right;
-    background: linear-gradient(to top left, #1e88e5, #0d47a1);
-    color: #333;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .gradient-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #fbc2eb);
+      background-size: 300% 300%;
+      animation: gradient-loop 8s infinite;
+    }
+
+    @keyframes gradient-loop {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .content {
+      z-index: 1;
+      color: #fff;
+      text-align: center;
+    }
 
         form {
             max-width: 600px;
@@ -186,6 +213,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
+<div class="gradient-bg"></div>
+  <div class="content">
+    <h1>Rotating Gradient</h1>
+    <p>This gradient smoothly transitions and loops infinitely.</p>
+  </div>
     <div id="noteContainer">
         <p class="bold">لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
         <p class="bold">زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
