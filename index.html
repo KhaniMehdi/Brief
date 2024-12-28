@@ -33,7 +33,7 @@
             text-align: right;
             background: linear-gradient(35deg, #1e88e5, #0d47a1);
             color: #333;
-            overflow: hidden;
+            overflow-y: auto;
         }
 
         #typing-container {
@@ -52,6 +52,7 @@
             color: rgba(255, 255, 255, 0.3);
             white-space: nowrap;
             overflow: hidden;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .typing-text.left {
@@ -64,36 +65,8 @@
             text-align: right;
         }
 
-        @keyframes typing {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes erasing {
-            from {
-                width: 100%;
-            }
-            to {
-                width: 0;
-            }
-        }
-
-        @keyframes blink {
-            from, to {
-                border-color: transparent;
-            }
-            50% {
-                border-color: rgba(255, 255, 255, 0.7);
-            }
-        }
-
-        .typing-text span {
-            display: inline-block;
-            animation: blink 0.7s step-end infinite;
+        .faded-text {
+            color: #888;
         }
 
         form {
@@ -122,11 +95,6 @@
             font-family: 'Vazir', Arial, sans-serif;
         }
 
-        input::placeholder, textarea::placeholder {
-            font-style: italic;
-            color: #888;
-        }
-
         button {
             background: #007BFF;
             color: #fff;
@@ -140,67 +108,6 @@
             background: #0056b3;
         }
 
-        #progressBar {
-            height: 10px;
-            width: 0;
-            background: linear-gradient(90deg, #1e88e5, #0d47a1);
-            transition: width 0.5s ease-in-out;
-            border-radius: 5px;
-        }
-
-        #progressContainer {
-            margin: 15px 0;
-            background: #f3f3f3;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            height: 10px;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        #progressText {
-            margin-top: 5px;
-            font-size: 12px;
-            color: #555;
-            text-align: center;
-        }
-
-        button[disabled] {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        #noteContainer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            font-family: 'Vazir', Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.8;
-            color: #333;
-            animation: glow 2s infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
-            }
-        }
-
         @media (max-width: 768px) {
             #noteContainer {
                 position: static;
@@ -212,13 +119,16 @@
 </head>
 <body>
     <div id="typing-container">
-        <div class="typing-text left" id="typing-left"></div>
-        <div class="typing-text right" id="typing-right"></div>
+        <div class="typing-text left" id="typing-left">
+            <span class="faded-text">Creat</span><span>ivity</span>
+        </div>
+        <div class="typing-text right" id="typing-right">
+            <span class="faded-text">Idea</span><span>tion</span>
+        </div>
     </div>
 
     <form id="briefForm">
         <h1>بریف پروژه</h1>
-
         <label for="brandName">1. نام برند:</label>
         <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
 
@@ -309,105 +219,28 @@
     </div>
 
     <script>
-        const leftTyping = document.getElementById("typing-left");
-        const rightTyping = document.getElementById("typing-right");
-        const words = ["Creativity", "Ideation", "Design"];
+        function updateTypingText() {
+            const leftTyping = document.getElementById('typing-left');
+            const rightTyping = document.getElementById('typing-right');
+            const words = [
+                { faded: 'Creat', bold: 'ivity' },
+                { faded: 'Idea', bold: 'tion' },
+                { faded: 'Des', bold: 'ign' }
+            ];
 
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let currentSide = "left";
-
-        function typeWords() {
-            const currentWord = words[wordIndex];
-
-            if (isDeleting) {
-                if (currentSide === "left") {
-                    leftTyping.textContent = currentWord.substring(0, charIndex--);
-                } else {
-                    rightTyping.textContent = currentWord.substring(0, charIndex--);
-                }
-            } else {
-                if (currentSide === "left") {
-                    leftTyping.textContent = currentWord.substring(0, charIndex++);
-                } else {
-                    rightTyping.textContent = currentWord.substring(0, charIndex++);
-                }
+            let index = 0;
+            function cycleWords() {
+                const word = words[index];
+                leftTyping.innerHTML = `<span class='faded-text'>${word.faded}</span><span>${word.bold}</span>`;
+                rightTyping.innerHTML = `<span class='faded-text'>${word.faded}</span><span>${word.bold}</span>`;
+                index = (index + 1) % words.length;
+                setTimeout(cycleWords, 2000);
             }
 
-            if (!isDeleting && charIndex === currentWord.length) {
-                isDeleting = true;
-                setTimeout(typeWords, 2000); // Pause before deleting
-                return;
-            }
-
-            if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                wordIndex = (wordIndex + 1) % words.length;
-                currentSide = currentSide === "left" ? "right" : "left";
-            }
-
-            setTimeout(typeWords, isDeleting ? 50 : 100);
+            cycleWords();
         }
 
-        typeWords();
-
-        function validatePhoneNumber(input) {
-            const phonePattern = /^\d{0,11}$/;
-            if (!phonePattern.test(input.value)) {
-                alert("لطفاً فقط اعداد وارد کنید.");
-                input.value = input.value.slice(0, -1);
-            }
-        }
-
-        function toggleOtherProductionGoal(select) {
-            const otherGoal = document.getElementById('otherProductionGoal');
-            otherGoal.style.display = select.value === 'سایر' ? 'block' : 'none';
-            if (select.value !== 'سایر') {
-                otherGoal.value = '';
-            }
-        }
-
-        function toggleOtherVideoDimensions(select) {
-            const otherDimensions = document.getElementById('otherVideoDimensions');
-            otherDimensions.style.display = select.value === 'سایر' ? 'block' : 'none';
-            if (select.value !== 'سایر') {
-                otherDimensions.value = '';
-            }
-        }
-
-        async function validateAndSave() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-
-            pdf.addFileToVFS("IRANSansXBold.ttf", "BASE64_BOLD_FONT_HERE");
-            pdf.addFont("IRANSansXBold.ttf", "IRANSansBold", "normal");
-
-            pdf.addFileToVFS("IRANSansXRegular.ttf", "BASE64_REGULAR_FONT_HERE");
-            pdf.addFont("IRANSansXRegular.ttf", "IRANSansRegular", "normal");
-
-            pdf.setFont("IRANSansBold");
-            pdf.setFontSize(16);
-            pdf.text('بریف پروژه', 105, 20, { align: 'center' });
-
-            const formData = new FormData(document.getElementById('briefForm'));
-            let y = 40;
-
-            formData.forEach((value, key) => {
-                if (value.trim()) {
-                    if (key.includes("نام") || key.includes("هدف") || key.includes("ابعاد")) {
-                        pdf.setFont("IRANSansBold");
-                    } else {
-                        pdf.setFont("IRANSansRegular");
-                    }
-                    pdf.setFontSize(12);
-                    pdf.text(`${key}: ${value}`, 190, y, { align: 'right' });
-                    y += 10;
-                }
-            });
-
-            pdf.save('brief.pdf');
-        }
+        updateTypingText();
     </script>
 </body>
 </html>
