@@ -21,16 +21,19 @@
             padding: 0;
             direction: rtl;
             text-align: right;
-            background: linear-gradient(to top left, #1e88e5, #0d47a1);
-            animation: gradientBackground 5s infinite alternate;
+            background: linear-gradient(to bottom right, #1e88e5, #0d47a1);
+            animation: changeBackground 5s infinite;
             color: #333;
             overflow-y: auto;
             overflow-x: hidden;
         }
 
-        @keyframes gradientBackground {
-            0% { background-color: #1e88e5; }
-            100% { background-color: #0d47a1; }
+        @keyframes changeBackground {
+            0% { background: linear-gradient(to bottom right, #1e88e5, #0d47a1); }
+            25% { background: linear-gradient(to bottom right, #4caf50, #8bc34a); }
+            50% { background: linear-gradient(to bottom right, #ff5722, #e91e63); }
+            75% { background: linear-gradient(to bottom right, #ffc107, #ff9800); }
+            100% { background: linear-gradient(to bottom right, #3f51b5, #673ab7); }
         }
 
         form {
@@ -122,7 +125,7 @@
             padding: 20px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(255, 87, 34, 1);
+            box-shadow: 0 0 20px rgba(255, 87, 34, 1);
             font-family: 'Vazir', Arial, sans-serif;
             font-size: 14px;
             line-height: 2;
@@ -133,25 +136,11 @@
 
         @keyframes glowEffect {
             0% {
-                box-shadow: 0 0 15px rgba(255, 87, 34, 0.7);
+                box-shadow: 0 0 20px rgba(255, 87, 34, 0.7);
             }
             100% {
-                box-shadow: 0 0 25px rgba(255, 87, 34, 1);
+                box-shadow: 0 0 30px rgba(255, 87, 34, 1);
             }
-        }
-
-        #noteContainer p {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        #noteContainer p:nth-child(3) {
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        #noteContainer p:nth-child(3) span {
-            font-weight: normal;
         }
 
         h1 {
@@ -243,7 +232,9 @@
 
     <div id="popupBackground"></div>
     <div id="popup">
-        <p>فرم با موفقیت کامل شد و ذخیره شد.</p>
+        <p>مرسی از شما بابت کامل کردن بریف<br>
+        فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید<br>
+        ممنونم 🌹</p>
         <button onclick="closePopup()">بستن</button>
     </div>
 
