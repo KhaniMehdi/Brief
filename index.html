@@ -345,8 +345,14 @@
             const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
             let validCount = 0;
             inputs.forEach(input => {
-                if (input.value.trim()) validCount++;
+                if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
             });
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
+            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
+            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
+            saveButton.disabled = validCount !== inputs.length;
+        });
             const progressBar = document.getElementById('progressBar');
             progressBar.style.width = (validCount / inputs.length) * 100 + '%';
             progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
@@ -369,6 +375,11 @@
 
         function validateText(input) {
             input.value = input.value.replace(/[0-9]/g, '');
+            if (input.value.trim() === '') {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
         }
     </script>
 </body>
