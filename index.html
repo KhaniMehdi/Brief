@@ -36,41 +36,27 @@
             overflow: hidden;
         }
 
-        #background-words {
+        #typing-effect {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .word {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             font-family: 'Pix', Arial, sans-serif;
-            font-size: 3rem;
-            color: rgba(255, 255, 255, 0.1);
-            position: absolute;
-            animation: fade 6s linear infinite;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid rgba(255, 255, 255, 0.7);
+            animation: blink 0.7s step-end infinite;
         }
 
-        @keyframes fade {
-            0% {
-                opacity: 0;
-                transform: translateY(100%);
+        @keyframes blink {
+            from, to {
+                border-color: transparent;
             }
-            25% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            75% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100%);
+            50% {
+                border-color: rgba(255, 255, 255, 0.7);
             }
         }
 
@@ -185,10 +171,9 @@
             }
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <div id="background-words"></div>
+    <div id="typing-effect"></div>
 
     <form id="briefForm">
         <h1>بریف پروژه</h1>
@@ -284,30 +269,41 @@
 
     <script>
         const words = ['Creativity', 'Ideation', 'Design'];
-        const backgroundWords = document.getElementById('background-words');
+        const typingEffect = document.getElementById('typing-effect');
 
-        function createWord(word) {
-            const span = document.createElement('span');
-            span.textContent = word;
-            span.className = 'word';
-            span.style.top = `${Math.random() * 100}%`;
-            span.style.left = `${Math.random() * 100}%`;
-            backgroundWords.appendChild(span);
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
 
-            setTimeout(() => {
-                backgroundWords.removeChild(span);
-            }, 6000);
+        function typeWords() {
+            const currentWord = words[wordIndex];
+
+            if (isDeleting) {
+                typingEffect.textContent = currentWord.substring(0, charIndex--);
+            } else {
+                typingEffect.textContent = currentWord.substring(0, charIndex++);
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(typeWords, 2000); // Pause before deleting
+                return;
+            }
+
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+            }
+
+            setTimeout(typeWords, isDeleting ? 50 : 100);
         }
 
-        setInterval(() => {
-            const word = words[Math.floor(Math.random() * words.length)];
-            createWord(word);
-        }, 2000);
+        typeWords();
 
         function validatePhoneNumber(input) {
             const phonePattern = /^\d{0,11}$/;
             if (!phonePattern.test(input.value)) {
-                alert("لطفاً فقط اعداد وارد کنید و شماره باید 11 رقم باشد.");
+                alert("لطفاً فقط اعداد وارد کنید.");
                 input.value = input.value.slice(0, -1);
             }
         }
