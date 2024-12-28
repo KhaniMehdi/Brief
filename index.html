@@ -112,6 +112,31 @@
             text-align: center;
         }
 
+        #noteContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(255, 87, 34, 0.7);
+            font-family: 'Vazir', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 2;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        #noteContainer p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #noteContainer p span {
+            font-weight: normal;
+        }
+
         #popupBackground {
             position: fixed;
             top: 0;
@@ -166,6 +191,12 @@
     </style>
 </head>
 <body>
+    <div id="noteContainer">
+        <p>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
+        <p>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
+        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<span>(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
+    </div>
+
     <div id="popupBackground"></div>
     <div id="popup">
         <p>مرسی از شما بابت کامل کردن بریف<br>
