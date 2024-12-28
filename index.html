@@ -62,16 +62,16 @@
         }
 
         button {
-            display: block;
-            width: calc(100% - 40px);
-            margin: 20px auto;
+            display: inline-block;
+            width: calc(45% - 10px);
+            margin: 10px 5px;
             background: #007BFF;
             color: #fff;
             border: none;
             padding: 10px 15px;
             cursor: pointer;
             border-radius: 4px;
-            font-size: 16px;
+            font-size: 14px;
             font-family: 'Vazir', Arial, sans-serif;
             box-sizing: border-box;
             text-align: center;
@@ -86,6 +86,15 @@
         button:disabled {
             background: #cccccc;
             cursor: not-allowed;
+        }
+
+        .download-btn {
+            background: #28a745;
+        }
+
+        .download-btn:hover:enabled {
+            background: #218838;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.7);
         }
 
         #progressContainer {
@@ -126,7 +135,7 @@
             line-height: 2;
             color: #333;
             box-sizing: border-box;
-            animation: glow 1.5s infinite alternate;
+            animation: glow 0.8s infinite alternate;
         }
 
         @keyframes glow {
@@ -138,54 +147,10 @@
             }
         }
 
-        #popupBackground {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 99;
-        }
-
-        #popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            display: none;
-            z-index: 100;
-        }
-
-        #popup p {
-            font-family: 'Vazir', Arial, sans-serif;
-            font-size: 16px;
-            margin: 0 0 10px;
-        }
-
-        #popup button {
-            background: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        #popup button:hover {
-            background: #0056b3;
-        }
-
         h1 {
             text-align: center;
             font-family: 'Vazir', Arial, sans-serif;
-            font-size: 80px;
+            font-size: 36px;
             font-weight: bold;
             margin: 20px 10px;
         }
@@ -194,8 +159,8 @@
 </head>
 <body>
     <div id="noteContainer">
-        <p>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
-        <p>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
+        <p><b>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</b></p>
+        <p><b>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</b></p>
         <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<span>(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
     </div>
 
@@ -203,6 +168,8 @@
     <div id="popup">
         <p>مرسی از شما بابت کامل کردن بریف<br>
         فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید<br>
+        اگر دانلود نشد دکمه زیر را کلیک کنید<br>
+        <button class="download-btn" onclick="downloadPDF()">دانلود PDF</button>
         ممنونم 🌹</p>
         <button onclick="closePopup()">بستن</button>
     </div>
@@ -291,71 +258,74 @@
 
     <script>
         const saveButton = document.getElementById('saveButton');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const popup = document.getElementById('popup');
         const popupBackground = document.getElementById('popupBackground');
+        const popup = document.getElementById('popup');
         const form = document.getElementById('briefForm');
 
-        function updateProgress() {
-            const inputs = Array.from(form.querySelectorAll('input[required], select[required], textarea[required]'));
-            const validInputs = inputs.filter(input => {
-                if (input.id === 'phoneNumber' && input.value.length < 11) {
-                    input.classList.add('invalid');
-                    return false;
-                } else {
-                    input.classList.remove('invalid');
-                }
-                return input.value.trim() !== '';
-            });
-
-            const progress = (validInputs.length / inputs.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressText.textContent = `${Math.round(progress)}% تکمیل شده`;
-            saveButton.disabled = progress < 100;
-        }
-
-        function validatePhoneNumber(input) {
-            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
-        }
-
-        function closePopup() {
-            popup.style.display = 'none';
-            popupBackground.style.display = 'none';
-        }
-
-        saveButton.addEventListener('click', async () => {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ unit: 'px', format: 'a4' });
-
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                if ((key === 'سناریو پیشنهادی' || key === 'توضیحات تکمیلی') && value.trim() === '') return;
-                data[key] = value;
-            });
-
-            let y = 20;
-            pdf.setFont('Arial', 'bold');
-            pdf.setFontSize(14);
-            pdf.text('بریف پروژه', 200, y, { align: 'center' });
-
-            y += 30;
-            pdf.setFont('Arial', 'normal');
-            Object.entries(data).forEach(([key, value]) => {
-                pdf.text(`${key}: ${value}`, 20, y);
-                y += 20;
-            });
-
-            pdf.save('brief.pdf');
-
+        saveButton.addEventListener('click', () => {
+            generatePDF();
             popupBackground.style.display = 'block';
             popup.style.display = 'block';
         });
 
-        form.addEventListener('input', updateProgress);
+        function closePopup() {
+            popupBackground.style.display = 'none';
+            popup.style.display = 'none';
+        }
 
-        window.addEventListener('DOMContentLoaded', updateProgress);
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+
+            const loadFont = async (url, fontName) => {
+                const fontData = await fetch(url).then(res => res.arrayBuffer());
+                pdf.addFileToVFS(`${fontName}.ttf`, fontData);
+                pdf.addFont(`${fontName}.ttf`, fontName, "normal");
+            };
+
+            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf", "Vazir");
+            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf", "IRANSansBold");
+
+            pdf.setFont("Vazir");
+            pdf.setFontSize(16);
+
+            let y = 20;
+            pdf.text("بریف پروژه", 200, y, { align: 'center' });
+            y += 30;
+
+            const formData = new FormData(form);
+            formData.forEach((value, key) => {
+                if (value.trim() !== "") {
+                    pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
+                    y += 20;
+                }
+            });
+
+            pdf.save('brief.pdf');
+        }
+
+        form.addEventListener('input', () => {
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim()) validCount++;
+            });
+            document.getElementById('progressBar').style.width = (validCount / inputs.length) * 100 + '%';
+            saveButton.disabled = validCount !== inputs.length;
+        });
+
+        function downloadPDF() {
+            generatePDF();
+        }
+
+        function validatePhoneNumber(input) {
+            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
+            if (input.value.length < 11) {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
+        }
     </script>
 </body>
 </html>
