@@ -53,7 +53,7 @@
             box-sizing: border-box;
         }
 
-        input.invalid, select.invalid {
+        input.invalid, select.invalid, textarea.invalid {
             border-color: red;
         }
 
@@ -289,6 +289,12 @@
                 saveButton.disabled = validCount !== inputs.length;
             });
 
+            saveButton.addEventListener('click', () => {
+                if (!saveButton.disabled) {
+                    alert('بریف شما با موفقیت تکمیل شد.');
+                }
+            });
+
             function validatePhoneNumber(input) {
                 const regex = /^[0-9]{0,11}$/;
                 input.value = input.value.replace(/[^0-9]/g, '');
@@ -314,6 +320,11 @@
 
             function validateTextNoNumbers(input) {
                 input.value = input.value.replace(/[0-9]/g, '');
+                if (/\d/.test(input.value)) {
+                    input.classList.add('invalid');
+                } else {
+                    input.classList.remove('invalid');
+                }
             }
 
             function validateSelect(input) {
