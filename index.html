@@ -206,6 +206,8 @@
                         validatePhoneNumber(input);
                     } else if (input.type === 'email') {
                         validateEmail(input);
+                    } else if (input.tagName.toLowerCase() === 'textarea' && (input.id === 'brandImage' || input.id === 'audienceReaction')) {
+                        validateTextNoNumbers(input);
                     } else {
                         validateText(input);
                     }
@@ -223,12 +225,12 @@
 
             function validatePhoneNumber(input) {
                 const regex = /^[0-9]{0,11}$/;
+                input.value = input.value.replace(/[^0-9]/g, '');
                 if (!regex.test(input.value) || input.value.length < 11) {
                     input.classList.add('invalid');
                 } else {
                     input.classList.remove('invalid');
                 }
-                input.value = input.value.slice(0, 11);
             }
 
             function validateEmail(input) {
@@ -242,11 +244,10 @@
 
             function validateText(input) {
                 input.value = input.value.replace(/[0-9]/g, '');
-                if (input.value.trim() === '') {
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
+            }
+
+            function validateTextNoNumbers(input) {
+                input.value = input.value.replace(/[0-9]/g, '');
             }
         });
     </script>
