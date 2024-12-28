@@ -45,6 +45,7 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
         }
 
         label {
@@ -56,10 +57,11 @@
         input, textarea, select {
             width: calc(100% - 40px);
             padding: 10px;
-            margin: 20px;
+            margin: 10px 20px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-family: 'Vazir', Arial, sans-serif;
+            box-sizing: border-box;
         }
 
         textarea {
@@ -74,6 +76,8 @@
             cursor: pointer;
             border-radius: 4px;
             font-size: 16px;
+            margin: 10px 20px;
+            box-sizing: border-box;
         }
 
         button:hover {
@@ -117,6 +121,7 @@
             font-size: 14px;
             line-height: 2;
             color: #333;
+            box-sizing: border-box;
         }
 
         #noteContainer p {
@@ -126,12 +131,12 @@
 
         #noteContainer p:nth-child(3) {
             font-weight: normal;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         h1 {
             text-align: center;
-            font-size: 40px;
+            font-size: 50px;
             font-weight: bold;
             margin: 40px 0;
         }
@@ -148,6 +153,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             text-align: center;
             z-index: 100;
+            box-sizing: border-box;
         }
 
         #popupBackground {
@@ -179,6 +185,31 @@
 
         #popup button:hover {
             background: #d32f2f;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+
+            form {
+                width: calc(100% - 40px);
+                margin: 10px;
+                padding: 20px;
+            }
+
+            input, textarea, select, button {
+                width: calc(100% - 20px);
+                margin: 10px;
+                padding: 10px;
+            }
+
+            #noteContainer {
+                width: calc(100% - 40px);
+                top: 10px;
+                right: 10px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
