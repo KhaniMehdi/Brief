@@ -190,36 +190,44 @@
             saveButton.disabled = progress < 100;
         }
 
-       async function validateAndSave() {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+        async function validateAndSave() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
 
-        // Load font from GitHub
-        const fontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/Vazir-Regular.ttf';
-        const fontResponse = await fetch(fontUrl);
-        const fontData = await fontResponse.arrayBuffer();
-        pdf.addFileToVFS('Vazir-Regular.ttf', btoa(String.fromCharCode(...new Uint8Array(fontData))));
-        pdf.addFont('Vazir-Regular.ttf', 'Vazir', 'normal');
-        pdf.setFont('Vazir');
+            // Load fonts from GitHub
+            const boldFontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/IRANSansXBold.ttf';
+            const regularFontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/IRANSansXRegular.ttf';
 
-        const formData = new FormData(document.getElementById('briefForm'));
-        let y = 40; // Start position
-        pdf.setFontSize(16);
-        pdf.text('بریف پروژه', 105, y, { align: 'center' }); // Title
-        y += 20;
+            const boldFontResponse = await fetch(boldFontUrl);
+            const boldFontData = await boldFontResponse.arrayBuffer();
+            pdf.addFileToVFS('IRANSansXBold.ttf', btoa(String.fromCharCode(...new Uint8Array(boldFontData))));
+            pdf.addFont('IRANSansXBold.ttf', 'IRANSansX', 'bold');
 
-        formData.forEach((value, key) => {
-            if (value.trim() && !(key === 'هدف دیگر' && !value.trim())) {
-                pdf.setFontSize(12);
-                pdf.text(`${key}:`, 190, y, { align: 'right' });
-                pdf.setFont(undefined, 'normal');
-                pdf.text(value, 170, y, { align: 'right' });
-                y += 10;
-            }
-        });
+            const regularFontResponse = await fetch(regularFontUrl);
+            const regularFontData = await regularFontResponse.arrayBuffer();
+            pdf.addFileToVFS('IRANSansXRegular.ttf', btoa(String.fromCharCode(...new Uint8Array(regularFontData))));
+            pdf.addFont('IRANSansXRegular.ttf', 'IRANSansX', 'normal');
 
-        pdf.save('brief.pdf');
-    }
+            const formData = new FormData(form);
+            let y = 40; // Start position
+            pdf.setFont('IRANSansX', 'bold');
+            pdf.setFontSize(16);
+            pdf.text('بریف پروژه', 105, y, { align: 'center' }); // Title
+            y += 20;
+
+            formData.forEach((value, key) => {
+                if (value.trim() && !(key === 'هدف دیگر' && !value.trim())) {
+                    pdf.setFont('IRANSansX', 'bold');
+                    pdf.setFontSize(12);
+                    pdf.text(`${key}:`, 190, y, { align: 'right' });
+                    pdf.setFont('IRANSansX', 'normal');
+                    pdf.text(value, 170, y, { align: 'right' });
+                    y += 10;
+                }
+            });
+
+            pdf.save('brief.pdf');
+        }
 
         function toggleOtherProductionGoal(select) {
             const otherGoal = document.getElementById('otherProductionGoal');
