@@ -309,41 +309,35 @@
             popup.style.display = 'none';
         }
 
-      async function generatePDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
 
-    // بارگذاری فونت‌ها از Base64
-    const loadFont = (fontName, fontBase64) => {
-        pdf.addFileToVFS(`${fontName}.ttf`, atob(fontBase64));
-        pdf.addFont(`${fontName}.ttf`, fontName, "normal");
-    };
+            const loadFont = async (url, fontName) => {
+                const fontData = await fetch(url).then(res => res.arrayBuffer());
+                pdf.addFileToVFS(`${fontName}.ttf`, fontData);
+                pdf.addFont(`${fontName}.ttf`, fontName, "normal");
+            };
 
-    // جایگذاری Base64 فونت‌ها
-    loadFont("Vazir", "<BASE64_STRING_FOR_VAZIR>");
-    loadFont("IRANSansBold", "<BASE64_STRING_FOR_IRANSANSXBOLD>");
+            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf", "Vazir");
+            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf", "IRANSansBold");
 
-    pdf.setFont("Vazir");
-    pdf.setFontSize(16);
+            pdf.setFont("Vazir");
+            pdf.setFontSize(16);
 
-    let y = 20;
-    pdf.text("بریف پروژه", 200, y, { align: 'center' });
-    y += 30;
+            let y = 20;
+            pdf.text("بریف پروژه", 200, y, { align: 'center' });
+            y += 30;
 
-    const form = document.getElementById('briefForm'); // تعریف فرم
-    const formData = new FormData(form);
+            const formData = new FormData(form);
+            formData.forEach((value, key) => {
+                if (value.trim() !== "") {
+                    pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
+                    y += 20;
+                }
+            });
 
-    formData.forEach((value, key) => {
-        if (value.trim() !== "") {
-            pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
-            y += 20;
-        }
-    });
-
-    pdf.save('brief.pdf');
-    console.log("PDF saved successfully.");
-}
-
+            pdf.save('brief.pdf');
         }
 
         form.addEventListener('input', () => {
