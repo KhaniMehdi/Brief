@@ -77,40 +77,67 @@
             background: #0056b3;
         }
 
-        #popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            z-index: 100;
-        }
-
-        #popup button {
-            margin-top: 10px;
-            background: #f44336;
-            color: white;
-            border: none;
-            padding: 8px 12px;
+        #progressContainer {
+            margin: 15px 0;
+            background: #f3f3f3;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            cursor: pointer;
+            height: 10px;
+            overflow: hidden;
+            width: 100%;
         }
 
-        #popup button:hover {
-            background: #d32f2f;
+        #progressBar {
+            height: 10px;
+            width: 0;
+            background: linear-gradient(90deg, #1e88e5, #0d47a1);
+            transition: width 0.5s ease-in-out;
+        }
+
+        #progressText {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+        }
+
+        #noteContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-family: 'Vazir', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #333;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div id="popup">
-        <p>مرسی از کامل کردن بریف<br>
-        فایل بریف براتون ارسال شد بررسی بفرمایید اگر موردی بریف رو برای بنده هم ارسال کنید در غیر این صورت فرم رو مجدد پر بفرمایید ❤️🌹</p>
-        <button onclick="closePopup()">بستن</button>
+    <div id="noteContainer">
+        <p>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
+        <p>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
+        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.</p>
     </div>
 
     <form id="briefForm">
@@ -136,15 +163,6 @@
             <option value="برندینگ">برندینگ</option>
         </select>
 
-        <label for="videoDimensions">6. ابعاد ویدیو:</label>
-        <select id="videoDimensions" name="ابعاد ویدیو" required>
-            <option value="">انتخاب کنید</option>
-            <option value="720p عمودی">720p عمودی</option>
-            <option value="1080p عمودی">1080p عمودی</option>
-            <option value="720p افقی">720p افقی</option>
-            <option value="1080p افقی">1080p افقی</option>
-        </select>
-
         <label for="duration">7. مدت زمان پیشنهادی:</label>
         <select id="duration" name="مدت زمان پیشنهادی" required>
             <option value="">انتخاب کنید</option>
@@ -163,7 +181,10 @@
             <option value="فوری">فوری</option>
         </select>
 
-        <label for="proposedBudget">9. بودجه پیشنهادی:</label>
+        <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" rows="4"></textarea>
+
+        <label for="proposedBudget">10. بودجه پیشنهادی:</label>
         <select id="proposedBudget" name="بودجه پیشنهادی" required>
             <option value="">انتخاب کنید</option>
             <option value="تا 10 میلیون">تا 10 میلیون</option>
@@ -171,9 +192,6 @@
             <option value="تا 30 میلیون">تا 30 میلیون</option>
             <option value="بیش از 30 میلیون">بیش از 30 میلیون</option>
         </select>
-
-        <label for="competitorDifference">10. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" rows="4"></textarea>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
         <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4"></textarea>
@@ -187,32 +205,40 @@
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
         <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
 
+        <label for="videoDimensions">6. ابعاد ویدیو:</label>
+        <select id="videoDimensions" name="ابعاد ویدیو" required>
+            <option value="">انتخاب کنید</option>
+            <option value="720p عمودی">720p عمودی</option>
+            <option value="1080p عمودی">1080p عمودی</option>
+            <option value="720p افقی">720p افقی</option>
+            <option value="1080p افقی">1080p افقی</option>
+        </select>
+
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+        </div>
+        <div id="progressText">0% تکمیل شده</div>
+
         <button type="button" id="saveButton">دانلود فایل بریف</button>
     </form>
 
     <script>
         const saveButton = document.getElementById('saveButton');
-        const popup = document.getElementById('popup');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const form = document.getElementById('briefForm');
 
-        function showPopup() {
-            popup.style.display = 'block';
+        function updateProgress() {
+            const inputs = Array.from(form.querySelectorAll('input, select, textarea'));
+            const filled = inputs.filter(input => input.value.trim() !== '').length;
+            const progress = (filled / inputs.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}% تکمیل شده`;
         }
 
-        function closePopup() {
-            popup.style.display = 'none';
-        }
+        form.addEventListener('input', updateProgress);
 
         saveButton.addEventListener('click', () => {
-            if (validateForm()) {
-                alert('فرم با موفقیت ثبت شد!');
-                // Simulate file download
-                setTimeout(() => {
-                    showPopup();
-                }, 1000);
-            }
-        });
-
-        function validateForm() {
             const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
             let valid = true;
             requiredFields.forEach(field => {
@@ -225,12 +251,12 @@
                 }
             });
 
-            if (!valid) {
+            if (valid) {
+                alert('فرم با موفقیت ثبت شد!');
+            } else {
                 alert('لطفاً تمام بخش‌های الزامی را تکمیل کنید.');
             }
-
-            return valid;
-        }
+        });
     </script>
 </body>
 </html>
