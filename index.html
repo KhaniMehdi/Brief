@@ -313,8 +313,9 @@
                 pdf.addFont(`${fontName}.ttf`, fontName, "normal");
             };
 
-            await loadFont("https://github.com/KhaniMehdi/Brief/blob/11ba8b840dfc0a13ce96e5caffaf6bb824a7ff08/Vazirmatn-Regular.ttf", "Vazirmatn");
-            await loadFont("https://github.com/KhaniMehdi/Brief/blob/11ba8b840dfc0a13ce96e5caffaf6bb824a7ff08/IBMPlexSansArabic-Regular.ttf", "IBM Plex Sans Arabic");
+            await loadFont("https://raw.githubusercontent.com/KhaniMehdi/Brief/main/Vazirmatn-Regular.ttf", "Vazirmatn");
+            await loadFont("https://raw.githubusercontent.com/KhaniMehdi/Brief/main/IBMPlexSansArabic-Regular.ttf", "IBM Plex Sans Arabic");
+
 
             pdf.setFont("Vazir");
             pdf.setFontSize(16);
