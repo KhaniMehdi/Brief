@@ -53,7 +53,7 @@
             box-sizing: border-box;
         }
 
-        input.invalid {
+        input.invalid, select.invalid {
             border-color: red;
         }
 
@@ -159,113 +159,6 @@
             font-weight: bold;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('briefForm');
-            const saveButton = document.getElementById('saveButton');
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-
-            saveButton.addEventListener('click', () => {
-                if (validateAllFields()) {
-                    generatePDF();
-                } else {
-                    alert('لطفاً تمامی فیلدهای ضروری را تکمیل کنید.');
-                }
-            });
-
-            form.addEventListener('input', () => {
-                const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-                let validCount = 0;
-
-                inputs.forEach(input => {
-                    if (input.id === 'phoneNumber') {
-                        validatePhoneNumber(input);
-                    } else if (input.type === 'email') {
-                        validateEmail(input);
-                    } else if (input.tagName.toLowerCase() === 'textarea' && (input.id === 'scenario' || input.id === 'additionalNotes')) {
-                        validateTextNoNumbers(input);
-                    } else {
-                        validateText(input);
-                    }
-
-                    if (input.value.trim() && input.id === 'phoneNumber' && input.classList.contains('invalid')) {
-                        return;
-                    }
-                    if (input.value.trim()) {
-                        validCount++;
-                    }
-                });
-
-                progressBar.style.width = (validCount / inputs.length) * 100 + '%';
-                progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
-                progressText.textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
-                saveButton.disabled = validCount !== inputs.length;
-            });
-
-            async function generatePDF() {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
-
-                pdf.setFont('helvetica');
-                pdf.setFontSize(12);
-
-                let y = 20;
-                pdf.text('بریف پروژه', pdf.internal.pageSize.width / 2, y, { align: 'center' });
-                y += 30;
-
-                const formData = new FormData(form);
-                formData.forEach((value, key) => {
-                    if (value.trim() !== '') {
-                        pdf.text(`${key}: ${value}`, 20, y);
-                        y += 20;
-                    }
-                });
-
-                pdf.save('brief.pdf');
-            }
-
-            function validatePhoneNumber(input) {
-                const regex = /^[0-9]{0,11}$/;
-                input.value = input.value.replace(/[^0-9]/g, '');
-                if (!regex.test(input.value) || input.value.length < 11) {
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            }
-
-            function validateEmail(input) {
-                const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!regex.test(input.value.trim())) {
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            }
-
-            function validateText(input) {
-                input.value = input.value.replace(/[0-9]/g, '');
-            }
-
-            function validateTextNoNumbers(input) {
-                input.value = input.value.replace(/[0-9]/g, '');
-                if (/[0-9]/.test(input.value)) {
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            }
-
-            function validateAllFields() {
-                const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-                return Array.from(inputs).every(input => {
-                    return input.value.trim() && !input.classList.contains('invalid');
-                });
-            }
-        });
-    </script>
 </head>
 <body>
     <div id="noteContainer">
@@ -355,5 +248,82 @@
 
         <button type="button" id="saveButton" disabled>تکمیل بریف</button>
     </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('briefForm');
+            const saveButton = document.getElementById('saveButton');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+
+            form.addEventListener('input', () => {
+                const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+                let validCount = 0;
+
+                inputs.forEach(input => {
+                    if (input.id === 'phoneNumber') {
+                        validatePhoneNumber(input);
+                    } else if (input.type === 'email') {
+                        validateEmail(input);
+                    } else if (input.tagName.toLowerCase() === 'textarea' && (input.id === 'scenario' || input.id === 'additionalNotes')) {
+                        validateTextNoNumbers(input);
+                    } else if (input.tagName.toLowerCase() === 'select') {
+                        validateSelect(input);
+                    } else {
+                        validateText(input);
+                    }
+
+                    if (input.value.trim() && input.classList.contains('invalid')) {
+                        return;
+                    }
+
+                    if (input.value.trim()) {
+                        validCount++;
+                    }
+                });
+
+                progressBar.style.width = (validCount / inputs.length) * 100 + '%';
+                progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
+                progressText.textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
+                saveButton.disabled = validCount !== inputs.length;
+            });
+
+            function validatePhoneNumber(input) {
+                const regex = /^[0-9]{0,11}$/;
+                input.value = input.value.replace(/[^0-9]/g, '');
+                if (!regex.test(input.value) || input.value.length < 11) {
+                    input.classList.add('invalid');
+                } else {
+                    input.classList.remove('invalid');
+                }
+            }
+
+            function validateEmail(input) {
+                const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!regex.test(input.value.trim())) {
+                    input.classList.add('invalid');
+                } else {
+                    input.classList.remove('invalid');
+                }
+            }
+
+            function validateText(input) {
+                input.value = input.value.replace(/[0-9]/g, '');
+            }
+
+            function validateTextNoNumbers(input) {
+                input.value = input.value.replace(/[0-9]/g, '');
+            }
+
+            function validateSelect(input) {
+                if (input.value === '') {
+                    input.classList.add('invalid');
+                } else {
+                    input.classList.remove('invalid');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
