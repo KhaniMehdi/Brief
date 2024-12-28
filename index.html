@@ -5,15 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بریف پروژه</title>
     <style>
-        :root {
-            --main-bg: linear-gradient(35deg, #1e88e5, #0d47a1);
-            --form-bg: #ffffff;
-            --form-text-color: #333;
-            --button-bg: #007BFF;
-            --button-hover-bg: #0056b3;
-            --error-color: red;
-        }
-
         @font-face {
             font-family: 'Vazir';
             src: url('https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf') format('truetype');
@@ -40,9 +31,9 @@
             padding: 0;
             direction: rtl;
             text-align: right;
-            background: var(--main-bg);
-            color: var(--form-text-color);
-            overflow-y: auto;
+            background: linear-gradient(35deg, #1e88e5, #0d47a1);
+            color: #333;
+            overflow: hidden;
         }
 
         #typing-container {
@@ -61,7 +52,6 @@
             color: rgba(255, 255, 255, 0.3);
             white-space: nowrap;
             overflow: hidden;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .typing-text.left {
@@ -74,10 +64,42 @@
             text-align: right;
         }
 
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes erasing {
+            from {
+                width: 100%;
+            }
+            to {
+                width: 0;
+            }
+        }
+
+        @keyframes blink {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        .typing-text span {
+            display: inline-block;
+            animation: blink 0.7s step-end infinite;
+        }
+
         form {
             max-width: 600px;
             margin: 20px auto;
-            background: var(--form-bg);
+            background: #ffffff;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -100,36 +122,90 @@
             font-family: 'Vazir', Arial, sans-serif;
         }
 
+        input::placeholder, textarea::placeholder {
+            font-style: italic;
+            color: #888;
+        }
+
         button {
-            background: var(--button-bg);
+            background: #007BFF;
             color: #fff;
             border: none;
             padding: 10px 15px;
             cursor: pointer;
             border-radius: 4px;
-            transition: background 0.3s ease;
         }
 
         button:hover {
-            background: var(--button-hover-bg);
+            background: #0056b3;
+        }
+
+        #progressBar {
+            height: 10px;
+            width: 0;
+            background: linear-gradient(90deg, #1e88e5, #0d47a1);
+            transition: width 0.5s ease-in-out;
+            border-radius: 5px;
+        }
+
+        #progressContainer {
+            margin: 15px 0;
+            background: #f3f3f3;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 10px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        #progressText {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+        }
+
+        button[disabled] {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
         }
 
         #noteContainer {
-            margin: 20px auto;
-            max-width: 600px;
-            background: #f9f9f9;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-family: 'Vazir', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #333;
+            animation: glow 2s infinite;
         }
 
-        .faded-text {
-            color: #888;
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
+            }
         }
 
         @media (max-width: 768px) {
             #noteContainer {
-                margin: 10px;
+                position: static;
+                width: auto;
+                margin: 20px;
             }
         }
     </style>
@@ -153,19 +229,20 @@
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" pattern="\d{11}" required>
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" pattern="\d{11}" oninput="validatePhoneNumber(this)" required>
 
         <label for="productionGoal">5. هدف از تولید:</label>
-        <select id="productionGoal" name="هدف از تولید" required>
+        <select id="productionGoal" name="هدف از تولید" onchange="toggleOtherProductionGoal(this)" required>
             <option value="">انتخاب کنید</option>
             <option value="فروش و بازاریابی">فروش و بازاریابی</option>
             <option value="معرفی محصول">معرفی محصول</option>
             <option value="برندینگ">برندینگ</option>
             <option value="سایر">سایر</option>
         </select>
+        <input type="text" id="otherProductionGoal" name="هدف دیگر" placeholder="مثال: اطلاع‌رسانی" style="display: none;">
 
         <label for="videoDimensions">6. ابعاد ویدیو:</label>
-        <select id="videoDimensions" name="ابعاد ویدیو" required>
+        <select id="videoDimensions" name="ابعاد ویدیو" onchange="toggleOtherVideoDimensions(this)" required>
             <option value="">انتخاب کنید</option>
             <option value="720p عمودی">720p عمودی</option>
             <option value="1080p عمودی">1080p عمودی</option>
@@ -173,6 +250,7 @@
             <option value="1080p افقی">1080p افقی</option>
             <option value="سایر">سایر</option>
         </select>
+        <input type="text" id="otherVideoDimensions" name="ابعاد دیگر" placeholder="مثال: 4K یا ابعاد دلخواه" style="display: none;">
 
         <label for="duration">7. مدت زمان پیشنهادی:</label>
         <select id="duration" name="مدت زمان پیشنهادی" required>
@@ -183,7 +261,45 @@
             <option value="بیشتر از 90 ثانیه">بیشتر از 90 ثانیه</option>
         </select>
 
-        <button type="button" onclick="validateAndSave()">دانلود فایل بریف</button>
+        <label for="deliveryDate">8. تاریخ تحویل پیشنهادی:</label>
+        <select id="deliveryDate" name="تاریخ تحویل پیشنهادی" required>
+            <option value="">انتخاب کنید</option>
+            <option value="ده روزه">ده روزه</option>
+            <option value="بیست روزه">بیست روزه</option>
+            <option value="سی روزه">سی روزه</option>
+            <option value="فوری">فوری</option>
+        </select>
+
+        <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" rows="4" required></textarea>
+
+        <label for="proposedBudget">10. بودجه پیشنهادی:</label>
+        <select id="proposedBudget" name="بودجه پیشنهادی" required>
+            <option value="">انتخاب کنید</option>
+            <option value="تا 10 میلیون">تا 10 میلیون</option>
+            <option value="تا 20 میلیون">تا 20 میلیون</option>
+            <option value="تا 30 میلیون">تا 30 میلیون</option>
+            <option value="بیش از 30 میلیون">بیش از 30 میلیون</option>
+        </select>
+
+        <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
+
+        <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
+
+        <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
+        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
+
+        <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
+        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
+
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+        </div>
+        <div id="progressText">0% تکمیل شده</div>
+
+        <button type="button" id="saveButton" onclick="validateAndSave()" disabled>دانلود فایل بریف</button>
     </form>
 
     <div id="noteContainer">
@@ -193,37 +309,103 @@
     </div>
 
     <script>
-        function updateTypingText() {
-            const leftTyping = document.getElementById('typing-left');
-            const rightTyping = document.getElementById('typing-right');
-            const words = [
-                { faded: 'Creat', bold: 'ivity' },
-                { faded: 'Idea', bold: 'tion' },
-                { faded: 'Des', bold: 'ign' }
-            ];
+        const leftTyping = document.getElementById("typing-left");
+        const rightTyping = document.getElementById("typing-right");
+        const words = ["Creativity", "Ideation", "Design"];
 
-            let index = 0;
-            function cycleWords() {
-                const word = words[index];
-                leftTyping.innerHTML = `<span class="faded-text">${word.faded}</span><span>${word.bold}</span>`;
-                rightTyping.innerHTML = `<span class="faded-text">${word.faded}</span><span>${word.bold}</span>`;
-                index = (index + 1) % words.length;
-                setTimeout(cycleWords, 2000);
-            }
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let currentSide = "left";
 
-            cycleWords();
-        }
+        function typeWords() {
+            const currentWord = words[wordIndex];
 
-        updateTypingText();
-
-        function validateAndSave() {
-            const form = document.getElementById('briefForm');
-            if (form.checkValidity()) {
-                alert('فرم شما با موفقیت ذخیره شد!');
+            if (isDeleting) {
+                if (currentSide === "left") {
+                    leftTyping.textContent = currentWord.substring(0, charIndex--);
+                } else {
+                    rightTyping.textContent = currentWord.substring(0, charIndex--);
+                }
             } else {
-                alert('لطفاً تمام فیلدهای ضروری را پر کنید.');
+                if (currentSide === "left") {
+                    leftTyping.textContent = currentWord.substring(0, charIndex++);
+                } else {
+                    rightTyping.textContent = currentWord.substring(0, charIndex++);
+                }
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(typeWords, 2000); // Pause before deleting
+                return;
+            }
+
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                currentSide = currentSide === "left" ? "right" : "left";
+            }
+
+            setTimeout(typeWords, isDeleting ? 50 : 100);
+        }
+
+        typeWords();
+
+        function validatePhoneNumber(input) {
+            const phonePattern = /^\d{0,11}$/;
+            if (!phonePattern.test(input.value)) {
+                alert("لطفاً فقط اعداد وارد کنید.");
+                input.value = input.value.slice(0, -1);
             }
         }
-    </script>
-</body>
-</html>
+
+        function toggleOtherProductionGoal(select) {
+            const otherGoal = document.getElementById('otherProductionGoal');
+            otherGoal.style.display = select.value === 'سایر' ? 'block' : 'none';
+            if (select.value !== 'سایر') {
+                otherGoal.value = '';
+            }
+        }
+
+        function toggleOtherVideoDimensions(select) {
+            const otherDimensions = document.getElementById('otherVideoDimensions');
+            otherDimensions.style.display = select.value === 'سایر' ? 'block' : 'none';
+            if (select.value !== 'سایر') {
+                otherDimensions.value = '';
+            }
+        }
+
+        async function validateAndSave() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+
+            pdf.addFileToVFS("IRANSansXBold.ttf", "BASE64_BOLD_FONT_HERE");
+            pdf.addFont("IRANSansXBold.ttf", "IRANSansBold", "normal");
+
+            pdf.addFileToVFS("IRANSansXRegular.ttf", "BASE64_REGULAR_FONT_HERE");
+            pdf.addFont("IRANSansXRegular.ttf", "IRANSansRegular", "normal");
+
+            pdf.setFont("IRANSansBold");
+            pdf.setFontSize(16);
+            pdf.text('بریف پروژه', 105, 20, { align: 'center' });
+
+            const formData = new FormData(document.getElementById('briefForm'));
+            let y = 40;
+
+            formData.forEach((value, key) => {
+                if (value.trim()) {
+                    if (key.includes("نام") || key.includes("هدف") || key.includes("ابعاد")) {
+                        pdf.setFont("IRANSansBold");
+                    } else {
+                        pdf.setFont("IRANSansRegular");
+                    }
+                    pdf.setFontSize(12);
+                    pdf.text(`${key}: ${value}`, 190, y, { align: 'right' });
+                    y += 10;
+                }
+            });
+
+            pdf.save('brief.pdf');
+        }
+   
