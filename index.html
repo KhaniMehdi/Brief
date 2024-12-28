@@ -32,7 +32,6 @@
             top: 50%;
             left: 0;
             width: 100%;
-            pointer-events: none;
             transform: translateY(-50%);
             z-index: 1;
         }
@@ -40,51 +39,21 @@
         .typing-text {
             position: absolute;
             font-family: 'Pix', Arial, sans-serif;
-            font-size: 3rem;
+            font-size: 4rem;
             color: rgba(255, 255, 255, 0.2);
             white-space: nowrap;
             overflow: hidden;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
         }
 
         .typing-text.left {
-            left: 10%;
+            left: 5%;
+            text-align: left;
         }
 
         .typing-text.right {
-            right: 10%;
-        }
-
-        @keyframes typing {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes erasing {
-            from {
-                width: 100%;
-            }
-            to {
-                width: 0;
-            }
-        }
-
-        @keyframes blink {
-            from, to {
-                border-color: transparent;
-            }
-            50% {
-                border-color: rgba(255, 255, 255, 0.7);
-            }
-        }
-
-        .typing-text span {
-            display: inline-block;
-            animation: blink 0.7s step-end infinite;
+            right: 5%;
+            text-align: right;
         }
 
         form {
@@ -95,7 +64,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
-            z-index: 10;
+            z-index: 2;
         }
 
         label {
@@ -113,11 +82,6 @@
             font-family: 'Vazir', Arial, sans-serif;
         }
 
-        input::placeholder, textarea::placeholder {
-            font-style: italic;
-            color: #888;
-        }
-
         button {
             background: #007BFF;
             color: #fff;
@@ -130,35 +94,6 @@
         button:hover {
             background: #0056b3;
         }
-
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        #noteContainer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            font-family: 'Vazir', Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.8;
-            color: #333;
-        }
-
-        @media (max-width: 768px) {
-            #noteContainer {
-                position: static;
-                width: auto;
-                margin: 20px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -170,138 +105,68 @@
     <form id="briefForm">
         <h1>بریف پروژه</h1>
 
-        <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
+        <label for="brandName">نام برند:</label>
+        <input type="text" id="brandName" name="brandName" placeholder="مثال: ایران کالا" required>
 
-        <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
+        <label for="clientName">نام کارفرما:</label>
+        <input type="text" id="clientName" name="clientName" placeholder="مثال: محمد محمدی" required>
 
-        <label for="email">3. آدرس ایمیل:</label>
-        <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
+        <label for="email">ایمیل:</label>
+        <input type="email" id="email" name="email" placeholder="مثال: example@email.com" required>
 
-        <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" pattern="\d{11}" oninput="validatePhoneNumber(this)" required>
+        <label for="phoneNumber">شماره تماس:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" placeholder="مثال: 09121111111" required>
 
-        <label for="productionGoal">5. هدف از تولید:</label>
-        <select id="productionGoal" name="هدف از تولید" onchange="toggleOtherProductionGoal(this)" required>
-            <option value="">انتخاب کنید</option>
-            <option value="فروش و بازاریابی">فروش و بازاریابی</option>
-            <option value="معرفی محصول">معرفی محصول</option>
-            <option value="برندینگ">برندینگ</option>
-            <option value="سایر">سایر</option>
-        </select>
-        <input type="text" id="otherProductionGoal" name="هدف دیگر" placeholder="مثال: اطلاع‌رسانی" style="display: none;">
-
-        <label for="videoDimensions">6. ابعاد ویدیو:</label>
-        <select id="videoDimensions" name="ابعاد ویدیو" onchange="toggleOtherVideoDimensions(this)" required>
-            <option value="">انتخاب کنید</option>
-            <option value="720p عمودی">720p عمودی</option>
-            <option value="1080p عمودی">1080p عمودی</option>
-            <option value="720p افقی">720p افقی</option>
-            <option value="1080p افقی">1080p افقی</option>
-            <option value="سایر">سایر</option>
-        </select>
-        <input type="text" id="otherVideoDimensions" name="ابعاد دیگر" placeholder="مثال: 4K یا ابعاد دلخواه" style="display: none;">
-
-        <label for="duration">7. مدت زمان پیشنهادی:</label>
-        <select id="duration" name="مدت زمان پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="کمتر از 30 ثانیه">کمتر از 30 ثانیه</option>
-            <option value="30 تا 60 ثانیه">30 تا 60 ثانیه</option>
-            <option value="60 تا 90 ثانیه">60 تا 90 ثانیه</option>
-            <option value="بیشتر از 90 ثانیه">بیشتر از 90 ثانیه</option>
-        </select>
-
-        <label for="deliveryDate">8. تاریخ تحویل پیشنهادی:</label>
-        <select id="deliveryDate" name="تاریخ تحویل پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="ده روزه">ده روزه</option>
-            <option value="بیست روزه">بیست روزه</option>
-            <option value="سی روزه">سی روزه</option>
-            <option value="فوری">فوری</option>
-        </select>
-
-        <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" rows="4" required></textarea>
-
-        <label for="proposedBudget">10. بودجه پیشنهادی:</label>
-        <select id="proposedBudget" name="بودجه پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="تا 10 میلیون">تا 10 میلیون</option>
-            <option value="تا 20 میلیون">تا 20 میلیون</option>
-            <option value="تا 30 میلیون">تا 30 میلیون</option>
-            <option value="بیش از 30 میلیون">بیش از 30 میلیون</option>
-        </select>
-
-        <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
-
-        <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
-
-        <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
-
-        <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
-
-        <button type="button" id="saveButton">دانلود فایل بریف</button>
+        <button type="submit">ارسال</button>
     </form>
 
     <script>
-        const leftTyping = document.getElementById("typing-left");
-        const rightTyping = document.getElementById("typing-right");
         const words = ["Creat", "Idea", "Des"];
-        const continuations = ["ivity", "tion", "ign"];
+        const endings = ["ivity", "tion", "ign"];
 
-        let wordIndex = 0;
+        let index = 0;
         let isDeleting = false;
-        let charIndex = 0;
+        let leftText = "";
+        let rightText = "";
 
-        function typeWords() {
+        const leftTyping = document.getElementById('typing-left');
+        const rightTyping = document.getElementById('typing-right');
+
+        function type() {
             if (!isDeleting) {
-                leftTyping.textContent = words[wordIndex].substring(0, charIndex);
-                rightTyping.textContent = continuations[wordIndex].substring(0, charIndex);
-                charIndex++;
-
-                if (charIndex > words[wordIndex].length) {
-                    isDeleting = true;
-                    setTimeout(typeWords, 2000); // Pause before deleting
-                    return;
-                }
+                leftText = words[index].substring(0, leftText.length + 1);
+                rightText = endings[index].substring(0, rightText.length + 1);
             } else {
-                charIndex--;
-                leftTyping.textContent = words[wordIndex].substring(0, charIndex);
-                rightTyping.textContent = continuations[wordIndex].substring(0, charIndex);
-
-                if (charIndex === 0) {
-                    isDeleting = false;
-                    wordIndex = (wordIndex + 1) % words.length;
-                }
+                leftText = leftText.substring(0, leftText.length - 1);
+                rightText = rightText.substring(0, rightText.length - 1);
             }
 
-            setTimeout(typeWords, isDeleting ? 50 : 100);
+            leftTyping.textContent = leftText;
+            rightTyping.textContent = rightText;
+
+            if (!isDeleting && leftText === words[index] && rightText === endings[index]) {
+                isDeleting = true;
+                setTimeout(type, 2000);
+            } else if (isDeleting && leftText === "" && rightText === "") {
+                isDeleting = false;
+                index = (index + 1) % words.length;
+                setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting ? 100 : 200);
+            }
         }
 
-        typeWords();
+        type();
 
-        function validatePhoneNumber(input) {
-            const phonePattern = /^\d{0,11}$/;
-            if (!phonePattern.test(input.value)) {
+        document.getElementById('phoneNumber').addEventListener('input', function (e) {
+            const value = e.target.value;
+            if (/\D/.test(value)) {
                 alert("لطفاً فقط اعداد وارد کنید.");
-                input.value = input.value.slice(0, -1);
+                e.target.value = value.replace(/\D/g, "");
+            } else if (value.length > 11) {
+                e.target.value = value.slice(0, 11);
             }
-        }
-
-        function toggleOtherProductionGoal(select) {
-            const otherGoal = document.getElementById('otherProductionGoal');
-            otherGoal.style.display = select.value === 'سایر' ? 'block' : 'none';
-        }
-
-        function toggleOtherVideoDimensions(select) {
-            const otherDimensions = document.getElementById('otherVideoDimensions');
-            otherDimensions.style.display = select.value === 'سایر' ? 'block' : 'none';
-        }
+        });
     </script>
 </body>
 </html>
