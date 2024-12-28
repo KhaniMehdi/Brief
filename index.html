@@ -293,73 +293,83 @@
         <button type="button" id="saveButton" disabled>تکمیل بریف</button>
     </form>
 
-    <script>
-        const saveButton = document.getElementById('saveButton');
-        const popupBackground = document.getElementById('popupBackground');
-        const popup = document.getElementById('popup');
-        const form = document.getElementById('briefForm');
+   <script>
+    const saveButton = document.getElementById('saveButton');
+    const popupBackground = document.getElementById('popupBackground');
+    const popup = document.getElementById('popup');
+    const form = document.getElementById('briefForm');
 
-        saveButton.addEventListener('click', () => {
-            html2canvas(form).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF();
-                const imgWidth = 190;
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                pdf.save('brief.pdf');
-            });
-            popupBackground.style.display = 'block';
-            popup.style.display = 'block';
+    saveButton.addEventListener('click', () => {
+        const pdf = new jsPDF('p', 'mm', 'a4'); // Create a new PDF instance
+        const formData = new FormData(form); // Extract form data
+        let y = 20; // Initial Y position for text in PDF
+
+        pdf.setFont('helvetica', 'normal'); // Set font style
+        pdf.setFontSize(12); // Set font size
+
+        // Add form fields to the PDF
+        formData.forEach((value, key) => {
+            pdf.text(`${key}: ${value}`, 10, y, { align: 'left' });
+            y += 10; // Increment Y position
+            if (y > 280) { // Handle multi-page PDFs
+                pdf.addPage();
+                y = 20; // Reset Y position
+            }
         });
 
-        function closePopup() {
-            popupBackground.style.display = 'none';
-            popup.style.display = 'none';
-        }
+        // Show the popup
+        popupBackground.style.display = 'block';
+        popup.style.display = 'block';
 
-        form.addEventListener('input', () => {
-            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-            let validCount = 0;
-            inputs.forEach(input => {
-                if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
-            });
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
-            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
-            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
-            saveButton.disabled = validCount !== inputs.length;
+        // Attach the download function to the popup's download button
+        document.querySelector('.download-btn').onclick = () => {
+            pdf.save('brief.pdf'); // Save the PDF
+            closePopup(); // Close the popup after download
+        };
+    });
+
+    // Close the popup
+    function closePopup() {
+        popupBackground.style.display = 'none';
+        popup.style.display = 'none';
+    }
+
+    // Update progress bar based on form inputs
+    form.addEventListener('input', () => {
+        const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+        let validCount = 0;
+        inputs.forEach(input => {
+            if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
         });
+        const progressBar = document.getElementById('progressBar');
+        progressBar.style.width = (validCount / inputs.length) * 100 + '%';
+        progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
+        document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
+        saveButton.disabled = validCount !== inputs.length;
+    });
 
-        function downloadPDF() {
-            html2canvas(form).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF();
-                const imgWidth = 190;
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                pdf.save('brief.pdf');
-            });
+    // Validate phone number
+    function validatePhoneNumber(input) {
+        input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
+        if (input.value.length < 11) {
+            input.classList.add('invalid');
+        } else {
+            input.classList.remove('invalid');
         }
+    }
 
-        function validatePhoneNumber(input) {
-            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
-            if (input.value.length < 11) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
+    // Validate text inputs
+    function validateText(input) {
+        if (input.type !== 'email' && input.id !== 'phoneNumber') {
+            input.value = input.value.replace(/[0-9]/g, '');
         }
+        if (input.value.trim() === '') {
+            input.classList.add('invalid');
+        } else {
+            input.classList.remove('invalid');
+        }
+    }
+</script>
 
-        function validateText(input) {
-            if (input.type !== 'email' && input.id !== 'phoneNumber') {
-                input.value = input.value.replace(/[0-9]/g, '');
-            }
-            if (input.value.trim() === '') {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
-    </script>
 </body>
 </html>
