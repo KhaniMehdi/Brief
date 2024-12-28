@@ -158,76 +158,39 @@
         p.bold {
             font-weight: bold;
         }
+
+        #popupBackground {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 99;
+        }
+
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+            z-index: 100;
+            text-align: center;
+        }
+
+        #popup button {
+            margin: 10px 5px;
+            width: calc(45% - 10px);
+        }
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('briefForm');
-            const saveButton = document.getElementById('saveButton');
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-
-            form.addEventListener('input', () => {
-                const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-                let validCount = 0;
-
-                inputs.forEach(input => {
-                    if (input.id === 'phoneNumber') {
-                        validatePhoneNumber(input);
-                    } else if (input.type === 'email') {
-                        validateEmail(input);
-                    } else if (input.tagName.toLowerCase() === 'textarea' && (input.id === 'scenario' || input.id === 'additionalNotes')) {
-                        validateTextNoNumbers(input);
-                    } else {
-                        validateText(input);
-                    }
-
-                    if (input.value.trim() && input.id === 'phoneNumber' && input.classList.contains('invalid')) {
-                        return;
-                    }
-                    if (input.value.trim()) {
-                        validCount++;
-                    }
-                });
-
-                progressBar.style.width = (validCount / inputs.length) * 100 + '%';
-                progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
-                progressText.textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
-                saveButton.disabled = validCount !== inputs.length;
-            });
-
-            function validatePhoneNumber(input) {
-                const regex = /^[0-9]{0,11}$/;
-                input.value = input.value.replace(/[^0-9]/g, '');
-                if (!regex.test(input.value) || input.value.length < 11) {
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            }
-
-            function validateEmail(input) {
-                const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!regex.test(input.value.trim())) {
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            }
-
-            function validateText(input) {
-                input.value = input.value.replace(/[0-9]/g, '');
-            }
-
-            function validateTextNoNumbers(input) {
-                input.value = input.value.replace(/[0-9]/g, '');
-                if (/[0-9]/.test(input.value)) {
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            }
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div id="noteContainer">
@@ -236,20 +199,31 @@
         <p><b>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.</b><span> (این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
     </div>
 
+    <div id="popupBackground"></div>
+    <div id="popup">
+        <p>مرسی از شما بابت تکمیل بریف<br>
+        فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید.<br>
+        ممنونم 🌹</p>
+        <div>
+            <button class="download-btn" onclick="downloadPDF()">دانلود PDF</button>
+            <button onclick="closePopup()">بستن</button>
+        </div>
+    </div>
+
     <form id="briefForm">
         <h1>بریف پروژه</h1>
 
         <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
+        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required oninput="validateText(this);">
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required oninput="validateText(this);">
 
         <label for="email">3. آدرس ایمیل:</label>
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required>
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required oninput="validatePhoneNumber(this);">
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
@@ -287,7 +261,7 @@
         </select>
 
         <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required></textarea>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required oninput="validateText(this);"></textarea>
 
         <label for="proposedBudget">10. بودجه پیشنهادی:</label>
         <select id="proposedBudget" name="بودجه پیشنهادی" required>
@@ -299,16 +273,16 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required oninput="validateText(this);"></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this);"></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
+        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4" oninput="validateText(this);"></textarea>
 
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
+        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4" oninput="validateText(this);"></textarea>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
@@ -317,5 +291,91 @@
 
         <button type="button" id="saveButton" disabled>تکمیل بریف</button>
     </form>
+
+    <script>
+        const saveButton = document.getElementById('saveButton');
+        const popupBackground = document.getElementById('popupBackground');
+        const popup = document.getElementById('popup');
+        const form = document.getElementById('briefForm');
+
+        saveButton.addEventListener('click', () => {
+            generatePDF();
+            popupBackground.style.display = 'block';
+            popup.style.display = 'block';
+        });
+
+        function closePopup() {
+            popupBackground.style.display = 'none';
+            popup.style.display = 'none';
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+
+            const loadFont = async (url, fontName) => {
+                const fontData = await fetch(url).then(res => res.arrayBuffer());
+                pdf.addFileToVFS(`${fontName}.ttf`, fontData);
+                pdf.addFont(`${fontName}.ttf`, fontName, "normal");
+            };
+
+            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf", "Vazir");
+            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf", "IRANSansBold");
+
+            pdf.setFont("Vazir");
+            pdf.setFontSize(16);
+
+            let y = 20;
+            pdf.text("بریف پروژه", 200, y, { align: 'center' });
+            y += 30;
+
+            const formData = new FormData(form);
+            formData.forEach((value, key) => {
+                if (value.trim() !== "") {
+                    pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
+                    y += 20;
+                }
+            });
+
+            pdf.save('brief.pdf');
+        }
+
+        form.addEventListener('input', () => {
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
+            });
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
+            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
+            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
+            saveButton.disabled = validCount !== inputs.length;
+        });
+
+        function downloadPDF() {
+            generatePDF();
+        }
+
+        function validatePhoneNumber(input) {
+            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
+            if (input.value.length < 11) {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
+        }
+
+        function validateText(input) {
+            if (input.type !== 'email' && input.id !== 'phoneNumber') {
+                input.value = input.value.replace(/[0-9]/g, '');
+            }
+            if (input.value.trim() === '') {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
+        }
+    </script>
 </body>
 </html>
