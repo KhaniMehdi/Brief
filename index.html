@@ -165,77 +165,86 @@
     </form>
 
     <script>
-        const form = document.getElementById('briefForm');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const saveButton = document.getElementById('saveButton');
+    const form = document.getElementById('briefForm');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const saveButton = document.getElementById('saveButton');
 
-        form.addEventListener('input', updateProgress);
+    form.addEventListener('input', updateProgress);
 
-        function updateProgress() {
-            const requiredInputs = form.querySelectorAll('input[required], select[required], textarea[required]');
-            const total = requiredInputs.length;
-            let filled = 0;
+    function updateProgress() {
+        const requiredInputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+        const total = requiredInputs.length;
+        let filled = 0;
 
-            requiredInputs.forEach(input => {
-                if (input.value.trim()) {
-                    filled++;
-                }
-            });
-
-            const progress = Math.round((filled / total) * 100);
-            progressBar.style.width = progress + '%';
-            progressText.textContent = `${progress}% تکمیل شده`;
-
-            saveButton.disabled = progress < 100;
-        }
-
-        async function validateAndSave() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-
-            // Load fonts from GitHub
-            const boldFontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/IRANSansXBold.ttf';
-            const regularFontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/IRANSansXRegular.ttf';
-
-            const boldFontResponse = await fetch(boldFontUrl);
-            const boldFontData = await boldFontResponse.arrayBuffer();
-            pdf.addFileToVFS('IRANSansXBold.ttf', btoa(String.fromCharCode(...new Uint8Array(boldFontData))));
-            pdf.addFont('IRANSansXBold.ttf', 'IRANSansX', 'bold');
-
-            const regularFontResponse = await fetch(regularFontUrl);
-            const regularFontData = await regularFontResponse.arrayBuffer();
-            pdf.addFileToVFS('IRANSansXRegular.ttf', btoa(String.fromCharCode(...new Uint8Array(regularFontData))));
-            pdf.addFont('IRANSansXRegular.ttf', 'IRANSansX', 'normal');
-
-            const formData = new FormData(form);
-            let y = 40; // Start position
-            pdf.setFont('IRANSansX', 'bold');
-            pdf.setFontSize(16);
-            pdf.text('بریف پروژه', 105, y, { align: 'center' }); // Title
-            y += 20;
-
-            formData.forEach((value, key) => {
-                if (value.trim() && !(key === 'هدف دیگر' && !value.trim())) {
-                    pdf.setFont('IRANSansX', 'bold');
-                    pdf.setFontSize(12);
-                    pdf.text(`${key}:`, 190, y, { align: 'right' });
-                    pdf.setFont('IRANSansX', 'normal');
-                    pdf.text(value, 170, y, { align: 'right' });
-                    y += 10;
-                }
-            });
-
-            pdf.save('brief.pdf');
-        }
-
-        function toggleOtherProductionGoal(select) {
-            const otherGoal = document.getElementById('otherProductionGoal');
-            otherGoal.style.display = select.value === 'سایر' ? 'block' : 'none';
-            if (select.value !== 'سایر') {
-                otherGoal.value = '';
+        requiredInputs.forEach(input => {
+            if (input.value.trim()) {
+                filled++;
             }
+        });
+
+        const progress = Math.round((filled / total) * 100);
+        progressBar.style.width = progress + '%';
+        progressText.textContent = `${progress}% تکمیل شده`;
+
+        // سبز شدن نوار پیشرفت
+        if (progress === 100) {
+            progressBar.style.background = 'linear-gradient(90deg, #4caf50, #2e7d32)';
+        } else {
+            progressBar.style.background = 'linear-gradient(90deg, #1e88e5, #0d47a1)';
         }
-    </script>
+
+        saveButton.disabled = progress < 100;
+    }
+
+    async function validateAndSave() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+
+        // بارگذاری فونت‌ها
+        const boldFontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/IRANSansXBold.ttf';
+        const regularFontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/IRANSansXRegular.ttf';
+
+        const boldFontResponse = await fetch(boldFontUrl);
+        const boldFontData = await boldFontResponse.arrayBuffer();
+        pdf.addFileToVFS('IRANSansXBold.ttf', btoa(String.fromCharCode(...new Uint8Array(boldFontData))));
+        pdf.addFont('IRANSansXBold.ttf', 'IRANSansX', 'bold');
+
+        const regularFontResponse = await fetch(regularFontUrl);
+        const regularFontData = await regularFontResponse.arrayBuffer();
+        pdf.addFileToVFS('IRANSansXRegular.ttf', btoa(String.fromCharCode(...new Uint8Array(regularFontData))));
+        pdf.addFont('IRANSansXRegular.ttf', 'IRANSansX', 'normal');
+
+        // تولید فایل PDF
+        const formData = new FormData(form);
+        let y = 40; // موقعیت شروع
+        pdf.setFont('IRANSansX', 'bold');
+        pdf.setFontSize(16);
+        pdf.text('بریف پروژه', 105, y, { align: 'center' }); // عنوان
+        y += 20;
+
+        formData.forEach((value, key) => {
+            if (value.trim()) { // بررسی خالی نبودن مقادیر
+                pdf.setFont('IRANSansX', 'bold');
+                pdf.setFontSize(12);
+                pdf.text(`${key}:`, 190, y, { align: 'right' });
+                pdf.setFont('IRANSansX', 'normal');
+                pdf.text(value, 170, y, { align: 'right' });
+                y += 10;
+            }
+        });
+
+        pdf.save('brief.pdf');
+    }
+
+    function toggleOtherProductionGoal(select) {
+        const otherGoal = document.getElementById('otherProductionGoal');
+        otherGoal.style.display = select.value === 'سایر' ? 'block' : 'none';
+        if (select.value !== 'سایر') {
+            otherGoal.value = '';
+        }
+    }
+</script>
+
 </body>
 </html>
