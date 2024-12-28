@@ -28,27 +28,11 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* برای قرار دادن پس‌زمینه زیر محتوا */
-    background: -webkit-linear-gradient(45deg, 
-        rgba(0, 0, 0, 1), 
-        rgba(34, 34, 34, 0.8), 
-        rgba(60, 60, 60, 0.6), 
-        rgba(90, 90, 90, 0.5), 
-        rgba(20, 40, 20, 0.3), /* ته‌رنگ سبز در بازه کم */
-        rgba(120, 120, 120, 0.4), 
-        rgba(255, 255, 255, 0.3)
-    );
-    background: linear-gradient(45deg, 
-        rgba(0, 0, 0, 1), 
-        rgba(34, 34, 34, 0.8), 
-        rgba(60, 60, 60, 0.6), 
-        rgba(90, 90, 90, 0.5), 
-        rgba(20, 40, 20, 0.3), /* ته‌رنگ سبز در بازه کم */
-        rgba(120, 120, 120, 0.4), 
-        rgba(255, 255, 255, 0.3)
-    );
-    background-size: 300% 300%; /* تغییر ابعاد گرادیان */
-    animation: gradient-loop 15s infinite; /* طول مدت انیمیشن */
+    z-index: -1; 
+    background: -webkit-linear-gradient(45deg, rgba(0, 0, 0, 1), rgba(0, 30, 0, 0.8), rgba(0, 60, 0, 0.6), rgba(0, 90, 0, 0.4), rgba(0, 120, 0, 0.2), rgba(0, 0, 0, 1));
+    background: linear-gradient(45deg, rgba(0, 0, 0, 1), rgba(0, 30, 0, 0.8), rgba(0, 60, 0, 0.6), rgba(0, 90, 0, 0.4), rgba(0, 120, 0, 0.2), rgba(0, 0, 0, 1));
+    background-size: 400% 400%; 
+    animation: gradient-loop 18s infinite; 
 }
 
 .gradient-bg::after {
@@ -58,7 +42,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3); /* تیرگی اضافی */
+    background: rgba(0, 0, 0, 0.5); 
     z-index: 0;
 }
 
@@ -71,9 +55,6 @@
     }
     50% {
         background-position: 100% 50%;
-    }
-    75% {
-        background-position: 50% 0%;
     }
     100% {
         background-position: 0% 50%;
