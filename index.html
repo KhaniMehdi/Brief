@@ -185,27 +185,32 @@
         }
 
         async function validateAndSave() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
 
-            // Load font from GitHub
-            const fontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/Vazir-Regular.ttf';
-            const fontResponse = await fetch(fontUrl);
-            const fontData = await fontResponse.arrayBuffer();
-            pdf.addFileToVFS('Vazir-Regular.ttf', btoa(String.fromCharCode(...new Uint8Array(fontData))));
-            pdf.addFont('Vazir-Regular.ttf', 'Vazir', 'normal');
-            pdf.setFont('Vazir');
+        // Load font from GitHub
+        const fontUrl = 'https://raw.githubusercontent.com/KhaniMehdi/Brief/main/Vazir-Regular.ttf';
+        const fontResponse = await fetch(fontUrl);
+        const fontData = await fontResponse.arrayBuffer();
+        pdf.addFileToVFS('Vazir-Regular.ttf', btoa(String.fromCharCode(...new Uint8Array(fontData))));
+        pdf.addFont('Vazir-Regular.ttf', 'Vazir', 'normal');
+        pdf.setFont('Vazir');
 
-            const formData = new FormData(form);
-            let y = 20;
+        // Form data
+        const formData = new FormData(document.getElementById("briefForm"));
+        let y = 20; // Initial Y position
 
-            formData.forEach((value, key) => {
-                pdf.text(`${key}: ${value}`, 10, y, { align: 'right' });
-                y += 10;
-            });
+        pdf.setFontSize(12); // Font size
+        pdf.text("بریف پروژه", 190, y, { align: "right" });
+        y += 10; // Move to next line
 
-            pdf.save('brief.pdf');
-        }
+        formData.forEach((value, key) => {
+            pdf.text(`${key}: ${value}`, 190, y, { align: "right" });
+            y += 10;
+        });
+
+        pdf.save('brief.pdf');
+    }
 
         function toggleOtherProductionGoal(select) {
             const otherGoal = document.getElementById('otherProductionGoal');
