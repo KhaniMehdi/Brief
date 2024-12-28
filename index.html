@@ -190,89 +190,41 @@
             width: calc(45% - 10px);
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script>
-        const form = document.getElementById('briefForm');
-        const saveButton = document.getElementById('saveButton');
-
-        saveButton.addEventListener('click', () => {
-            generatePDF();
-        });
-
-        function validatePhoneNumber(input) {
-            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
-            if (input.value.length !== 11) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
-
-        function validateText(input) {
-            input.value = input.value.replace(/[^؀-ۿ\s]/g, '');
-            if (input.value.trim() === '') {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
-
-        function validateEmail(input) {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(input.value)) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
-
-        form.addEventListener('input', (event) => {
-            const target = event.target;
-            if (target.id === 'phoneNumber') {
-                validatePhoneNumber(target);
-            } else if (target.type === 'email') {
-                validateEmail(target);
-            } else if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-                validateText(target);
-            }
-
-            const allInputs = form.querySelectorAll('input, textarea');
-            const allValid = Array.from(allInputs).every(input => !input.classList.contains('invalid') && input.value.trim() !== '');
-            saveButton.disabled = !allValid;
-        });
-
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-
-            pdf.text('بریف پروژه', 10, 10);
-
-            const formData = new FormData(form);
-            let y = 20;
-            formData.forEach((value, key) => {
-                pdf.text(`${key}: ${value}`, 10, y);
-                y += 10;
-            });
-
-            pdf.save('brief.pdf');
-        }
-    </script>
 </head>
 <body>
+    <div id="noteContainer">
+        <p class="bold">لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
+        <p class="bold">زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
+        <p><b>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.</b><span> (این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
+    </div>
+
+    <div id="popupBackground"></div>
+    <div id="popup">
+        <p>مرسی از شما بابت تکمیل بریف<br>
+        فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید.<br>
+        ممنونم 🌹</p>
+        <div>
+            <button class="download-btn" onclick="downloadPDF()">دانلود PDF</button>
+            <button onclick="closePopup()">بستن</button>
+        </div>
+    </div>
+
     <form id="briefForm">
         <h1>بریف پروژه</h1>
 
         <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" placeholder="نام برند" required>
+        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required oninput="validateText(this);">
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="نام کارفرما" required>
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required oninput="validateText(this);">
 
         <label for="email">3. آدرس ایمیل:</label>
-        <input type="email" id="email" name="آدرس ایمیل" placeholder="ایمیل" required>
+        <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="شماره تماس" required>
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required oninput="validatePhoneNumber(this);">
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
@@ -310,7 +262,7 @@
         </select>
 
         <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="تفاوت محصول با رقبا"></textarea>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required oninput="validateText(this);"></textarea>
 
         <label for="proposedBudget">10. بودجه پیشنهادی:</label>
         <select id="proposedBudget" name="بودجه پیشنهادی" required>
@@ -322,23 +274,92 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="تصویر برند"></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required oninput="validateText(this);"></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="واکنش مخاطب"></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this);"></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="سناریو پیشنهادی"></textarea>
+        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4" oninput="validateText(this);"></textarea>
 
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" placeholder="توضیحات تکمیلی"></textarea>
+        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4" oninput="validateText(this);"></textarea>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
         </div>
         <div id="progressText">0% تکمیل شده</div>
 
-        <button type="button" id="saveButton" disabled>دانلود PDF</button>
+        <button type="button" id="saveButton" disabled>تکمیل بریف</button>
     </form>
+
+    <script>
+        const saveButton = document.getElementById('saveButton');
+        const popupBackground = document.getElementById('popupBackground');
+        const popup = document.getElementById('popup');
+        const form = document.getElementById('briefForm');
+
+        saveButton.addEventListener('click', () => {
+            html2canvas(form).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
+                const imgWidth = 190;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                pdf.save('brief.pdf');
+            });
+            popupBackground.style.display = 'block';
+            popup.style.display = 'block';
+        });
+
+        function closePopup() {
+            popupBackground.style.display = 'none';
+            popup.style.display = 'none';
+        }
+
+        form.addEventListener('input', () => {
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
+            });
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
+            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
+            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
+            saveButton.disabled = validCount !== inputs.length;
+        });
+
+        function downloadPDF() {
+            html2canvas(form).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
+                const imgWidth = 190;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                pdf.save('brief.pdf');
+            });
+        }
+
+        function validatePhoneNumber(input) {
+            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
+            if (input.value.length < 11) {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
+        }
+
+        function validateText(input) {
+            if (input.type !== 'email' && input.id !== 'phoneNumber') {
+                input.value = input.value.replace(/[0-9]/g, '');
+            }
+            if (input.value.trim() === '') {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
+        }
+    </script>
 </body>
 </html>
