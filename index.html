@@ -110,7 +110,7 @@
         #progressBar {
             height: 10px;
             width: 0;
-            background: linear-gradient(90deg, #1e88e5, #0d47a1);
+            background: linear-gradient(90deg, #28a745, #28a745);
             transition: width 0.5s ease-in-out;
         }
 
@@ -154,14 +154,42 @@
             font-weight: bold;
             margin: 20px 10px;
         }
+
+        p.bold {
+            font-weight: bold;
+        }
+
+        #popupBackground {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+            z-index: 100;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div id="noteContainer">
-        <p><b>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</b></p>
-        <p><b>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</b></p>
-        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<span>(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
+        <p class="bold">لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
+        <p class="bold">زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
+        <p class="bold">پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.</p>
     </div>
 
     <div id="popupBackground"></div>
@@ -178,10 +206,10 @@
         <h1>بریف پروژه</h1>
 
         <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
+        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required oninput="validateText(this);">
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required oninput="validateText(this);">
 
         <label for="email">3. آدرس ایمیل:</label>
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
@@ -225,7 +253,7 @@
         </select>
 
         <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required></textarea>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required oninput="validateText(this);"></textarea>
 
         <label for="proposedBudget">10. بودجه پیشنهادی:</label>
         <select id="proposedBudget" name="بودجه پیشنهادی" required>
@@ -237,16 +265,16 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required oninput="validateText(this);"></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this);"></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
+        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4" oninput="validateText(this);"></textarea>
 
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
+        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4" oninput="validateText(this);"></textarea>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
@@ -310,7 +338,10 @@
             inputs.forEach(input => {
                 if (input.value.trim()) validCount++;
             });
-            document.getElementById('progressBar').style.width = (validCount / inputs.length) * 100 + '%';
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
+            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
+            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
             saveButton.disabled = validCount !== inputs.length;
         });
 
@@ -325,6 +356,10 @@
             } else {
                 input.classList.remove('invalid');
             }
+        }
+
+        function validateText(input) {
+            input.value = input.value.replace(/[0-9]/g, '');
         }
     </script>
 </body>
