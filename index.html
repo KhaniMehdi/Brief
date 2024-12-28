@@ -21,6 +21,7 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         label {
@@ -84,6 +85,19 @@
             text-align: center;
             font-size: 24px;
             font-weight: bold;
+        }
+
+        #noteContainer {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 4px solid #007BFF;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #noteContainer p {
+            margin: 5px 0;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -164,6 +178,12 @@
         <button type="button" id="saveButton" onclick="validateAndSave()" disabled>دانلود فایل بریف</button>
     </form>
 
+    <div id="noteContainer">
+        <p>در صورت نیاز به توضیح یا اشاره به مسئله مهمی در بخش توضیحات ذکر بفرمایید.</p>
+        <p>(زمان و مبلغ‌ها تقریبی و حدودی هستند.)</p>
+        <p>(ابتدای شروع 50 درصد مبلغ پروژه دریافت می‌شود.)</p>
+    </div>
+
     <script>
         const form = document.getElementById('briefForm');
         const progressBar = document.getElementById('progressBar');
@@ -186,6 +206,12 @@
             const progress = Math.round((filled / total) * 100);
             progressBar.style.width = progress + '%';
             progressText.textContent = `${progress}% تکمیل شده`;
+
+            if (progress === 100) {
+                progressBar.style.background = 'linear-gradient(90deg, #4caf50, #2e7d32)';
+            } else {
+                progressBar.style.background = 'linear-gradient(90deg, #1e88e5, #0d47a1)';
+            }
 
             saveButton.disabled = progress < 100;
         }
