@@ -23,8 +23,16 @@
     overflow-y: auto; 
 }
 .gradient-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* برای قرار دادن پس‌زمینه زیر محتوا */
     background: -webkit-linear-gradient(45deg, #ff7a7a, #ff9a9e, #ffccd2, #c88ad2, #a18cd1);
     background: linear-gradient(45deg, #ff7a7a, #ff9a9e, #ffccd2, #c88ad2, #a18cd1);
+    background-size: 300% 300%;
+    animation: gradient-loop 8s infinite;
 }
     .gradient-bg::after {
     content: "";
@@ -33,22 +41,25 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.3); 
+    background: rgba(255, 255, 255, 0.1); 
 
     z-index: 0;
 }
 
     @keyframes gradient-loop {
-      0% {
+    0% {
         background-position: 0% 25%;
-      }
-      25% {
-        background-position: 50% 25%;
-      }
-      50% {
-        background-position: 0% 25%;
-      }
     }
+    25% {
+        background-position: 50% 25%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 25%;
+    }
+}
 
         form {
             max-width: 600px;
@@ -218,7 +229,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
-    
+
 <div class="gradient-bg"></div>
     <div id="noteContainer">
         <p class="bold">لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
