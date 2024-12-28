@@ -21,8 +21,7 @@
             padding: 0;
             direction: rtl;
             text-align: right;
-            background: linear-gradient(to bottom right, #4caf50, #000000);
-            animation: gradientBackground 5s infinite alternate;
+            background: linear-gradient(to top left, #000000, #0000ff);
             color: #333;
             overflow-y: auto;
             overflow-x: hidden;
@@ -117,12 +116,21 @@
             padding: 20px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
-            box-shadow: 0 0 25px rgba(255, 87, 34, 1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
             font-family: 'Vazir', Arial, sans-serif;
             font-size: 14px;
             line-height: 2;
             color: #333;
             box-sizing: border-box;
+        }
+
+        #noteContainer p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #noteContainer p span {
+            font-weight: normal;
         }
 
         h1 {
@@ -162,7 +170,7 @@
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" maxlength="11" pattern="\d{11}" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" pattern="\d{11}" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
