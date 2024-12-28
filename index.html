@@ -124,18 +124,17 @@
     <form id="briefForm">
         <h1>بریف پروژه</h1>
 
-        
         <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required oninput="validateText(this);">
+        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required oninput="validateText(this);">
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
 
         <label for="email">3. آدرس ایمیل:</label>
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required oninput="validatePhoneNumber(this);">
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required>
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
@@ -171,31 +170,6 @@
             <option value="سی روزه">سی روزه</option>
             <option value="فوری">فوری</option>
         </select>
-
-        <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required oninput="validateText(this);"></textarea>
-
-        <label for="proposedBudget">10. بودجه پیشنهادی:</label>
-        <select id="proposedBudget" name="بودجه پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="تا 10 میلیون">تا 10 میلیون</option>
-            <option value="تا 20 میلیون">تا 20 میلیون</option>
-            <option value="تا 30 میلیون">تا 30 میلیون</option>
-            <option value="بیش از 30 میلیون">بیش از 30 میلیون</option>
-        </select>
-
-        <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required oninput="validateText(this);"></textarea>
-
-        <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this);"></textarea>
-
-        <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4" oninput="validateText(this);"></textarea>
-
-        <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4" oninput="validateText(this);"></textarea>
-
 
         <div id="progressContainer">
             <div id="progressBar"></div>
