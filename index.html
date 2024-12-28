@@ -314,9 +314,13 @@
             const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
 
             const loadFont = async (url, fontName) => {
-                const fontData = await fetch(url).then(res => res.arrayBuffer());
-                pdf.addFileToVFS(`${fontName}.ttf`, fontData);
-                pdf.addFont(`${fontName}.ttf`, fontName, "normal");
+                try {
+                    const fontData = await fetch(url).then(res => res.arrayBuffer());
+                    pdf.addFileToVFS(`${fontName}.ttf`, fontData);
+                    pdf.addFont(`${fontName}.ttf`, fontName, "normal");
+                } catch (error) {
+                    console.error(`Failed to load font: ${fontName}`, error);
+                }
             };
 
             await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf", "Vazir");
@@ -329,7 +333,7 @@
             pdf.text("بریف پروژه", 200, y, { align: 'center' });
             y += 30;
 
-            const formData = new FormData(form);
+            const formData = new FormData(document.getElementById('briefForm'));
             formData.forEach((value, key) => {
                 if (value.trim() !== "") {
                     pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
@@ -337,7 +341,14 @@
                 }
             });
 
-            pdf.save('brief.pdf');
+            try {
+                pdf.save('brief.pdf');
+                alert('فایل پی‌دی‌اف با موفقیت ذخیره شد.');
+            } catch (error) {
+                alert('مشکلی در ذخیره فایل پی‌دی‌اف پیش آمده است.');
+                console.error('PDF save error:', error);
+            }
+        }
         }
 
         form.addEventListener('input', () => {
