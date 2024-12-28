@@ -351,7 +351,7 @@
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
 
-    const margin = 20 ; 
+    const margin = 18 ; 
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
     const columnGap = 10; 
@@ -359,7 +359,7 @@
     const lineHeight = 17; 
     const fontSizeHeader = 35; 
     const fontSizeText = 12; 
-    let y = margin + 80; 
+    let y = margin + 60; 
     let xColumn1 = margin + columnWidth + columnGap + (-25);
     let xColumn2 = margin + (-25);
 
@@ -391,38 +391,38 @@
 
     
     const formData = new FormData(document.getElementById("briefForm"));
-    let column = 0; 
-    let x = xColumn1; 
+let column = 0; 
+let x = xColumn1; 
 
-    formData.forEach((value, key) => {
-        if (value.trim() !== "") {
-            
-            if (y + 2 * lineHeight > pageHeight - margin) {
-                column++;
-                if (column > 1) {
-                    pdf.addPage(); 
-                    column = 0; 
-                    y = margin + 100; 
-                    x = xColumn1; 
-                } else {
-                    x = xColumn2; 
-                    y = margin + 100; 
-                }
+formData.forEach((value, key) => {
+    if (value.trim() !== "") {
+        
+        if (y + 2 * lineHeight > pageHeight - margin) {
+            column++;
+            if (column > 1) {
+                pdf.addPage(); 
+                column = 0; 
+                y = margin + 100; 
+                x = xColumn1; 
+            } else {
+                x = xColumn2; 
+                y = margin + 100; 
             }
-
-            
-            pdf.text(`${key}:`, x + columnWidth - 10, y, { align: 'right' });
-            y += lineHeight; 
-
-            
-            pdf.setFont("Vazir"); 
-            pdf.text(value, x + columnWidth - 10, y, { align: 'right' });
-            y += lineHeight + 5; 
-
-            
-            pdf.setFont("IRANSansBold");
         }
-    });
+
+        
+        pdf.text(`${key} :`, x + columnWidth - 10, y, { align: 'right' });
+        y += lineHeight; 
+
+       
+        pdf.setFont("Vazir"); 
+        pdf.text(value, x + columnWidth - 10, y, { align: 'right' });
+        y += lineHeight + 5; 
+
+        
+        pdf.setFont("IRANSansBold");
+    }
+});
 
    
     pdf.save('brief.pdf');
