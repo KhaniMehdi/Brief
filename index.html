@@ -168,7 +168,11 @@
             const progressText = document.getElementById('progressText');
 
             saveButton.addEventListener('click', () => {
-                generatePDF();
+                if (validateAllFields()) {
+                    generatePDF();
+                } else {
+                    alert('لطفاً تمامی فیلدهای ضروری را تکمیل کنید.');
+                }
             });
 
             form.addEventListener('input', () => {
@@ -199,6 +203,28 @@
                 progressText.textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
                 saveButton.disabled = validCount !== inputs.length;
             });
+
+            async function generatePDF() {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+
+                pdf.setFont('helvetica');
+                pdf.setFontSize(12);
+
+                let y = 20;
+                pdf.text('بریف پروژه', pdf.internal.pageSize.width / 2, y, { align: 'center' });
+                y += 30;
+
+                const formData = new FormData(form);
+                formData.forEach((value, key) => {
+                    if (value.trim() !== '') {
+                        pdf.text(`${key}: ${value}`, 20, y);
+                        y += 20;
+                    }
+                });
+
+                pdf.save('brief.pdf');
+            }
 
             function validatePhoneNumber(input) {
                 const regex = /^[0-9]{0,11}$/;
@@ -232,26 +258,11 @@
                 }
             }
 
-            async function generatePDF() {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
-
-                pdf.setFont('helvetica');
-                pdf.setFontSize(12);
-
-                let y = 20;
-                pdf.text('بریف پروژه', 200, y, { align: 'center' });
-                y += 30;
-
-                const formData = new FormData(form);
-                formData.forEach((value, key) => {
-                    if (value.trim() !== '') {
-                        pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
-                        y += 20;
-                    }
+            function validateAllFields() {
+                const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+                return Array.from(inputs).every(input => {
+                    return input.value.trim() && !input.classList.contains('invalid');
                 });
-
-                pdf.save('brief.pdf');
             }
         });
     </script>
