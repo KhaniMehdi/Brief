@@ -53,7 +53,7 @@
             box-sizing: border-box;
         }
 
-        input.invalid, select.invalid {
+        input.invalid {
             border-color: red;
         }
 
@@ -175,15 +175,16 @@
                         validatePhoneNumber(input);
                     } else if (input.type === 'email') {
                         validateEmail(input);
-                    } else if (input.tagName.toLowerCase() === 'textarea' && (input.id === 'brandImage' || input.id === 'audienceReaction')) {
+                    } else if (input.tagName.toLowerCase() === 'textarea' && (input.id === 'scenario' || input.id === 'additionalNotes')) {
                         validateTextNoNumbers(input);
-                    } else if (input.tagName.toLowerCase() === 'select') {
-                        validateSelect(input);
                     } else {
                         validateText(input);
                     }
 
-                    if (input.value.trim() && !input.classList.contains('invalid')) {
+                    if (input.value.trim() && input.id === 'phoneNumber' && input.classList.contains('invalid')) {
+                        return;
+                    }
+                    if (input.value.trim()) {
                         validCount++;
                     }
                 });
@@ -219,10 +220,7 @@
 
             function validateTextNoNumbers(input) {
                 input.value = input.value.replace(/[0-9]/g, '');
-            }
-
-            function validateSelect(input) {
-                if (input.value === '') {
+                if (/[0-9]/.test(input.value)) {
                     input.classList.add('invalid');
                 } else {
                     input.classList.remove('invalid');
