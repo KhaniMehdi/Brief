@@ -27,37 +27,17 @@
             direction: rtl;
             text-align: right;
             background: linear-gradient(35deg, #1e88e5, #0d47a1);
+            background-size: 200% 200%;
+            animation: gradientAnimation 15s infinite;
             color: #333;
             overflow-y: auto;
             overflow-x: hidden;
         }
 
-        #typing-container {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .typing-text {
-            position: absolute;
-            font-family: 'IRANSansRegular', Arial, sans-serif;
-            font-size: 4rem;
-            color: rgba(255, 255, 255, 0.2);
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .typing-text.left {
-            left: 10%;
-            text-align: left;
-        }
-
-        .typing-text.right {
-            right: 10%;
-            text-align: right;
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         form {
@@ -89,6 +69,14 @@
         input::placeholder, textarea::placeholder {
             font-style: italic;
             color: #888;
+        }
+
+        input[type="text"]:invalid {
+            border-color: red;
+        }
+
+        input[type="text"]:valid {
+            border-color: green;
         }
 
         button {
@@ -136,7 +124,7 @@
 
         h1 {
             text-align: center;
-            font-size: 24px;
+            font-size: 35px;
             font-weight: bold;
         }
 
@@ -156,32 +144,12 @@
             animation: glow 2s infinite;
         }
 
-        #popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            font-family: 'Vazir', Arial, sans-serif;
-            text-align: center;
-            color: #333;
-            z-index: 1000;
-        }
-
-        #popup span {
-            text-decoration: underline;
-        }
-
         @keyframes glow {
             0%, 100% {
-                box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+                box-shadow: 0 0 10px rgba(255, 165, 0, 0.7);
             }
             50% {
-                box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+                box-shadow: 0 0 20px rgba(255, 165, 0, 1);
             }
         }
 
@@ -195,15 +163,10 @@
     </style>
 </head>
 <body>
-    <div id="typing-container">
-        <div class="typing-text left" id="typing-left">محمد</div>
-        <div class="typing-text right" id="typing-right">محمدی</div>
-    </div>
-
     <div id="noteContainer">
         <p>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
         <p>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
-        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است. <br><span style="font-size: 0.9em; color: #555">(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
+        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.</p>
     </div>
 
     <form id="briefForm">
@@ -213,176 +176,45 @@
         <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" maxlength="11" required>
 
         <label for="email">3. آدرس ایمیل:</label>
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" pattern="\d*" oninput="validatePhoneNumber(this)" required>
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" pattern="\d*" required>
 
         <label for="productionGoal">5. هدف از تولید:</label>
-        <select id="productionGoal" name="هدف از تولید" onchange="toggleOtherProductionGoal(this)" required>
+        <select id="productionGoal" name="هدف از تولید" required>
             <option value="">انتخاب کنید</option>
             <option value="فروش و بازاریابی">فروش و بازاریابی</option>
             <option value="معرفی محصول">معرفی محصول</option>
             <option value="برندینگ">برندینگ</option>
-            <option value="سایر">سایر</option>
         </select>
-        <input type="text" id="otherProductionGoal" name="هدف دیگر" placeholder="مثال: اطلاع‌رسانی" style="display: none;">
-
-        <label for="videoDimensions">6. ابعاد ویدیو:</label>
-        <select id="videoDimensions" name="ابعاد ویدیو" onchange="toggleOtherVideoDimensions(this)" required>
-            <option value="">انتخاب کنید</option>
-            <option value="720p عمودی">720p عمودی</option>
-            <option value="1080p عمودی">1080p عمودی</option>
-            <option value="720p افقی">720p افقی</option>
-            <option value="1080p افقی">1080p افقی</option>
-            <option value="سایر">سایر</option>
-        </select>
-        <input type="text" id="otherVideoDimensions" name="ابعاد دیگر" placeholder="مثال: 4K یا ابعاد دلخواه" style="display: none;">
-
-        <label for="duration">7. مدت زمان پیشنهادی:</label>
-        <select id="duration" name="مدت زمان پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="کمتر از 30 ثانیه">کمتر از 30 ثانیه</option>
-            <option value="30 تا 60 ثانیه">30 تا 60 ثانیه</option>
-            <option value="60 تا 90 ثانیه">60 تا 90 ثانیه</option>
-            <option value="بیشتر از 90 ثانیه">بیشتر از 90 ثانیه</option>
-        </select>
-
-        <label for="deliveryDate">8. تاریخ تحویل پیشنهادی:</label>
-        <select id="deliveryDate" name="تاریخ تحویل پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="ده روزه">ده روزه</option>
-            <option value="بیست روزه">بیست روزه</option>
-            <option value="سی روزه">سی روزه</option>
-            <option value="فوری">فوری</option>
-        </select>
-
-        <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" rows="4" required></textarea>
-
-        <label for="proposedBudget">10. بودجه پیشنهادی:</label>
-        <select id="proposedBudget" name="بودجه پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="تا 10 میلیون">تا 10 میلیون</option>
-            <option value="تا 20 میلیون">تا 20 میلیون</option>
-            <option value="تا 30 میلیون">تا 30 میلیون</option>
-            <option value="بیش از 30 میلیون">بیش از 30 میلیون</option>
-        </select>
-
-        <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
-
-        <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
-
-        <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
-
-        <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
         </div>
         <div id="progressText">0% تکمیل شده</div>
 
-        <button type="button" id="saveButton" onclick="validateAndSave()" disabled>دانلود فایل بریف</button>
+        <button type="button" id="saveButton">دانلود فایل بریف</button>
     </form>
 
-    <div id="popup">
-        <p>مرسی از شما بابت کامل کردن بریف</p>
-        <p>شما نسخه پی دی اف این فرم رو دریافت کردید و اگر نیاز به اصلاح نیست <span>فایل رو برای من هم ارسال بفرمایید</span>.</p>
-        <p>ممنونم 🌸</p>
-    </div>
-
     <script>
-        const leftTyping = document.getElementById("typing-left");
-        const rightTyping = document.getElementById("typing-right");
-        const words = ["محمد", "محمدی"];
+        const saveButton = document.getElementById('saveButton');
+        const form = document.getElementById('briefForm');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
 
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-
-        function typeWords() {
-            if (!isDeleting) {
-                leftTyping.textContent = words[0].substring(0, charIndex);
-                rightTyping.textContent = words[1].substring(0, charIndex);
-                charIndex++;
-
-                if (charIndex > words[0].length) {
-                    isDeleting = true;
-                    setTimeout(typeWords, 2000);
-                    return;
-                }
-            } else {
-                charIndex--;
-                leftTyping.textContent = words[0].substring(0, charIndex);
-                rightTyping.textContent = words[1].substring(0, charIndex);
-
-                if (charIndex === 0) {
-                    isDeleting = false;
-                }
-            }
-
-            setTimeout(typeWords, isDeleting ? 50 : 100);
+        function updateProgress() {
+            const inputs = Array.from(form.querySelectorAll('input, select'));
+            const filled = inputs.filter(input => input.value.trim() !== '').length;
+            const progress = (filled / inputs.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}% تکمیل شده`;
         }
 
-        typeWords();
-
-        function validatePhoneNumber(input) {
-            const phonePattern = /^\d*$/;
-            if (!phonePattern.test(input.value)) {
-                alert("لطفاً فقط اعداد وارد کنید.");
-                input.value = input.value.slice(0, -1);
-            }
-        }
-
-        function toggleOtherProductionGoal(select) {
-            const otherGoal = document.getElementById('otherProductionGoal');
-            otherGoal.style.display = select.value === 'سایر' ? 'block' : 'none';
-        }
-
-        function toggleOtherVideoDimensions(select) {
-            const otherDimensions = document.getElementById('otherVideoDimensions');
-            otherDimensions.style.display = select.value === 'سایر' ? 'block' : 'none';
-        }
-
-        async function validateAndSave() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-
-            pdf.addFileToVFS("IRANSansXBold.ttf", "BASE64_BOLD_FONT_HERE");
-            pdf.addFont("IRANSansXBold.ttf", "IRANSansBold", "normal");
-
-            pdf.addFileToVFS("IRANSansXRegular.ttf", "BASE64_REGULAR_FONT_HERE");
-            pdf.addFont("IRANSansXRegular.ttf", "IRANSansRegular", "normal");
-
-            pdf.setFont("IRANSansBold");
-            pdf.setFontSize(16);
-            pdf.text('بریف پروژه', 105, 20, { align: 'center' });
-
-            const formData = new FormData(document.getElementById('briefForm'));
-            let y = 40;
-
-            formData.forEach((value, key) => {
-                if (value.trim()) {
-                    if (key.includes("نام") || key.includes("هدف") || key.includes("ابعاد")) {
-                        pdf.setFont("IRANSansBold");
-                    } else {
-                        pdf.setFont("IRANSansRegular");
-                    }
-                    pdf.setFontSize(12);
-                    pdf.text(`${key}: ${value}`, 190, y, { align: 'right' });
-                    y += 10;
-                }
-            });
-
-            pdf.save('brief.pdf');
-        }
+        form.addEventListener('input', updateProgress);
     </script>
 </body>
 </html>
