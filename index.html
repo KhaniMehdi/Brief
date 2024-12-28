@@ -44,6 +44,11 @@
             font-family: 'Vazir', Arial, sans-serif;
         }
 
+        input::placeholder, textarea::placeholder {
+            font-style: italic;
+            color: #888;
+        }
+
         button {
             background: #007BFF;
             color: #fff;
@@ -99,22 +104,22 @@
             right: 20px;
             width: 300px;
             padding: 20px;
-            background: rgba(255, 87, 34, 0.9);
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             font-family: 'Vazir', Arial, sans-serif;
             font-size: 14px;
             line-height: 1.8;
-            color: #fff;
-            animation: typeAndBlink 1.5s infinite;
+            color: #333;
+            animation: glow 2s infinite;
         }
 
-        @keyframes typeAndBlink {
+        @keyframes glow {
             0%, 100% {
-                opacity: 1;
+                box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
             }
             50% {
-                opacity: 0.7;
+                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
             }
         }
 
@@ -133,16 +138,16 @@
         <h1>بریف پروژه</h1>
 
         <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" required>
+        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" required>
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
 
         <label for="email">3. آدرس ایمیل:</label>
-        <input type="email" id="email" name="آدرس ایمیل" required>
+        <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" required>
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" pattern="\d{11}" required>
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" onchange="toggleOtherProductionGoal(this)" required>
@@ -152,7 +157,7 @@
             <option value="برندینگ">برندینگ</option>
             <option value="سایر">سایر</option>
         </select>
-        <input type="text" id="otherProductionGoal" name="هدف دیگر" placeholder="هدف دیگر را وارد کنید" style="display: none;">
+        <input type="text" id="otherProductionGoal" name="هدف دیگر" placeholder="مثال: اطلاع‌رسانی" style="display: none;">
 
         <label for="videoDimensions">6. ابعاد ویدیو:</label>
         <select id="videoDimensions" name="ابعاد ویدیو" required>
@@ -183,7 +188,7 @@
         </select>
 
         <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" rows="4" required></textarea>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" rows="4" required></textarea>
 
         <label for="proposedBudget">10. بودجه پیشنهادی:</label>
         <select id="proposedBudget" name="بودجه پیشنهادی" required>
@@ -195,16 +200,16 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" rows="4" required></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" rows="4" required></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" rows="4"></textarea>
+        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
 
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
+        <textarea id="additionalNotes" name="توضیحات تکمیلی" placeholder="مثال: نیاز به حضور تیم تصویربرداری در محل" rows="4"></textarea>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
