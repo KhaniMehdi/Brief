@@ -190,8 +190,8 @@
             width: calc(45% - 10px);
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
 </head>
 <body>
     <div id="noteContainer">
@@ -224,7 +224,7 @@
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required>
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" required>
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
@@ -234,104 +234,39 @@
             <option value="برندینگ">برندینگ</option>
         </select>
 
-        <label for="videoDimensions">6. ابعاد ویدیو:</label>
-        <select id="videoDimensions" name="ابعاد ویدیو" required>
-            <option value="">انتخاب کنید</option>
-            <option value="720p عمودی">720p عمودی</option>
-            <option value="1080p عمودی">1080p عمودی</option>
-            <option value="720p افقی">720p افقی</option>
-            <option value="1080p افقی">1080p افقی</option>
-        </select>
-
-        <label for="duration">7. مدت زمان پیشنهادی:</label>
-        <select id="duration" name="مدت زمان پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="کمتر از 30 ثانیه">کمتر از 30 ثانیه</option>
-            <option value="30 تا 60 ثانیه">30 تا 60 ثانیه</option>
-            <option value="60 تا 90 ثانیه">60 تا 90 ثانیه</option>
-            <option value="بیشتر از 90 ثانیه">بیشتر از 90 ثانیه</option>
-        </select>
-
-        <label for="deliveryDate">8. تاریخ تحویل پیشنهادی:</label>
-        <select id="deliveryDate" name="تاریخ تحویل پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="ده روزه">ده روزه</option>
-            <option value="بیست روزه">بیست روزه</option>
-            <option value="سی روزه">سی روزه</option>
-            <option value="فوری">فوری</option>
-        </select>
-
-        <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required></textarea>
-
-        <label for="proposedBudget">10. بودجه پیشنهادی:</label>
-        <select id="proposedBudget" name="بودجه پیشنهادی" required>
-            <option value="">انتخاب کنید</option>
-            <option value="تا 10 میلیون">تا 10 میلیون</option>
-            <option value="تا 20 میلیون">تا 20 میلیون</option>
-            <option value="تا 30 میلیون">تا 30 میلیون</option>
-            <option value="بیش از 30 میلیون">بیش از 30 میلیون</option>
-        </select>
-
-        <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
-
-        <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
-
-        <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
-
-        <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
-
-        <div id="progressContainer">
-            <div id="progressBar"></div>
-        </div>
-        <div id="progressText">0% تکمیل شده</div>
-
-        <button type="button" id="saveButton" disabled>تکمیل بریف</button>
+        <button type="button" id="saveButton">دانلود PDF</button>
     </form>
 
     <script>
-        const saveButton = document.getElementById('saveButton');
-        const popupBackground = document.getElementById('popupBackground');
-        const popup = document.getElementById('popup');
-        const form = document.getElementById('briefForm');
+        document.getElementById('saveButton').addEventListener('click', () => {
+            const formData = new FormData(document.getElementById('briefForm'));
+            const docDefinition = {
+                content: [
+                    { text: 'بریف پروژه', style: 'header' },
+                    { text: 'جزئیات فرم:', style: 'subheader' },
+                ],
+                styles: {
+                    header: {
+                        fontSize: 22,
+                        bold: true,
+                        alignment: 'center',
+                    },
+                    subheader: {
+                        fontSize: 18,
+                        bold: true,
+                    },
+                    normal: {
+                        fontSize: 12,
+                        lineHeight: 1.4,
+                    },
+                },
+            };
 
-        saveButton.addEventListener('click', () => {
-            generatePDF();
-            popupBackground.style.display = 'block';
-            popup.style.display = 'block';
-        });
-
-        function closePopup() {
-            popupBackground.style.display = 'none';
-            popup.style.display = 'none';
-        }
-
-        async function generatePDF() {
-            const element = document.getElementById("briefForm");
-            const canvas = await html2canvas(element, { scale: 2 });
-            const imgData = canvas.toDataURL("image/png");
-            const pdf = new jsPDF("p", "mm", "a4");
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-            pdf.save("brief.pdf");
-        }
-
-        form.addEventListener('input', () => {
-            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-            let validCount = 0;
-            inputs.forEach(input => {
-                if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
+            formData.forEach((value, key) => {
+                docDefinition.content.push({ text: `${key}: ${value}`, style: 'normal' });
             });
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
-            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
-            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
-            saveButton.disabled = validCount !== inputs.length;
+
+            pdfMake.createPdf(docDefinition).download('brief.pdf');
         });
     </script>
 </body>
