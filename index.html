@@ -36,19 +36,50 @@
             overflow: hidden;
         }
 
-        #typing-effect {
+        #typing-container {
             position: absolute;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .typing-text {
+            position: absolute;
             font-family: 'Pix', Arial, sans-serif;
             font-size: 4rem;
-            color: rgba(255, 255, 255, 0.7);
-            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
             white-space: nowrap;
             overflow: hidden;
-            border-right: 2px solid rgba(255, 255, 255, 0.7);
-            animation: blink 0.7s step-end infinite;
+        }
+
+        .typing-text.left {
+            left: 10%;
+            text-align: left;
+        }
+
+        .typing-text.right {
+            right: 10%;
+            text-align: right;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes erasing {
+            from {
+                width: 100%;
+            }
+            to {
+                width: 0;
+            }
         }
 
         @keyframes blink {
@@ -60,6 +91,11 @@
             }
         }
 
+        .typing-text span {
+            display: inline-block;
+            animation: blink 0.7s step-end infinite;
+        }
+
         form {
             max-width: 600px;
             margin: 20px auto;
@@ -67,6 +103,8 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
         }
 
         label {
@@ -173,7 +211,10 @@
     </style>
 </head>
 <body>
-    <div id="typing-effect"></div>
+    <div id="typing-container">
+        <div class="typing-text left" id="typing-left"></div>
+        <div class="typing-text right" id="typing-right"></div>
+    </div>
 
     <form id="briefForm">
         <h1>بریف پروژه</h1>
@@ -268,20 +309,30 @@
     </div>
 
     <script>
-        const words = ['Creativity', 'Ideation', 'Design'];
-        const typingEffect = document.getElementById('typing-effect');
+        const leftTyping = document.getElementById("typing-left");
+        const rightTyping = document.getElementById("typing-right");
+        const words = ["Creativity", "Ideation", "Design"];
 
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
+        let currentSide = "left";
 
         function typeWords() {
             const currentWord = words[wordIndex];
 
             if (isDeleting) {
-                typingEffect.textContent = currentWord.substring(0, charIndex--);
+                if (currentSide === "left") {
+                    leftTyping.textContent = currentWord.substring(0, charIndex--);
+                } else {
+                    rightTyping.textContent = currentWord.substring(0, charIndex--);
+                }
             } else {
-                typingEffect.textContent = currentWord.substring(0, charIndex++);
+                if (currentSide === "left") {
+                    leftTyping.textContent = currentWord.substring(0, charIndex++);
+                } else {
+                    rightTyping.textContent = currentWord.substring(0, charIndex++);
+                }
             }
 
             if (!isDeleting && charIndex === currentWord.length) {
@@ -293,6 +344,7 @@
             if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 wordIndex = (wordIndex + 1) % words.length;
+                currentSide = currentSide === "left" ? "right" : "left";
             }
 
             setTimeout(typeWords, isDeleting ? 50 : 100);
