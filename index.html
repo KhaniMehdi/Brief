@@ -179,10 +179,35 @@
     </form>
 
     <div id="noteContainer">
-        <p>در صورت نیاز به توضیح یا اشاره به مسئله مهمی در بخش توضیحات ذکر بفرمایید.</p>
-        <p>(زمان و مبلغ‌ها تقریبی و حدودی هستند.)</p>
-        <p>(ابتدای شروع 50 درصد مبلغ پروژه دریافت می‌شود.)</p>
-    </div>
+    <p>لطفاً در صورت وجود موارد مهم یا جزئیات خاص در بخش توضیحات آن‌ها را به طور کامل ذکر کنید.</p>
+    <p>زمان و هزینه‌های ذکر شده صرفاً تخمینی و قابل تغییر هستند.</p>
+    <p>پنجاه درصد از مبلغ پروژه در ابتدای کار دریافت می‌شود.)</p>
+</div>
+
+<style>
+    #noteContainer {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 300px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.8); /* شیشه‌ای بودن */
+        border-radius: 15px; /* گوشه‌های گرد */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* سایه زیبا */
+        font-size: 14px;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    #noteContainer p {
+        margin: 0 0 10px 0;
+    }
+
+    #noteContainer p:last-child {
+        margin-bottom: 0;
+    }
+</style>
+
 
     <script>
         const form = document.getElementById('briefForm');
