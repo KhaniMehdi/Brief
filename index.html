@@ -313,21 +313,21 @@
     pdf.addFileToVFS("IRANSansXBold.ttf", iransansBase64);
     pdf.addFont("IRANSansXBold.ttf", "IRANSans", "normal");
 
-    // Load Vazir font
     pdf.addFileToVFS("Vazir-Regular.ttf", vazirBase64);
     pdf.addFont("Vazir-Regular.ttf", "Vazir", "normal");
 
     pdf.setFont("Vazir");
     pdf.setFontSize(16);
 
-    let y = 20;
-    pdf.text("بریف پروژه", 200, y, { align: 'center' });
-    y += 30;
+    // عنوان پروژه
+    pdf.text("بریف پروژه", 200, 20, { align: 'center' });
 
+    // فرم داده‌ها
+    let y = 40;
     const formData = new FormData(document.getElementById("briefForm"));
     formData.forEach((value, key) => {
         if (value.trim() !== "") {
-            pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
+            pdf.text(`${key}: ${value}`, 180, y, { align: 'right' }); // موقعیت و راست‌چین
             y += 20;
         }
     });
