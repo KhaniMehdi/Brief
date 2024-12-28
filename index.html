@@ -21,7 +21,7 @@
             padding: 0;
             direction: rtl;
             text-align: right;
-            background: linear-gradient(to top left, #000000, #0000ff);
+            background: linear-gradient(to top left, #1e88e5, #0d47a1);
             color: #333;
             overflow-y: auto;
             overflow-x: hidden;
@@ -116,7 +116,7 @@
             padding: 20px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 25px rgba(255, 87, 34, 0.7);
             font-family: 'Vazir', Arial, sans-serif;
             font-size: 14px;
             line-height: 2;
@@ -149,8 +149,8 @@
         <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<span>(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
     </div>
 
-    <div id="popupBackground"></div>
-    <div id="popup">
+    <div id="popupBackground" style="display: none;"></div>
+    <div id="popup" style="display: none;">
         <p>مرسی از شما بابت کامل کردن بریف<br>
         فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید<br>
         ممنونم 🌹</p>
@@ -282,7 +282,7 @@
                 data[key] = value;
             });
 
-            const pdfContent = `بریف پروژه:\n\n${JSON.stringify(data, null, 2)}`;
+            const pdfContent = `بریف پروژه:\n\n${Object.entries(data).map(([key, value]) => `${key}: ${value}`).join('\n')}`;
             const blob = new Blob([pdfContent], { type: 'application/pdf' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
