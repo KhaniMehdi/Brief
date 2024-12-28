@@ -190,6 +190,7 @@
             width: calc(45% - 10px);
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
@@ -214,16 +215,16 @@
         <h1>بریف پروژه</h1>
 
         <label for="brandName">1. نام برند:</label>
-        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required oninput="validateText(this);">
+        <input type="text" id="brandName" name="نام برند" placeholder="مثال: ایران کالا" required>
 
         <label for="clientName">2. نام کارفرما:</label>
-        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required oninput="validateText(this);">
+        <input type="text" id="clientName" name="نام کارفرما" placeholder="مثال: محمد محمدی" required>
 
         <label for="email">3. آدرس ایمیل:</label>
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required oninput="validatePhoneNumber(this);">
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required>
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
@@ -261,7 +262,7 @@
         </select>
 
         <label for="competitorDifference">9. تفاوت محصول با رقبا یا دلیل انتخاب این محصول توسط مخاطب:</label>
-        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required oninput="validateText(this);"></textarea>
+        <textarea id="competitorDifference" name="تفاوت محصول با رقبا" placeholder="مثال: کیفیت بالاتر و قیمت کمتر نسبت به رقبا" required></textarea>
 
         <label for="proposedBudget">10. بودجه پیشنهادی:</label>
         <select id="proposedBudget" name="بودجه پیشنهادی" required>
@@ -273,16 +274,16 @@
         </select>
 
         <label for="brandImage">11. برند شما چه تصویری از خود در ذهن مخاطب دارد؟</label>
-        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required oninput="validateText(this);"></textarea>
+        <textarea id="brandImage" name="تصویر برند" placeholder="مثال: یک برند حرفه‌ای و قابل اعتماد" rows="4" required></textarea>
 
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
-        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this);"></textarea>
+        <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required></textarea>
 
         <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4" oninput="validateText(this);"></textarea>
+        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4"></textarea>
 
         <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4" oninput="validateText(this);"></textarea>
+        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4"></textarea>
 
         <div id="progressContainer">
             <div id="progressBar"></div>
@@ -310,33 +311,15 @@
         }
 
         async function generatePDF() {
+            const element = document.getElementById('briefForm');
+            const canvas = await html2canvas(element);
+            const imgData = canvas.toDataURL('image/png');
             const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+            const pdf = new jsPDF();
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            const loadFont = async (url, fontName) => {
-                const fontData = await fetch(url).then(res => res.arrayBuffer());
-                pdf.addFileToVFS(`${fontName}.ttf`, fontData);
-                pdf.addFont(`${fontName}.ttf`, fontName, "normal");
-            };
-
-            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf", "Vazir");
-            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf", "IRANSansBold");
-
-            pdf.setFont("Vazir");
-            pdf.setFontSize(16);
-
-            let y = 20;
-            pdf.text("بریف پروژه", pdf.internal.pageSize.getWidth() / 2, y, { align: 'center' });
-            y += 30;
-
-            const formData = new FormData(form);
-            formData.forEach((value, key) => {
-                if (value.trim() !== "") {
-                    pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
-                    y += 20;
-                }
-            });
-
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
             pdf.save('brief.pdf');
         }
 
@@ -352,30 +335,6 @@
             document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
             saveButton.disabled = validCount !== inputs.length;
         });
-
-        function downloadPDF() {
-            generatePDF();
-        }
-
-        function validatePhoneNumber(input) {
-            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
-            if (input.value.length < 11) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
-
-        function validateText(input) {
-            if (input.type !== 'email' && input.id !== 'phoneNumber') {
-                input.value = input.value.replace(/[0-9]/g, '');
-            }
-            if (input.value.trim() === '') {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        }
     </script>
 </body>
 </html>
