@@ -63,12 +63,12 @@
 
         button {
             display: inline-block;
-            width: calc(45% - 10px);
-            margin: 10px 5px;
+            width: calc(100% - 40px);
+            margin: 10px 20px;
             background: #007BFF;
             color: #fff;
             border: none;
-            padding: 10px 15px;
+            padding: 10px;
             cursor: pointer;
             border-radius: 4px;
             font-size: 14px;
@@ -166,7 +166,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
             z-index: 99;
         }
 
@@ -181,6 +182,12 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
             z-index: 100;
+            text-align: center;
+        }
+
+        #popup button {
+            margin: 10px 5px;
+            width: calc(45% - 10px);
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -189,17 +196,18 @@
     <div id="noteContainer">
         <p class="bold">لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
         <p class="bold">زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
-        <p class="bold">پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.</p>
+        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<span> (این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
     </div>
 
     <div id="popupBackground"></div>
     <div id="popup">
-        <p>مرسی از شما بابت کامل کردن بریف<br>
-        فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید<br>
-        اگر دانلود نشد دکمه زیر را کلیک کنید<br>
-        <button class="download-btn" onclick="downloadPDF()">دانلود PDF</button>
-        ممنونم 🌹</p>
-        <button onclick="closePopup()">بستن</button>
+        <p>مرسی از شما بابت تکمیل بریف<br>
+فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید.<br>
+ممنونم 🌹</p>
+        <div>
+            <button class="download-btn" onclick="downloadPDF()">دانلود PDF</button>
+            <button onclick="closePopup()">بستن</button>
+        </div>
     </div>
 
     <form id="briefForm">
@@ -281,7 +289,7 @@
         </div>
         <div id="progressText">0% تکمیل شده</div>
 
-        <button type="button" id="saveButton" disabled>دانلود فایل بریف</button>
+        <button type="button" id="saveButton" disabled>تکمیل بریف</button>
     </form>
 
     <script>
