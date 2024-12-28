@@ -112,29 +112,48 @@
             text-align: center;
         }
 
-        #noteContainer {
+        #popupBackground {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 300px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 99;
+        }
+
+        #popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 0 25px rgba(255, 87, 34, 0.7);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            display: none;
+            z-index: 100;
+        }
+
+        #popup p {
             font-family: 'Vazir', Arial, sans-serif;
-            font-size: 14px;
-            line-height: 2;
-            color: #333;
-            box-sizing: border-box;
+            font-size: 16px;
+            margin: 0 0 10px;
         }
 
-        #noteContainer p {
-            font-size: 14px;
-            font-weight: bold;
+        #popup button {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
         }
 
-        #noteContainer p span {
-            font-weight: normal;
+        #popup button:hover {
+            background: #0056b3;
         }
 
         h1 {
@@ -147,14 +166,8 @@
     </style>
 </head>
 <body>
-    <div id="noteContainer">
-        <p>لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
-        <p>زمان‌ها و بودجه تنها به عنوان یک راهنما محسوب می‌شوند و ممکن است در طول فرآیند تغییر کنند.</p>
-        <p>پرداخت اولیه معادل 50٪ هزینه پروژه برای شروع فرآیند کاری الزامی است.<span>(این پرداخت به عنوان تعهد طرفین در پیشبرد پروژه در نظر گرفته می‌شود.)</span></p>
-    </div>
-
-    <div id="popupBackground" style="display: none;"></div>
-    <div id="popup" style="display: none;">
+    <div id="popupBackground"></div>
+    <div id="popup">
         <p>مرسی از شما بابت کامل کردن بریف<br>
         فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید<br>
         ممنونم 🌹</p>
@@ -174,7 +187,7 @@
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" pattern="\d{11}" required oninput="validatePhoneNumber(this);">
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" required oninput="validatePhoneNumber(this);">
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
@@ -270,11 +283,7 @@
         }
 
         function validatePhoneNumber(input) {
-            if (input.value.length < 11) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
+            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
         }
 
         function closePopup() {
@@ -283,29 +292,22 @@
         }
 
         saveButton.addEventListener('click', () => {
-            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
-            const isValid = Array.from(requiredFields).every(field => field.value.trim() !== '');
-
-            if (!isValid) {
-                alert('لطفاً تمام بخش‌های الزامی را تکمیل کنید.');
-                return;
-            }
-
             const formData = new FormData(form);
             const data = {};
             formData.forEach((value, key) => {
+                if ((key === 'سناریو پیشنهادی' || key === 'توضیحات تکمیلی') && value.trim() === '') return;
                 data[key] = value;
             });
 
-            const txtContent = Object.entries(data).map(([key, value]) => `${key}: ${value}`).join('\n');
-            const blob = new Blob([txtContent], { type: 'text/plain' });
+            const pdfContent = Object.entries(data).map(([key, value]) => `${key}: ${value}`).join('\n');
+            const blob = new Blob([pdfContent], { type: 'application/pdf' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'brief.txt';
+            link.download = 'brief.pdf';
             link.click();
 
-            popup.style.display = 'block';
             popupBackground.style.display = 'block';
+            popup.style.display = 'block';
         });
 
         form.addEventListener('input', updateProgress);
