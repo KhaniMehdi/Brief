@@ -211,7 +211,6 @@
         formData.forEach((value, key) => {
             if (value.trim() && !(key === 'هدف دیگر' && !value.trim())) {
                 pdf.setFontSize(12);
-                pdf.setFont(undefined, 'bold');
                 pdf.text(`${key}:`, 190, y, { align: 'right' });
                 pdf.setFont(undefined, 'normal');
                 pdf.text(value, 170, y, { align: 'right' });
