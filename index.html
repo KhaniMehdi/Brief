@@ -22,18 +22,16 @@
             direction: rtl;
             text-align: right;
             background: linear-gradient(to bottom right, #1e88e5, #0d47a1);
-            animation: changeBackground 5s infinite;
+            animation: gradientBackground 5s infinite alternate;
             color: #333;
             overflow-y: auto;
             overflow-x: hidden;
         }
 
-        @keyframes changeBackground {
+        @keyframes gradientBackground {
             0% { background: linear-gradient(to bottom right, #1e88e5, #0d47a1); }
-            25% { background: linear-gradient(to bottom right, #4caf50, #8bc34a); }
-            50% { background: linear-gradient(to bottom right, #ff5722, #e91e63); }
-            75% { background: linear-gradient(to bottom right, #ffc107, #ff9800); }
-            100% { background: linear-gradient(to bottom right, #3f51b5, #673ab7); }
+            50% { background: linear-gradient(to bottom right, #4caf50, #ff5722); }
+            100% { background: linear-gradient(to bottom right, #ff9800, #3f51b5); }
         }
 
         form {
@@ -125,7 +123,7 @@
             padding: 20px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 87, 34, 1);
+            box-shadow: 0 0 25px rgba(255, 87, 34, 1);
             font-family: 'Vazir', Arial, sans-serif;
             font-size: 14px;
             line-height: 2;
@@ -136,11 +134,20 @@
 
         @keyframes glowEffect {
             0% {
-                box-shadow: 0 0 20px rgba(255, 87, 34, 0.7);
+                box-shadow: 0 0 25px rgba(255, 87, 34, 0.7);
             }
             100% {
-                box-shadow: 0 0 30px rgba(255, 87, 34, 1);
+                box-shadow: 0 0 35px rgba(255, 87, 34, 1);
             }
+        }
+
+        #noteContainer p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #noteContainer p span {
+            font-weight: normal;
         }
 
         h1 {
@@ -251,7 +258,7 @@
         <input type="email" id="email" name="آدرس ایمیل" placeholder="مثال: example@email.com" required>
 
         <label for="phoneNumber">4. شماره تماس:</label>
-        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" pattern="\d{11}" required oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+        <input type="text" id="phoneNumber" name="شماره تماس" placeholder="مثال: 09121111111" maxlength="11" pattern="\d{11}" required>
 
         <label for="productionGoal">5. هدف از تولید:</label>
         <select id="productionGoal" name="هدف از تولید" required>
@@ -270,7 +277,7 @@
             <option value="1080p افقی">1080p افقی</option>
             <option value="سایر">سایر</option>
         </select>
-        <input type="text" id="otherVideoDimensions" name="ابعاد دیگر" placeholder="مثال: 4K یا ابعاد دلخواه" style="display: none;" required>
+        <input type="text" id="otherVideoDimensions" name="ابعاد دیگر" placeholder="مثال: 4K یا ابعاد دلخواه" style="display: none;">
 
         <label for="duration">7. مدت زمان پیشنهادی:</label>
         <select id="duration" name="مدت زمان پیشنهادی" required>
@@ -332,11 +339,19 @@
 
         function updateProgress() {
             const inputs = Array.from(form.querySelectorAll('input[required], select[required], textarea[required]'));
-            const filled = inputs.filter(input => input.value.trim() !== '').length;
-            const progress = (filled / inputs.length) * 100;
+            const validInputs = inputs.filter(input => {
+                if (input.id === 'phoneNumber' && input.value.length < 11) {
+                    return false;
+                }
+                if (input.id === 'otherVideoDimensions' && !input.value.trim()) {
+                    return false;
+                }
+                return input.value.trim() !== '';
+            });
+
+            const progress = (validInputs.length / inputs.length) * 100;
             progressBar.style.width = `${progress}%`;
             progressText.textContent = `${Math.round(progress)}% تکمیل شده`;
-
             saveButton.disabled = progress < 100;
         }
 
@@ -350,43 +365,46 @@
                 otherDimensions.required = false;
                 otherDimensions.value = '';
             }
+            updateProgress();
         }
-
-        form.addEventListener('input', updateProgress);
-
-        saveButton.addEventListener('click', () => {
-            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
-            let valid = true;
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    valid = false;
-                    field.style.borderColor = 'red';
-                    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    field.style.borderColor = '';
-                }
-            });
-
-            if (valid) {
-                generatePDF();
-                popup.style.display = 'block';
-                popupBackground.style.display = 'block';
-            }
-        });
 
         function closePopup() {
             popup.style.display = 'none';
             popupBackground.style.display = 'none';
         }
 
-        function generatePDF() {
-            const pdfContent = form.outerHTML;
+        saveButton.addEventListener('click', () => {
+            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+            const isValid = Array.from(requiredFields).every(field => field.value.trim() !== '');
+
+            if (!isValid) {
+                alert('لطفاً تمام بخش‌های الزامی را تکمیل کنید.');
+                return;
+            }
+
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            const pdfContent = `بریف پروژه:\n\n${JSON.stringify(data, null, 2)}`;
             const blob = new Blob([pdfContent], { type: 'application/pdf' });
             const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'brief-form.pdf';
+            link.href = URL.createObjectURL(blob);
+            link.download = 'brief.pdf';
             link.click();
-        }
+
+            popup.style.display = 'block';
+            popupBackground.style.display = 'block';
+        });
+
+        form.addEventListener('input', updateProgress);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Page fully loaded and scripts initialized.');
+            updateProgress();
+        });
     </script>
 </body>
 </html>
