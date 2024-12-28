@@ -326,7 +326,7 @@
             pdf.setFontSize(16);
 
             let y = 20;
-            pdf.text("بریف پروژه", 200, y, { align: 'center' });
+            pdf.text("بریف پروژه", pdf.internal.pageSize.getWidth() / 2, y, { align: 'center' });
             y += 30;
 
             const formData = new FormData(form);
