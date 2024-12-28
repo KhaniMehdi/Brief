@@ -206,7 +206,7 @@
         فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید.<br>
         ممنونم 🌹</p>
         <div>
-            <button class="download-btn" onclick="downloadPDF()">دانلود PDF</button>
+            <button class="download-btn" id="downloadButton">دانلود PDF</button>
             <button onclick="closePopup()">بستن</button>
         </div>
     </div>
@@ -279,11 +279,7 @@
         <label for="audienceReaction">12. انتظار دارید مخاطب به این محتوا چه واکنشی نشان دهد؟</label>
         <textarea id="audienceReaction" name="واکنش مخاطب" placeholder="مثال: افزایش تماس‌های ورودی و سفارشات" rows="4" required oninput="validateText(this);"></textarea>
 
-        <label for="scenario">13. سناریو پیشنهادی (درصورت نیاز):</label>
-        <textarea id="scenario" name="سناریو پیشنهادی" placeholder="مثال: معرفی محصول به همراه مقایسه با رقبا" rows="4" oninput="validateText(this);"></textarea>
-
-        <label for="additionalNotes">14. توضیحات تکمیلی (درصورت نیاز):</label>
-        <textarea id="additionalNotes" name="توضیحات تکمیلی" rows="4" oninput="validateText(this);"></textarea>
+        <!-- Placeholder for question 14 -->
 
         <div id="progressContainer">
             <div id="progressBar"></div>
@@ -293,86 +289,85 @@
         <button type="button" id="saveButton" disabled>تکمیل بریف</button>
     </form>
 
-<script>
-    const saveButton = document.getElementById('saveButton');
-    const popupBackground = document.getElementById('popupBackground');
-    const popup = document.getElementById('popup');
-    const form = document.getElementById('briefForm');
+    <script>
+        const saveButton = document.getElementById('saveButton');
+        const popupBackground = document.getElementById('popupBackground');
+        const popup = document.getElementById('popup');
+        const form = document.getElementById('briefForm');
 
-    saveButton.addEventListener('click', () => {
-        html2canvas(form, { scale: 2 }).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const imgWidth = 190; // Width in mm
-            const pageHeight = 297; // A4 height in mm
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        saveButton.addEventListener('click', () => {
+            html2canvas(form, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 190; // Width in mm
+                const pageHeight = 297; // A4 height in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-            let y = 0; // Starting position on PDF
-            if (imgHeight > pageHeight) {
-                let heightLeft = imgHeight;
+                let y = 0; // Starting position on PDF
+                if (imgHeight > pageHeight) {
+                    let heightLeft = imgHeight;
 
-                while (heightLeft > 0) {
-                    pdf.addImage(imgData, 'PNG', 10, y, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                    y = 0;
-                    if (heightLeft > 0) pdf.addPage();
+                    while (heightLeft > 0) {
+                        pdf.addImage(imgData, 'PNG', 10, y, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                        y = 0;
+                        if (heightLeft > 0) pdf.addPage();
+                    }
+                } else {
+                    pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
                 }
+
+                // Show the popup
+                popupBackground.style.display = 'block';
+                popup.style.display = 'block';
+
+                // Attach download action
+                document.querySelector('.download-btn').onclick = () => {
+                    pdf.save('brief.pdf');
+                    closePopup();
+                };
+            });
+        });
+
+        function closePopup() {
+            popupBackground.style.display = 'none';
+            popup.style.display = 'none';
+        }
+
+        form.addEventListener('input', () => {
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            let validCount = 0;
+
+            inputs.forEach(input => {
+                if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
+            });
+
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = (validCount / inputs.length) * 100 + '%';
+            progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
+            document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
+            saveButton.disabled = validCount !== inputs.length;
+        });
+
+        function validatePhoneNumber(input) {
+            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
+            if (input.value.length < 11) {
+                input.classList.add('invalid');
             } else {
-                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                input.classList.remove('invalid');
             }
-
-            // Show the popup
-            popupBackground.style.display = 'block';
-            popup.style.display = 'block';
-
-            // Attach download action
-            document.querySelector('.download-btn').onclick = () => {
-                pdf.save('brief.pdf');
-                closePopup();
-            };
-        });
-    });
-
-    function closePopup() {
-        popupBackground.style.display = 'none';
-        popup.style.display = 'none';
-    }
-
-    form.addEventListener('input', () => {
-        const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-        let validCount = 0;
-
-        inputs.forEach(input => {
-            if (input.value.trim() && !input.classList.contains('invalid')) validCount++;
-        });
-
-        const progressBar = document.getElementById('progressBar');
-        progressBar.style.width = (validCount / inputs.length) * 100 + '%';
-        progressBar.style.background = validCount === inputs.length ? '#28a745' : '#1e88e5';
-        document.getElementById('progressText').textContent = `${Math.round((validCount / inputs.length) * 100)}% تکمیل شده`;
-        saveButton.disabled = validCount !== inputs.length;
-    });
-
-    function validatePhoneNumber(input) {
-        input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
-        if (input.value.length < 11) {
-            input.classList.add('invalid');
-        } else {
-            input.classList.remove('invalid');
         }
-    }
 
-    function validateText(input) {
-        if (input.type !== 'email' && input.id !== 'phoneNumber') {
-            input.value = input.value.replace(/[0-9]/g, '');
+        function validateText(input) {
+            if (input.type !== 'email' && input.id !== 'phoneNumber') {
+                input.value = input.value.replace(/[0-9]/g, '');
+            }
+            if (input.value.trim() === '') {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
         }
-        if (input.value.trim() === '') {
-            input.classList.add('invalid');
-        } else {
-            input.classList.remove('invalid');
-        }
-    }
-</script>
-
+    </script>
 </body>
 </html>
