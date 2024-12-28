@@ -69,6 +69,9 @@
         }
 
         button {
+            display: block;
+            width: calc(100% - 40px);
+            margin: 20px auto;
             background: #007BFF;
             color: #fff;
             border: none;
@@ -76,12 +79,19 @@
             cursor: pointer;
             border-radius: 4px;
             font-size: 16px;
-            margin: 10px 20px;
             box-sizing: border-box;
+            text-align: center;
+            transition: box-shadow 0.3s ease, background 0.3s ease;
         }
 
         button:hover {
             background: #0056b3;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
+        }
+
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
         }
 
         #progressContainer {
@@ -125,7 +135,7 @@
         }
 
         #noteContainer p {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
         }
 
@@ -136,6 +146,7 @@
 
         h1 {
             text-align: center;
+            font-family: 'IRANSansBold', Arial, sans-serif;
             font-size: 50px;
             font-weight: bold;
             margin: 40px 0;
@@ -309,7 +320,7 @@
         </div>
         <div id="progressText">0% تکمیل شده</div>
 
-        <button type="button" id="saveButton">دانلود فایل بریف</button>
+        <button type="button" id="saveButton" disabled>دانلود فایل بریف</button>
     </form>
 
     <script>
@@ -326,11 +337,8 @@
             const progress = (filled / inputs.length) * 100;
             progressBar.style.width = `${progress}%`;
             progressText.textContent = `${Math.round(progress)}% تکمیل شده`;
-        }
 
-        function toggleOtherVideoDimensions(select) {
-            const otherDimensions = document.getElementById('otherVideoDimensions');
-            otherDimensions.style.display = select.value === 'سایر' ? 'block' : 'none';
+            saveButton.disabled = progress < 100;
         }
 
         form.addEventListener('input', updateProgress);
