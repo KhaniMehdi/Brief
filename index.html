@@ -120,21 +120,22 @@
             padding: 20px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
-            box-shadow: 0 0 25px rgba(255, 87, 34, 0.7);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
             font-family: 'Vazir', Arial, sans-serif;
             font-size: 14px;
             line-height: 2;
             color: #333;
             box-sizing: border-box;
+            animation: glow 1.5s infinite alternate;
         }
 
-        #noteContainer p {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        #noteContainer p span {
-            font-weight: normal;
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+            }
         }
 
         #popupBackground {
@@ -189,6 +190,7 @@
             margin: 20px 10px;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div id="noteContainer">
@@ -322,7 +324,10 @@
             popupBackground.style.display = 'none';
         }
 
-        saveButton.addEventListener('click', () => {
+        saveButton.addEventListener('click', async () => {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ unit: 'px', format: 'a4' });
+
             const formData = new FormData(form);
             const data = {};
             formData.forEach((value, key) => {
@@ -330,12 +335,19 @@
                 data[key] = value;
             });
 
-            const pdfContent = Object.entries(data).map(([key, value]) => `${key}: ${value}`).join('\n');
-            const blob = new Blob([pdfContent], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'brief.pdf';
-            link.click();
+            let y = 20;
+            pdf.setFont('Arial', 'bold');
+            pdf.setFontSize(14);
+            pdf.text('بریف پروژه', 200, y, { align: 'center' });
+
+            y += 30;
+            pdf.setFont('Arial', 'normal');
+            Object.entries(data).forEach(([key, value]) => {
+                pdf.text(`${key}: ${value}`, 20, y);
+                y += 20;
+            });
+
+            pdf.save('brief.pdf');
 
             popupBackground.style.display = 'block';
             popup.style.display = 'block';
