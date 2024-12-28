@@ -176,18 +176,11 @@
             padding: 10px 15px;
             cursor: pointer;
             border-radius: 4px;
+            font-size: 14px;
         }
 
         #popup button:hover {
             background: #0056b3;
-        }
-
-        h1 {
-            text-align: center;
-            font-family: 'Vazir', Arial, sans-serif;
-            font-size: 80px;
-            font-weight: bold;
-            margin: 20px 10px;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -203,6 +196,7 @@
     <div id="popup">
         <p>مرسی از شما بابت کامل کردن بریف<br>
         فایل رو تایید بفرمایید و در انتها برای ما ارسال بفرمایید<br>
+        اگر دانلود نشد <button onclick="downloadPDF()">PDF</button> را کلیک کنید<br>
         ممنونم 🌹</p>
         <button onclick="closePopup()">بستن</button>
     </div>
@@ -291,71 +285,65 @@
 
     <script>
         const saveButton = document.getElementById('saveButton');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const popup = document.getElementById('popup');
         const popupBackground = document.getElementById('popupBackground');
+        const popup = document.getElementById('popup');
         const form = document.getElementById('briefForm');
 
-        function updateProgress() {
-            const inputs = Array.from(form.querySelectorAll('input[required], select[required], textarea[required]'));
-            const validInputs = inputs.filter(input => {
-                if (input.id === 'phoneNumber' && input.value.length < 11) {
-                    input.classList.add('invalid');
-                    return false;
-                } else {
-                    input.classList.remove('invalid');
-                }
-                return input.value.trim() !== '';
-            });
-
-            const progress = (validInputs.length / inputs.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressText.textContent = `${Math.round(progress)}% تکمیل شده`;
-            saveButton.disabled = progress < 100;
-        }
-
-        function validatePhoneNumber(input) {
-            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 11);
-        }
-
-        function closePopup() {
-            popup.style.display = 'none';
-            popupBackground.style.display = 'none';
-        }
-
-        saveButton.addEventListener('click', async () => {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ unit: 'px', format: 'a4' });
-
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                if ((key === 'سناریو پیشنهادی' || key === 'توضیحات تکمیلی') && value.trim() === '') return;
-                data[key] = value;
-            });
-
-            let y = 20;
-            pdf.setFont('Arial', 'bold');
-            pdf.setFontSize(14);
-            pdf.text('بریف پروژه', 200, y, { align: 'center' });
-
-            y += 30;
-            pdf.setFont('Arial', 'normal');
-            Object.entries(data).forEach(([key, value]) => {
-                pdf.text(`${key}: ${value}`, 20, y);
-                y += 20;
-            });
-
-            pdf.save('brief.pdf');
-
+        saveButton.addEventListener('click', () => {
+            generatePDF();
             popupBackground.style.display = 'block';
             popup.style.display = 'block';
         });
 
-        form.addEventListener('input', updateProgress);
+        function closePopup() {
+            popupBackground.style.display = 'none';
+            popup.style.display = 'none';
+        }
 
-        window.addEventListener('DOMContentLoaded', updateProgress);
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+
+            const loadFont = async (url, fontName) => {
+                const fontData = await fetch(url).then(res => res.arrayBuffer());
+                pdf.addFileToVFS(`${fontName}.ttf`, fontData);
+                pdf.addFont(`${fontName}.ttf`, fontName, "normal");
+            };
+
+            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/Vazir-Regular.ttf", "Vazir");
+            await loadFont("https://github.com/KhaniMehdi/Brief/raw/main/IRANSansXBold.ttf", "IRANSansBold");
+
+            pdf.setFont("Vazir");
+            pdf.setFontSize(16);
+
+            let y = 20;
+            pdf.text("بریف پروژه", 200, y, { align: 'center' });
+            y += 30;
+
+            const formData = new FormData(form);
+            formData.forEach((value, key) => {
+                if (value.trim() !== "") {
+                    pdf.text(`${key}: ${value}`, 20, y, { align: 'right' });
+                    y += 20;
+                }
+            });
+
+            pdf.save('brief.pdf');
+        }
+
+        form.addEventListener('input', () => {
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim()) validCount++;
+            });
+            document.getElementById('progressBar').style.width = (validCount / inputs.length) * 100 + '%';
+            saveButton.disabled = validCount !== inputs.length;
+        });
+
+        function downloadPDF() {
+            generatePDF();
+        }
     </script>
 </body>
 </html>
