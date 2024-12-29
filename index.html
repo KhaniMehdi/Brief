@@ -402,24 +402,24 @@
             column++;
             if (column > 1) {
                 pdf.addPage(); // افزودن صفحه جدید
-                column = 0; 
-                y = margin + 50; // شروع متن در صفحات بعدی از بالاتر
-                x = xColumn1; 
+                column = 0;
+                y = margin + 50; // شروع متن در صفحات جدید
+                x = xColumn1; // بازگشت به ستون اول
             } else {
-                x = xColumn2; 
-                y = margin + 100; // شروع ستون دوم در صفحه جاری
+                x = xColumn2; // تغییر ستون به ستون دوم
+                y = margin + 50; // شروع ستون دوم در همان صفحه
             }
         }
 
         // چاپ تیتر
         pdf.setFont("IRANSansBold");
         pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
-        y += lineHeight; 
+        y += lineHeight;
 
         // چاپ مقدار
         pdf.setFont("Vazir");
         pdf.text(value, x + columnWidth - 10, y, { align: 'right' });
-        y += lineHeight + 5; 
+        y += lineHeight + 5;
     }
 });
 
