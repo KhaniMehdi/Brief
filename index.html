@@ -20,7 +20,6 @@
     background-size: cover;
     overflow: hidden; /* حذف اسکرول اضافی */
     position: relative; /* موقعیت بدنه */
-    direction: rtl; /* راست‌چین کردن کل محتوا */
 }
 .gradient-bg {
     position: absolute;
@@ -29,7 +28,7 @@
     width: 100%;
     height: 100%;
     z-index: 1; /* پس‌زمینه در لایه پایین‌تر */
-    background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
+    background: linear-gradient(180deg, #001f3f, #000000); /* گرادیانت از آبی به سفید */
     background-size: cover;
 }
 
@@ -59,16 +58,16 @@
         form {
     max-width: 600px;
     width: 90%; /* واکنش‌گرایی برای دستگاه‌های کوچک */
-    background: rgba(255, 255, 255, 0.9); /* شیشه‌ای کردن پس‌زمینه فرم */
+    background: rgba(255, 255, 255, 0.85); /* شیشه‌ای کردن فرم */
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     max-height: 90vh; /* محدود کردن ارتفاع فرم */
-    overflow-y: auto; /* افزودن اسکرول برای متن بلند */
-    position: relative; /* موقعیت فرم */
-    z-index: 10; /* لایه فرم بالاتر از پس‌زمینه */
-    margin: 20px; /* فاصله از اطراف */
+    overflow-y: auto; /* اسکرول برای متن‌های بلند */
+    position: relative;
+    z-index: 10; /* فرم بالاتر از پس‌زمینه */
+    margin: 20px auto; /* مرکز کردن فرم */
 }
 
 /* تنظیم عرض ورودی‌ها */
@@ -93,13 +92,11 @@ label {
 @media (max-width: 768px) {
     form {
         width: 90%; /* عرض فرم در دستگاه‌های کوچک */
-        margin: 10px auto; /* مرکز کردن فرم */
         padding: 20px;
     }
 
     input, select, textarea {
         font-size: 14px; /* کاهش اندازه فونت */
-        margin: 5px 0; /* فاصله کمتر بین فیلدها */
     }
     
     label {
