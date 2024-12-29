@@ -22,15 +22,16 @@
     overflow-x: hidden;
 }
        #container {
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px; /* فاصله بین عناصر */
+    justify-content: flex-start; /* یا space-between */
+    gap: 30px;
+    min-height: 100vh; /* ارتفاع صفحه */
     padding: 20px;
+    padding-bottom: 50px; /* فاصله از پایین */
     box-sizing: border-box;
-    min-height: calc(100vh - 50px);
-    padding-bottom: 50px;
+    background: #0d1b2a;
 }
         .common-box {
     width: 80%;
