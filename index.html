@@ -411,12 +411,12 @@
                 pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
                 
                 column = 0; 
-                y = margin + 120; // موقعیت جدید y
+                y = margin + 50; // شروع از بالاتر در صفحه جدید
                 x = xColumn1; // ستون اول
             } else {
                 // ستون دوم
                 x = xColumn2; 
-                y = margin + 120; // موقعیت جدید y برای ستون دوم
+                y = margin + 50; // شروع از بالاتر در ستون دوم
             }
         }
 
@@ -429,8 +429,26 @@
         pdf.setFont("Vazir");
         const wrappedText = pdf.splitTextToSize(value, columnWidth - 20);
         wrappedText.forEach((line) => {
+            if (y + lineHeight > pageHeight - margin) {
+                // انتقال به ستون یا صفحه بعدی
+                column++;
+                if (column > 1) {
+                    pdf.addPage(); 
+                    pdf.setDrawColor(0, 0, 0);
+                    pdf.setLineWidth(2);
+                    pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
+                    
+                    column = 0; 
+                    y = margin + 50;
+                    x = xColumn1;
+                } else {
+                    x = xColumn2;
+                    y = margin + 50;
+                }
+            }
+
             pdf.text(line, x + columnWidth - 10, y, { align: 'right' });
-            y += lineHeight; // حرکت به خط بعدی
+            y += lineHeight; 
         });
 
         y += 5; // فاصله اضافی بین آیتم‌ها
