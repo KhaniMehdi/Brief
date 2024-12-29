@@ -398,49 +398,50 @@
 
     formData.forEach((value, key) => {
     if (value.trim() !== "") {
-        // اگر فضای ستون پر شد
-        if (y + 2 * lineHeight > pageHeight - margin) {
+        // بررسی فضای باقی‌مانده در ستون فعلی
+        if (y + lineHeight > pageHeight - margin) {
             column++;
             if (column > 1) {
                 // صفحه جدید
-                pdf.addPage(); 
+                pdf.addPage();
 
                 // رسم کادر برای صفحه جدید
                 pdf.setDrawColor(0, 0, 0);
                 pdf.setLineWidth(2);
                 pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
 
-                column = 0; 
-                y = margin + 50; // شروع از بالاتر در صفحه جدید
-                x = xColumn1; // ستون اول
+                // بازنشانی ستون و موقعیت
+                column = 0;
+                x = xColumn1;
+                y = margin + 50; // تنظیم شروع از بالا
             } else {
-                // ستون دوم
+                // انتقال به ستون دوم
                 x = xColumn2;
-                y = margin + 50; // شروع از بالاتر در ستون دوم
+                y = margin + 50; // شروع از بالاتر
             }
         }
 
         // چاپ تیتر
         pdf.setFont("IRANSansBold");
         pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
-        y += lineHeight; 
+        y += lineHeight;
 
         // مدیریت متن‌های طولانی
         pdf.setFont("Vazir");
         const wrappedText = pdf.splitTextToSize(value, columnWidth - 20);
         wrappedText.forEach((line) => {
             if (y + lineHeight > pageHeight - margin) {
-                // انتقال به ستون یا صفحه بعدی
                 column++;
                 if (column > 1) {
-                    pdf.addPage(); 
+                    // صفحه جدید
+                    pdf.addPage();
                     pdf.setDrawColor(0, 0, 0);
                     pdf.setLineWidth(2);
                     pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
 
-                    column = 0; 
-                    y = margin + 50;
+                    column = 0;
                     x = xColumn1;
+                    y = margin + 50;
                 } else {
                     x = xColumn2;
                     y = margin + 50;
@@ -448,7 +449,7 @@
             }
 
             pdf.text(line, x + columnWidth - 10, y, { align: 'right' });
-            y += lineHeight; 
+            y += lineHeight;
         });
 
         y += 5; // فاصله اضافی بین آیتم‌ها
