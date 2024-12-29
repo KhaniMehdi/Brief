@@ -57,13 +57,12 @@
     z-index: 0;
 }
 
-        form {
-    margin-top: 160px; /* فاصله مناسب از باکس */
-    max-width: 600px; /* عرض فرم */
-    margin-left: auto; /* مرکز کردن فرم */
-    margin-right: auto; /* مرکز کردن فرم */
-    background: rgba(255, 255, 255, 0.9); /* پس‌زمینه شفاف */
+       form {
+    margin-top: 180px; /* فاصله مناسب از باکس */
+    width: 100%; /* عرض کامل */
+    max-width: 600px; /* عرض مشابه باکس */
     padding: 30px; /* فاصله داخلی */
+    background: rgba(255, 255, 255, 0.9); /* پس‌زمینه شفاف */
     direction: rtl; /* راست به چپ برای متن */
     text-align: right; /* ترازبندی متن به راست */
     border-radius: 8px; /* گوشه‌های گرد */
@@ -187,12 +186,13 @@
     padding: 30px; /* فاصله داخلی */
     background: rgba(255, 255, 255, 0.9); /* پس‌زمینه شفاف */
     border-radius: 8px; /* گوشه‌های گرد */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه نرم */
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.8); /* درخشش حفظ شده */
     font-family: 'Vazir', Arial, sans-serif; /* فونت مناسب */
     font-size: 14px; /* اندازه فونت */
     line-height: 2; /* فاصله خطوط */
     color: #333; /* رنگ متن */
     box-sizing: border-box; /* محاسبه دقیق فاصله‌ها */
+    animation: glow 0.8s infinite alternate; /* انیمیشن درخشش */
 }
 
 
