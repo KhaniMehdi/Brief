@@ -176,21 +176,22 @@
         }
 
         #noteContainer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
-            font-family: 'Vazir', Arial, sans-serif;
-            font-size: 14px;
-            line-height: 2;
-            color: #333;
-            box-sizing: border-box;
-            animation: glow 0.8s infinite alternate;
-        }
+    position: absolute; /* از fixed به absolute تغییر یافت */
+    top: 0; /* به بالای صفحه می‌چسبد */
+    left: 50%; /* به مرکز صفحه از چپ منتقل می‌شود */
+    transform: translate(-50%, 0); /* برای مرکز کردن به صورت افقی */
+    width: 300px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
+    font-family: 'Vazir', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 2;
+    color: #333;
+    box-sizing: border-box;
+    animation: glow 0.8s infinite alternate;
+}
 
         @keyframes glow {
             0% {
