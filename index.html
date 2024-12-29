@@ -8,138 +8,104 @@
     <style>
        
 
-   /* تنظیمات کلی بدنه */
-body {
+        body {
     margin: 0;
     padding: 0;
+    padding-top: 20px;
+    height: 100vh;
     font-family: 'Arial', sans-serif;
     display: flex;
+    direction: rtl;
+    text-align: right;
     justify-content: center;
     align-items: flex-start;
-    background: linear-gradient(180deg, #001f3f, #000000); /* گرادیانت از مشکی به سفید */
-    background-size: cover;
-    overflow-x: hidden; /* حذف اسکرول افقی */
-    direction: rtl;
-    position: relative;
-    flex-wrap: nowrap; /* برای نسخه دسکتاپ */
+    overflow-y: auto; 
+    overflow-x: hidden;
 }
-
-/* تنظیمات فرم */
-form {
-    max-width: 600px;
-    width: 90%;
-    background: rgba(255, 255, 255, 0.8); /* رنگ زمینه سفید شیشه‌ای */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* سایه مشکی نرم */
-    box-sizing: border-box;
-    overflow-y: auto; /* اسکرول در صورت نیاز */
-    margin: 20px;
-    text-align: right;
-    color: #000; /* تغییر رنگ متن به مشکی */
-    z-index: 2; /* فرم بالاتر از پس‌زمینه */
-}
-
-/* تنظیمات باکس کناری */
-.box {
-    max-width: 300px;
-    width: 30%;
-    background: rgba(0, 0, 0, 0.7); /* پس‌زمینه نیمه‌شفاف */
-    color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    margin: 20px;
-    position: relative;
-    z-index: 2; /* باکس بالاتر از پس‌زمینه */
-}
-.close-btn {
-    display: none; /* پیش‌فرض برای نسخه دسکتاپ */
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(255, 255, 255, 0.8); /* پس‌زمینه نیمه‌شفاف */
-    color: #000;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 30px;
-    cursor: pointer;
-    z-index: 4;
-    transition: all 0.3s ease;
-}
-
-.close-btn:hover {
-    background: rgba(255, 0, 0, 0.8); /* رنگ قرمز برای هاور */
-    color: #fff;
-}
-/* واکنش‌گرایی برای نسخه موبایل */
-@media (max-width: 768px) {
-    body {
-        flex-direction: column; /* تغییر جهت نمایش در موبایل */
-        align-items: center; /* مرکز کردن محتوا */
-    }
-
-    .box {
-        position: fixed; /* ثابت کردن باکس بالای صفحه */
-        top: 0; /* قرارگیری در بالای صفحه */
-        left: 0;
-        width: 100%; /* عرض کامل برای موبایل */
-        z-index: 3; /* جلوتر از فرم */
-        border-radius: 0; /* حذف گوشه‌ها */
-        margin: 0; /* حذف فاصله‌ها */
-        text-align: center;
-        padding: 15px; /* کاهش فضای داخلی */
-    }
-.close-btn {
-        display: block;
-    }
-    form {
-        margin-top: 150px; /* فاصله فرم از باکس */
-    }
-}
-
-/* تنظیمات پس‌زمینه */
-.background {
+.gradient-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
-    z-index: 1; /* پس‌زمینه در لایه پایین‌تر */
+    z-index: -1; 
+    background: linear-gradient(45deg, #212121, #1c2330, #182642, #152b5d, #182642, #1c2330, #212121);
+    background-size: 500% 500%; 
+    animation: gradient-fade 15s infinite alternate; 
 }
 
+@keyframes gradient-fade {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
 
+.gradient-bg::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1); 
+    z-index: 0;
+}
 
-/* تنظیم لیبل‌ها */
-input, select, textarea {
-    width: calc(100% - 20px); /* عرض ورودی‌ها */
-    font-size: 16px; /* اندازه فونت */
-    padding: 10px; /* فضای داخلی */
-    border: 1px solid #ccc; /* رنگ حاشیه */
-    border-radius: 4px; /* گوشه‌ها */
-    margin-bottom: 10px; /* فاصله بین ورودی‌ها */
+        form {
+    max-width: 600px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    direction: rtl;
+    text-align: right;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    background: #ffffff; /* رنگ زمینه سفید برای ورودی‌ها */
-    color: #000; /* رنگ متن مشکی */
+    max-height: 90vh; /* ارتفاع فرم را محدود کنید */
+    overflow-y: auto; /* اضافه کردن اسکرول به فرم */
 }
 
-/* تنظیم لیبل‌ها */
-label {
-    display: block; /* نمایش بلوکی */
-    margin-bottom: 5px; /* فاصله از فیلد */
-    font-weight: bold;
-    font-size: 14px; /* اندازه فونت */
-    color: #000; /* رنگ متن مشکی */
-}
-/* واکنش‌گرایی */
+/* تنظیمات برای واکنش‌گرایی */
+@media (max-width: 768px) {
+    form {
+        width: 90%; /* عرض فرم برای دستگاه‌های کوچک */
+        padding: 20px; /* کاهش فضای داخلی فرم */
+    }
 
+    input, select, textarea {
+        width: calc(100% - 20px); /* اطمینان از تطابق عرض با فرم */
+        font-size: 14px; /* کاهش اندازه فونت در دستگاه‌های کوچک */
+        margin: 5px 0; /* تنظیم فاصله بین فیلدها */
+    }
+    
+    label {
+        font-size: 14px; /* اندازه کوچک‌تر برای لیبل */
+        margin-bottom: 5px; /* فاصله کمتر بین لیبل و فیلد */
+    }
+}
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: calc(100% - 40px);
+            font-size: 16px;
+            padding: 10px;
+            margin: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Iransans', Arial, sans-serif;
+            box-sizing: border-box;
+        }
 
         input.invalid {
             border-color: red;
@@ -283,10 +249,7 @@ label {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
-<div class="box">
-    <button class="close-btn" onclick="closeBox()">×</button>
-    <!-- محتوا -->
-</div>
+
 <div class="gradient-bg"></div>
     <div id="noteContainer">
         <p class="bold">لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
@@ -388,10 +351,6 @@ label {
     </form>
 
     <script>
-        function closeBox() {
-    const box = document.querySelector('.box');
-    box.style.display = 'none';
-}
         const saveButton = document.getElementById('saveButton');
         const popupBackground = document.getElementById('popupBackground');
         const popup = document.getElementById('popup');
