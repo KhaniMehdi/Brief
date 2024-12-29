@@ -77,6 +77,7 @@
 
         input, textarea, select {
             width: calc(100% - 40px);
+            font-size: 16px;
             padding: 10px;
             margin: 10px 20px;
             border: 1px solid #ccc;
@@ -103,7 +104,7 @@
             padding: 10px;
             cursor: pointer;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 16px;
             font-family: 'Source Code Pro', Arial, sans-serif;
             box-sizing: border-box;
             text-align: center;
@@ -397,17 +398,25 @@
 
     formData.forEach((value, key) => {
     if (value.trim() !== "") {
-        // اگر ستون پر شد، به ستون بعدی برو
+        // اگر فضای ستون پر شد
         if (y + 2 * lineHeight > pageHeight - margin) {
             column++;
             if (column > 1) {
-                pdf.addPage(); // افزودن صفحه جدید
+                // صفحه جدید
+                pdf.addPage(); 
+                
+                // رسم کادر برای صفحه جدید
+                pdf.setDrawColor(0, 0, 0);
+                pdf.setLineWidth(2);
+                pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
+                
                 column = 0; 
-                y = margin + 120; // تنظیم فاصله برای صفحه جدید
-                x = xColumn1; 
+                y = margin + 120; // موقعیت جدید y
+                x = xColumn1; // ستون اول
             } else {
+                // ستون دوم
                 x = xColumn2; 
-                y = margin + 120; // تنظیم فاصله برای ستون دوم
+                y = margin + 120; // موقعیت جدید y برای ستون دوم
             }
         }
 
@@ -416,9 +425,9 @@
         pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
         y += lineHeight; 
 
-        // مدیریت متن‌های طولانی (دو خطی)
+        // مدیریت متن‌های طولانی
         pdf.setFont("Vazir");
-        const wrappedText = pdf.splitTextToSize(value, columnWidth - 20); // محدود کردن متن به عرض ستون
+        const wrappedText = pdf.splitTextToSize(value, columnWidth - 20);
         wrappedText.forEach((line) => {
             pdf.text(line, x + columnWidth - 10, y, { align: 'right' });
             y += lineHeight; // حرکت به خط بعدی
