@@ -11,16 +11,18 @@
         body {
     margin: 0;
     padding: 0;
-    padding-top: 20px;
     height: 100vh;
     font-family: 'Arial', sans-serif;
     display: flex;
+    flex-direction: column; /* مرتب‌سازی عمودی */
     direction: rtl;
     text-align: right;
-    justify-content: center;
-    align-items: flex-start;
-    overflow-y: auto; 
-    overflow-x: hidden;
+    justify-content: center; /* قرار دادن فرم در مرکز صفحه */
+    align-items: center;
+    background: linear-gradient(45deg, #001f3f, #003366, #228B22, #4B0082, #FFD700);
+    background-size: 300% 300%;
+    animation: gradient-loop 8s infinite;
+    overflow: hidden; /* جلوگیری از اسکرول اضافی */
 }
 .gradient-bg {
     position: fixed;
@@ -69,6 +71,9 @@
     box-sizing: border-box;
     max-height: 90vh; /* ارتفاع فرم را محدود کنید */
     overflow-y: auto; /* اضافه کردن اسکرول به فرم */
+    position: relative; /* موقعیت پیش‌فرض */
+    top: 0; /* جایگاه فرم */
+    transform: translateY(0); /* تنظیم عمودی پیش‌فرض */
 }
 
 /* تنظیمات برای واکنش‌گرایی */
@@ -76,6 +81,9 @@
     form {
         width: 90%; /* عرض فرم برای دستگاه‌های کوچک */
         padding: 20px; /* کاهش فضای داخلی فرم */
+        top: 0; /* بالاترین بخش صفحه */
+        transform: translateY(-10%); /* کمی بالاتر از مرکز */
+        position: absolute; /* موقعیت مطلق */
     }
 
     input, select, textarea {
