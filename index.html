@@ -58,21 +58,16 @@
 }
 
         form {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 30px;
-    direction: rtl;
-    text-align: right;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-
-    /* پس‌زمینه شیشه‌ای با گرادیانت */
-    background: linear-gradient(to top, rgba(0, 51, 102, 0.8), rgba(255, 255, 255, 0.5));
-    backdrop-filter: blur(10px); /* افکت شیشه‌ای */
-    -webkit-backdrop-filter: blur(10px); /* افکت شیشه‌ای برای مرورگرهای وب‌کیت */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* حاشیه شفاف */
-}
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            direction: rtl;
+            text-align: right;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
 
         label {
             display: block;
@@ -402,42 +397,29 @@
 
     formData.forEach((value, key) => {
     if (value.trim() !== "") {
+        // بررسی پر شدن ستون
         if (y + 2 * lineHeight > pageHeight - margin) {
             column++;
             if (column > 1) {
                 pdf.addPage(); // افزودن صفحه جدید
-
-                // افزودن کادر به صفحه جدید
-                pdf.setDrawColor(0, 0, 0); // رنگ مشکی
-                pdf.setLineWidth(2); // ضخامت خط
-                pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin); // کادر اصلی
-
                 column = 0; 
-                y = margin + 120; // فاصله جدید در صفحه جدید
+                y = margin + 50; // شروع متن در صفحات بعدی از بالاتر
                 x = xColumn1; 
             } else {
                 x = xColumn2; 
-                y = margin + 120; // فاصله جدید برای ستون دوم
+                y = margin + 100; // شروع ستون دوم در صفحه جاری
             }
         }
 
-        // تقسیم و چاپ تیتر (کلید)
+        // چاپ تیتر
         pdf.setFont("IRANSansBold");
-        const keyLines = pdf.splitTextToSize(`: ${key}`, columnWidth - 20); // تقسیم متن تیتر
-        keyLines.forEach((line) => {
-            pdf.text(line, x + columnWidth - 10, y, { align: 'right' });
-            y += lineHeight; 
-        });
+        pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
+        y += lineHeight; 
 
-        // تقسیم و چاپ مقدار
+        // چاپ مقدار
         pdf.setFont("Vazir");
-        const valueLines = pdf.splitTextToSize(value, columnWidth - 20); // تقسیم متن مقدار
-        valueLines.forEach((line) => {
-            pdf.text(line, x + columnWidth - 10, y, { align: 'right' });
-            y += lineHeight;
-        });
-
-        y += lineHeight + 5; // فاصله بین آیتم‌ها
+        pdf.text(value, x + columnWidth - 10, y, { align: 'right' });
+        y += lineHeight + 5; 
     }
 });
 
