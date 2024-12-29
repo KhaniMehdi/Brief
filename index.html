@@ -12,50 +12,60 @@
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
     background-size: cover;
-    overflow: hidden; /* حذف اسکرول اضافی */
-    position: relative;
-    direction: rtl; /* راست‌چین بودن کل صفحه */
+    overflow-x: hidden; /* حذف اسکرول افقی */
+    direction: rtl;
 }
 
 /* تنظیمات فرم */
 form {
     max-width: 600px;
-    width: 90%; /* عرض فرم برای واکنش‌گرایی */
+    width: 90%; /* واکنش‌گرایی برای دستگاه‌های کوچک */
     background: rgba(255, 255, 255, 0.9); /* شیشه‌ای کردن پس‌زمینه فرم */
-    padding: 30px;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* ایجاد سایه */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     overflow-y: auto; /* اسکرول در صورت نیاز */
-    position: relative;
-    z-index: 2; /* فرم در لایه جلوتر */
-    text-align: right; /* متن‌ها راست‌چین */
-    direction: rtl; /* راست‌چین شدن متن داخل فرم */
+    margin: 20px;
+    text-align: right;
 }
 
-/* تنظیمات مخصوص واکنش‌گرایی */
+/* تنظیمات باکس کناری */
+.box {
+    max-width: 300px;
+    width: 30%;
+    background: rgba(0, 0, 0, 0.7); /* پس‌زمینه نیمه‌شفاف */
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    margin: 20px;
+    position: sticky; /* موقعیت ثابت در دسکتاپ */
+    top: 20px;
+}
+
+/* تنظیمات واکنش‌گرایی */
 @media (max-width: 768px) {
+    body {
+        flex-direction: column; /* تغییر جهت نمایش در موبایل */
+        align-items: center; /* قرارگیری محتوا در مرکز */
+    }
+
+    .box {
+        position: relative; /* آزاد کردن موقعیت برای موبایل */
+        width: 90%; /* عرض بیشتر برای موبایل */
+        margin: 0 auto 20px auto; /* فاصله از پایین و مرکز کردن */
+    }
+
     form {
-        width: 95%; /* عرض بیشتر برای دستگاه‌های کوچک */
-        padding: 20px;
-        margin: 20px auto;
-    }
-
-    input, select, textarea {
-        font-size: 14px; /* کاهش اندازه فونت */
-        width: calc(100% - 20px); /* عرض متناسب با فرم */
-    }
-
-    label {
-        font-size: 14px;
-        margin-bottom: 5px;
+        width: 90%; /* عرض فرم در موبایل */
     }
 }
         
