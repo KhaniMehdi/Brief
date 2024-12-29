@@ -402,7 +402,7 @@
         if (y + lineHeight > pageHeight - margin) {
             column++;
             if (column > 1) {
-                // صفحه جدید
+                // افزودن صفحه جدید
                 pdf.addPage();
 
                 // رسم کادر برای صفحه جدید
@@ -410,14 +410,14 @@
                 pdf.setLineWidth(2);
                 pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
 
-                // بازنشانی ستون و موقعیت
+                // بازنشانی مقادیر
                 column = 0;
                 x = xColumn1;
-                y = margin + 50; // تنظیم شروع از بالا
+                y = margin + 100;
             } else {
                 // انتقال به ستون دوم
                 x = xColumn2;
-                y = margin + 50; // شروع از بالاتر
+                y = margin + 100;
             }
         }
 
@@ -426,14 +426,13 @@
         pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
         y += lineHeight;
 
-        // مدیریت متن‌های طولانی
+        // چاپ مقدار (مدیریت متن‌های طولانی)
         pdf.setFont("Vazir");
         const wrappedText = pdf.splitTextToSize(value, columnWidth - 20);
         wrappedText.forEach((line) => {
             if (y + lineHeight > pageHeight - margin) {
                 column++;
                 if (column > 1) {
-                    // صفحه جدید
                     pdf.addPage();
                     pdf.setDrawColor(0, 0, 0);
                     pdf.setLineWidth(2);
@@ -441,10 +440,10 @@
 
                     column = 0;
                     x = xColumn1;
-                    y = margin + 50;
+                    y = margin + 100;
                 } else {
                     x = xColumn2;
-                    y = margin + 50;
+                    y = margin + 100;
                 }
             }
 
