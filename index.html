@@ -28,14 +28,15 @@ body {
 form {
     max-width: 600px;
     width: 90%;
-    background: rgba(255, 255, 255, 0.9); /* شیشه‌ای کردن پس‌زمینه فرم */
+    background: rgba(0, 0, 0, 0.8); /* رنگ زمینه مشکی با شفافیت */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* سایه سفید نرم */
     box-sizing: border-box;
     overflow-y: auto; /* اسکرول در صورت نیاز */
     margin: 20px;
     text-align: right;
+    color: #fff; /* تغییر رنگ متن به سفید */
     z-index: 2; /* فرم بالاتر از پس‌زمینه */
 }
 
@@ -69,13 +70,13 @@ form {
         z-index: 3; /* جلوتر از فرم */
         border-radius: 0; /* حذف گوشه‌ها */
         margin: 0; /* حذف فاصله‌ها */
+        text-align: center;
     }
 
     form {
         margin-top: 120px; /* فاصله فرم از باکس */
     }
 }
-
 
 /* تنظیمات پس‌زمینه */
 .background {
@@ -91,11 +92,25 @@ form {
 
 
 /* تنظیم لیبل‌ها */
+input, select, textarea {
+    width: calc(100% - 20px); /* عرض ورودی‌ها */
+    font-size: 16px; /* اندازه فونت */
+    padding: 10px; /* فضای داخلی */
+    border: 1px solid #ccc; /* رنگ حاشیه */
+    border-radius: 4px; /* گوشه‌ها */
+    margin-bottom: 10px; /* فاصله بین ورودی‌ها */
+    box-sizing: border-box;
+    background: #222; /* رنگ زمینه مشکی برای ورودی‌ها */
+    color: #fff; /* رنگ متن سفید */
+}
+
+/* تنظیم لیبل‌ها */
 label {
     display: block; /* نمایش بلوکی */
     margin-bottom: 5px; /* فاصله از فیلد */
     font-weight: bold;
     font-size: 14px; /* اندازه فونت */
+    color: #fff; /* رنگ متن سفید */
 }
 
 /* واکنش‌گرایی */
