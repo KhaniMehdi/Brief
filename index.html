@@ -14,15 +14,14 @@ body {
     padding: 0;
     font-family: 'Arial', sans-serif;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-start;
     background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
     background-size: cover;
     overflow-x: hidden; /* حذف اسکرول افقی */
     direction: rtl;
     position: relative;
-    min-height: 100vh;
+    flex-wrap: wrap; /* برای انعطاف‌پذیری در موبایل */
 }
 
 /* تنظیمات فرم */
@@ -35,7 +34,7 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     overflow-y: auto; /* اسکرول در صورت نیاز */
-    margin: 20px 0;
+    margin: 20px;
     text-align: right;
     z-index: 2; /* فرم بالاتر از پس‌زمینه */
     position: relative;
@@ -52,11 +51,11 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     text-align: center;
     margin: 20px;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 3; /* باکس بالاتر از پس‌زمینه */
+    position: relative;
+    z-index: 2; /* باکس بالاتر از پس‌زمینه */
 }
+
+
 
 /* تنظیمات پس‌زمینه */
 .background {
@@ -77,25 +76,17 @@ form {
     }
 
     .box {
-        position: relative; /* آزاد کردن موقعیت برای موبایل */
         width: 90%; /* عرض بیشتر برای موبایل */
-        margin: 10px auto; /* فاصله از پایین و مرکز کردن */
+        margin: 0 auto 20px auto; /* فاصله از پایین و مرکز کردن */
+        position: sticky; /* ثابت کردن باکس بالای فرم */
+        top: 0; /* قرارگیری در بالای صفحه */
+        z-index: 3; /* جلوتر از فرم */
     }
 
     form {
         width: 90%; /* عرض فرم در موبایل */
+        margin-top: 20px; /* فاصله فرم از باکس */
     }
-}
-
-/* تنظیم عرض ورودی‌ها */
-input, select, textarea {
-    width: calc(100% - 20px); /* عرض ورودی‌ها */
-    font-size: 16px; /* اندازه فونت */
-    padding: 10px; /* فضای داخلی */
-    border: 1px solid #ccc; /* رنگ حاشیه */
-    border-radius: 4px; /* گوشه‌ها */
-    margin-bottom: 10px; /* فاصله بین ورودی‌ها */
-    box-sizing: border-box;
 }
 
 /* تنظیم لیبل‌ها */
