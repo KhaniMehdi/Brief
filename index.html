@@ -19,19 +19,18 @@
     background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
     background-size: cover;
     overflow: hidden; /* حذف اسکرول اضافی */
-    position: relative; /* بدنه در لایه پایین‌تر */
+    position: relative; /* موقعیت بدنه */
     direction: rtl; /* راست‌چین کردن کل محتوا */
 }
 .gradient-bg {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; 
-    background: linear-gradient(45deg, #212121, #1c2330, #182642, #152b5d, #182642, #1c2330, #212121);
-    background-size: 500% 500%; 
-    animation: gradient-fade 15s infinite alternate; 
+    z-index: 1; /* پس‌زمینه در لایه پایین‌تر */
+    background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
+    background-size: cover;
 }
 
 @keyframes gradient-fade {
@@ -59,7 +58,7 @@
 
         form {
     max-width: 600px;
-    width: 90%; /* عرض فرم واکنش‌گرا */
+    width: 90%; /* واکنش‌گرایی برای دستگاه‌های کوچک */
     background: rgba(255, 255, 255, 0.9); /* شیشه‌ای کردن پس‌زمینه فرم */
     padding: 30px;
     border-radius: 8px;
@@ -67,11 +66,9 @@
     box-sizing: border-box;
     max-height: 90vh; /* محدود کردن ارتفاع فرم */
     overflow-y: auto; /* افزودن اسکرول برای متن بلند */
-    position: absolute; /* موقعیت فرم نسبت به صفحه */
-    top: 50%; /* قرارگیری در مرکز عمودی */
-    transform: translateY(-50%); /* تنظیم دقیق مرکز عمودی */
-    text-align: right; /* راست‌چین کردن محتوا */
-    z-index: 2; /* فرم در لایه جلوتر */
+    position: relative; /* موقعیت فرم */
+    z-index: 10; /* لایه فرم بالاتر از پس‌زمینه */
+    margin: 20px; /* فاصله از اطراف */
 }
 
 /* تنظیم عرض ورودی‌ها */
@@ -95,17 +92,16 @@ label {
 /* واکنش‌گرایی */
 @media (max-width: 768px) {
     form {
-        width: 90%; /* عرض فرم کمتر برای موبایل */
-        padding: 20px; /* فضای داخلی کمتر */
-        top: 10%; /* فرم نزدیک به بالای صفحه */
-        transform: none; /* حذف ترجمه عمودی */
+        width: 90%; /* عرض فرم در دستگاه‌های کوچک */
+        margin: 10px auto; /* مرکز کردن فرم */
+        padding: 20px;
     }
 
     input, select, textarea {
-        font-size: 14px; /* کاهش اندازه فونت برای موبایل */
+        font-size: 14px; /* کاهش اندازه فونت */
         margin: 5px 0; /* فاصله کمتر بین فیلدها */
     }
-
+    
     label {
         font-size: 14px; /* کوچک‌تر کردن اندازه لیبل */
     }
