@@ -404,12 +404,12 @@
             if (column > 1) {
                 // صفحه جدید
                 pdf.addPage(); 
-                
+
                 // رسم کادر برای صفحه جدید
                 pdf.setDrawColor(0, 0, 0);
                 pdf.setLineWidth(2);
                 pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
-                
+
                 column = 0; 
                 y = margin + 50; // شروع از بالاتر در صفحه جدید
                 x = xColumn1; // ستون اول
@@ -437,7 +437,7 @@
                     pdf.setDrawColor(0, 0, 0);
                     pdf.setLineWidth(2);
                     pdf.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
-                    
+
                     column = 0; 
                     y = margin + 50;
                     x = xColumn1;
