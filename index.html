@@ -395,7 +395,7 @@
     let column = 0; // شمارنده ستون
     let x = xColumn1; // شروع ستون اول
 
-    formData.forEach((value, key, index) => {
+    formData.forEach((value, key) => {
     if (value.trim() !== "") {
         // اگر ستون پر شد، به ستون بعدی برو
         if (y + 2 * lineHeight > pageHeight - margin) {
@@ -403,27 +403,28 @@
             if (column > 1) {
                 pdf.addPage(); // افزودن صفحه جدید
                 column = 0; 
-                y = margin + 50; // بازنشانی y برای صفحه جدید
-                x = xColumn1; // شروع ستون اول در صفحه جدید
+                y = margin + 120; // تنظیم فاصله برای صفحه جدید
+                x = xColumn1; 
             } else {
-                x = xColumn2; // تغییر به ستون دوم
-                y = margin + 50; // بازنشانی y برای ستون دوم
+                x = xColumn2; 
+                y = margin + 120; // تنظیم فاصله برای ستون دوم
             }
         }
 
-        // تنظیم موقعیت y برای هر دو ستون
-        const yStart = y; // مقدار اولیه y
-
         // چاپ تیتر
         pdf.setFont("IRANSansBold");
-        pdf.text(`: ${key}`, x + columnWidth - 10, yStart, { align: 'right' });
+        pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
+        y += lineHeight; 
 
-        // چاپ مقدار
+        // مدیریت متن‌های طولانی (دو خطی)
         pdf.setFont("Vazir");
-        pdf.text(value, x + columnWidth - 10, yStart + lineHeight, { align: 'right' });
+        const wrappedText = pdf.splitTextToSize(value, columnWidth - 20); // محدود کردن متن به عرض ستون
+        wrappedText.forEach((line) => {
+            pdf.text(line, x + columnWidth - 10, y, { align: 'right' });
+            y += lineHeight; // حرکت به خط بعدی
+        });
 
-        // تغییر مقدار y برای هر خط
-        y += 2 * lineHeight + 5;
+        y += 5; // فاصله اضافی بین آیتم‌ها
     }
 });
     // ذخیره PDF
