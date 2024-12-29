@@ -395,31 +395,39 @@
     let x = xColumn1; // شروع ستون اول
 
     formData.forEach((value, key) => {
-        if (value.trim() !== "") {
-            if (y + 2 * lineHeight > pageHeight - margin) {
-                column++;
-                if (column > 1) {
-                    pdf.addPage(); // افزودن صفحه جدید
-                    column = 0; 
-                    y = margin + 120; // فاصله جدید در صفحه جدید
-                    x = xColumn1; 
-                } else {
-                    x = xColumn2; 
-                    y = margin + 120; // فاصله جدید برای ستون دوم
-                }
+    if (value.trim() !== "") {
+        if (y + 2 * lineHeight > pageHeight - margin) {
+            column++;
+            if (column > 1) {
+                pdf.addPage(); // افزودن صفحه جدید
+                column = 0; 
+                y = margin + 120; // فاصله جدید در صفحه جدید
+                x = xColumn1; 
+            } else {
+                x = xColumn2; 
+                y = margin + 120; // فاصله جدید برای ستون دوم
             }
-
-            // چاپ تیتر
-            pdf.setFont("IRANSansBold");
-            pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
-            y += lineHeight; 
-
-            // چاپ مقدار
-            pdf.setFont("Vazir");
-            pdf.text(value, x + columnWidth - 10, y, { align: 'right' });
-            y += lineHeight + 5; 
         }
-    });
+
+        // تقسیم و چاپ تیتر (کلید)
+        pdf.setFont("IRANSansBold");
+        const keyLines = pdf.splitTextToSize(`: ${key}`, columnWidth - 20); // تقسیم متن تیتر
+        keyLines.forEach((line) => {
+            pdf.text(line, x + columnWidth - 10, y, { align: 'right' });
+            y += lineHeight; 
+        });
+
+        // تقسیم و چاپ مقدار
+        pdf.setFont("Vazir");
+        const valueLines = pdf.splitTextToSize(value, columnWidth - 20); // تقسیم متن مقدار
+        valueLines.forEach((line) => {
+            pdf.text(line, x + columnWidth - 10, y, { align: 'right' });
+            y += lineHeight;
+        });
+
+        y += lineHeight + 5; // فاصله بین آیتم‌ها
+    }
+});
 
     // ذخیره PDF
     pdf.save('brief.pdf');
