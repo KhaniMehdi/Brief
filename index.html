@@ -18,8 +18,8 @@
     align-items: center;
     background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
     background-size: cover;
-    overflow: hidden; /* حذف اسکرول اضافی */
-    position: relative; /* بدنه در لایه پایین‌تر */
+    overflow: hidden;
+    position: relative;
 }
 .gradient-bg {
     position: fixed;
@@ -58,7 +58,7 @@
 
         form {
     max-width: 600px;
-    margin: 0 auto; /* فرم به‌صورت مرکزی قرار می‌گیرد */
+    width: 90%; /* واکنش‌گرایی برای دستگاه‌های کوچک */
     background: rgba(255, 255, 255, 0.9); /* شیشه‌ای کردن پس‌زمینه فرم */
     padding: 30px;
     direction: rtl; /* راست‌چین شدن متن */
@@ -68,48 +68,44 @@
     box-sizing: border-box;
     max-height: 90vh; /* محدود کردن ارتفاع فرم */
     overflow-y: auto; /* افزودن اسکرول برای متن بلند */
-    position: relative; /* فرم در لایه بالاتر از پس‌زمینه */
-    z-index: 2; /* فرم در لایه جلوتر */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin: 20px auto; /* فرم به‌صورت مرکزی قرار می‌گیرد */
 }
 
-        
-/* تنظیمات برای واکنش‌گرایی */
+/* تنظیم عرض ورودی‌ها */
+input, select, textarea {
+    width: calc(100% - 20px); /* عرض ورودی‌ها */
+    font-size: 16px; /* اندازه فونت */
+    padding: 10px; /* فضای داخلی */
+    border: 1px solid #ccc; /* رنگ حاشیه */
+    border-radius: 4px; /* گوشه‌ها */
+    margin-bottom: 10px; /* فاصله بین ورودی‌ها */
+}
+
+/* تنظیم لیبل‌ها */
+label {
+    display: block; /* نمایش بلوکی */
+    margin-bottom: 5px; /* فاصله از فیلد */
+    font-weight: bold;
+    font-size: 14px; /* اندازه فونت */
+}
+
+/* واکنش‌گرایی */
 @media (max-width: 768px) {
     form {
-        width: 90%; /* عرض فرم برای دستگاه‌های کوچک */
-        top: 10%; /* قرارگیری فرم نزدیک به بالای صفحه */
-        transform: translateY(0); /* حذف اثر موقعیت عمودی */
-        padding: 20px;
+        width: 90%; /* عرض فرم در دستگاه‌های کوچک */
+        padding: 20px; /* فضای داخلی کمتر */
     }
 
     input, select, textarea {
         font-size: 14px; /* کاهش اندازه فونت */
+        margin: 5px 0; /* کاهش فاصله بین فیلدها */
     }
-    
+
     label {
-        font-size: 14px;
+        font-size: 14px; /* کاهش اندازه لیبل */
+        margin-bottom: 5px;
     }
 }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input, textarea, select {
-            width: calc(100% - 40px);
-            font-size: 16px;
-            padding: 10px;
-            margin: 10px 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: 'Iransans', Arial, sans-serif;
-            box-sizing: border-box;
-        }
 
         input.invalid {
             border-color: red;
