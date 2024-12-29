@@ -21,13 +21,13 @@ body {
     overflow-x: hidden; /* حذف اسکرول افقی */
     direction: rtl;
     position: relative;
-    flex-wrap: wrap; /* برای انعطاف‌پذیری در موبایل */
+    flex-wrap: nowrap; /* برای نسخه دسکتاپ */
 }
 
 /* تنظیمات فرم */
 form {
     max-width: 600px;
-    width: 90%; /* واکنش‌گرایی برای دستگاه‌های کوچک */
+    width: 90%;
     background: rgba(255, 255, 255, 0.9); /* شیشه‌ای کردن پس‌زمینه فرم */
     padding: 20px;
     border-radius: 8px;
@@ -37,7 +37,6 @@ form {
     margin: 20px;
     text-align: right;
     z-index: 2; /* فرم بالاتر از پس‌زمینه */
-    position: relative;
 }
 
 /* تنظیمات باکس کناری */
@@ -55,6 +54,27 @@ form {
     z-index: 2; /* باکس بالاتر از پس‌زمینه */
 }
 
+/* تنظیمات واکنش‌گرایی */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column; /* تغییر جهت نمایش در موبایل */
+        align-items: center; /* مرکز کردن محتوا */
+    }
+
+    .box {
+        position: fixed; /* ثابت کردن باکس بالای صفحه */
+        top: 0; /* قرارگیری در بالای صفحه */
+        left: 0;
+        width: 100%; /* عرض کامل برای موبایل */
+        z-index: 3; /* جلوتر از فرم */
+        border-radius: 0; /* حذف گوشه‌ها */
+        margin: 0; /* حذف فاصله‌ها */
+    }
+
+    form {
+        margin-top: 120px; /* فاصله فرم از باکس */
+    }
+}
 
 
 /* تنظیمات پس‌زمینه */
@@ -68,26 +88,7 @@ form {
     z-index: 1; /* پس‌زمینه در لایه پایین‌تر */
 }
 
-/* تنظیمات واکنش‌گرایی */
-@media (max-width: 768px) {
-    body {
-        flex-direction: column; /* تغییر جهت نمایش در موبایل */
-        align-items: center; /* قرارگیری محتوا در مرکز */
-    }
 
-    .box {
-        width: 90%; /* عرض بیشتر برای موبایل */
-        margin: 0 auto 20px auto; /* فاصله از پایین و مرکز کردن */
-        position: sticky; /* ثابت کردن باکس بالای فرم */
-        top: 0; /* قرارگیری در بالای صفحه */
-        z-index: 3; /* جلوتر از فرم */
-    }
-
-    form {
-        width: 90%; /* عرض فرم در موبایل */
-        margin-top: 20px; /* فاصله فرم از باکس */
-    }
-}
 
 /* تنظیم لیبل‌ها */
 label {
