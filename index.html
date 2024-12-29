@@ -62,15 +62,15 @@
     max-width: 600px; /* عرض فرم */
     margin-left: auto; /* مرکز کردن فرم */
     margin-right: auto; /* مرکز کردن فرم */
-    background: rgba(255, 255, 255, 0.9);
-    padding: 30px;
-    direction: rtl;
-    text-align: right;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    max-height: 90vh; /* ارتفاع فرم را محدود کنید */
-    overflow-y: auto; /* اضافه کردن اسکرول به فرم */
+    background: rgba(255, 255, 255, 0.9); /* پس‌زمینه شفاف */
+    padding: 30px; /* فاصله داخلی */
+    direction: rtl; /* راست به چپ برای متن */
+    text-align: right; /* ترازبندی متن به راست */
+    border-radius: 8px; /* گوشه‌های گرد */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه فرم */
+    box-sizing: border-box; /* محاسبه دقیق فاصله‌ها */
+    max-height: 90vh; /* محدود کردن ارتفاع فرم */
+    overflow-y: auto; /* اضافه کردن اسکرول برای محتوای طولانی */
 }
 
 /* تنظیمات برای واکنش‌گرایی */
@@ -177,14 +177,14 @@
             text-align: center;
         }
 
-        #noteContainer {
+      #noteContainer {
     position: absolute; /* موقعیت مطلق */
-    top: 30px; /* فاصله از بالای صفحه */
-    left: 50%; /* مرکز کردن به صورت افقی */
-    transform: translate(-50%, 0); /* تنظیم دقیق مرکز */
-    width: 100%; /* عرض 100% برای تطابق با صفحه */
-    max-width: 600px; /* عرض دقیق برابر فرم */
-    padding: 20px; /* فاصله داخلی مناسب */
+    top: 20px; /* فاصله از بالای صفحه */
+    left: 50%; /* مرکز کردن افقی */
+    transform: translate(-50%, 0); /* تنظیم مرکزیت افقی */
+    width: 100%; /* عرض کامل */
+    max-width: 600px; /* عرض مشابه فرم */
+    padding: 30px; /* فاصله داخلی */
     background: rgba(255, 255, 255, 0.9); /* پس‌زمینه شفاف */
     border-radius: 8px; /* گوشه‌های گرد */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه نرم */
@@ -192,9 +192,9 @@
     font-size: 14px; /* اندازه فونت */
     line-height: 2; /* فاصله خطوط */
     color: #333; /* رنگ متن */
-    box-sizing: border-box; /* محاسبه مرزها */
-    animation: glow 0.8s infinite alternate; /* انیمیشن */
+    box-sizing: border-box; /* محاسبه دقیق فاصله‌ها */
 }
+
 
 
 
