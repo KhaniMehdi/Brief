@@ -18,8 +18,9 @@
     align-items: center;
     background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
     background-size: cover;
-    overflow: hidden;
-    position: relative;
+    overflow: hidden; /* حذف اسکرول اضافی */
+    position: relative; /* بدنه در لایه پایین‌تر */
+    direction: rtl; /* راست‌چین کردن کل محتوا */
 }
 .gradient-bg {
     position: fixed;
@@ -58,17 +59,19 @@
 
         form {
     max-width: 600px;
-    width: 90%; /* واکنش‌گرایی برای دستگاه‌های کوچک */
+    width: 90%; /* عرض فرم واکنش‌گرا */
     background: rgba(255, 255, 255, 0.9); /* شیشه‌ای کردن پس‌زمینه فرم */
     padding: 30px;
-    direction: rtl; /* راست‌چین شدن متن */
-    text-align: right;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     max-height: 90vh; /* محدود کردن ارتفاع فرم */
     overflow-y: auto; /* افزودن اسکرول برای متن بلند */
-    margin: 20px auto; /* فرم به‌صورت مرکزی قرار می‌گیرد */
+    position: absolute; /* موقعیت فرم نسبت به صفحه */
+    top: 50%; /* قرارگیری در مرکز عمودی */
+    transform: translateY(-50%); /* تنظیم دقیق مرکز عمودی */
+    text-align: right; /* راست‌چین کردن محتوا */
+    z-index: 2; /* فرم در لایه جلوتر */
 }
 
 /* تنظیم عرض ورودی‌ها */
@@ -92,18 +95,19 @@ label {
 /* واکنش‌گرایی */
 @media (max-width: 768px) {
     form {
-        width: 90%; /* عرض فرم در دستگاه‌های کوچک */
+        width: 90%; /* عرض فرم کمتر برای موبایل */
         padding: 20px; /* فضای داخلی کمتر */
+        top: 10%; /* فرم نزدیک به بالای صفحه */
+        transform: none; /* حذف ترجمه عمودی */
     }
 
     input, select, textarea {
-        font-size: 14px; /* کاهش اندازه فونت */
-        margin: 5px 0; /* کاهش فاصله بین فیلدها */
+        font-size: 14px; /* کاهش اندازه فونت برای موبایل */
+        margin: 5px 0; /* فاصله کمتر بین فیلدها */
     }
 
     label {
-        font-size: 14px; /* کاهش اندازه لیبل */
-        margin-bottom: 5px;
+        font-size: 14px; /* کوچک‌تر کردن اندازه لیبل */
     }
 }
 
