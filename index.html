@@ -16,7 +16,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    background: linear-gradient(180deg, #000000, #ffffff); /* گرادیانت از مشکی به سفید */
+    background: linear-gradient(180deg, #001f3f, #000000); /* گرادیانت از مشکی به سفید */
     background-size: cover;
     overflow-x: hidden; /* حذف اسکرول افقی */
     direction: rtl;
@@ -55,7 +55,7 @@ form {
     z-index: 2; /* باکس بالاتر از پس‌زمینه */
 }
 
-/* تنظیمات واکنش‌گرایی */
+/* واکنش‌گرایی برای نسخه موبایل */
 @media (max-width: 768px) {
     body {
         flex-direction: column; /* تغییر جهت نمایش در موبایل */
@@ -71,12 +71,14 @@ form {
         border-radius: 0; /* حذف گوشه‌ها */
         margin: 0; /* حذف فاصله‌ها */
         text-align: center;
+        padding: 15px; /* کاهش فضای داخلی */
     }
 
     form {
-        margin-top: 120px; /* فاصله فرم از باکس */
+        margin-top: 150px; /* فاصله فرم از باکس */
     }
 }
+
 /* تنظیمات پس‌زمینه */
 .background {
     position: fixed;
@@ -111,7 +113,6 @@ label {
     font-size: 14px; /* اندازه فونت */
     color: #000; /* رنگ متن مشکی */
 }
-
 /* واکنش‌گرایی */
 
 
