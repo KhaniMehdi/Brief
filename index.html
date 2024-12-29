@@ -84,17 +84,8 @@
 /* تنظیمات برای واکنش‌گرایی */
 /* نسخه موبایل (عرض کمتر از 768px) */
 /* نسخه موبایل (عرض کمتر از 768px) */
+/* نسخه موبایل (عرض کمتر از 768px) */
 @media (max-width: 768px) {
-    form {
-        margin-top: 10%; /* فاصله مناسب از بالای صفحه */
-        width: 80%; /* عرض فرم */
-        padding: 20px; /* فضای داخلی */
-        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
-        border-radius: 8px; /* گوشه‌های گرد */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه */
-        box-sizing: border-box; /* محاسبه دقیق */
-    }
-
     #noteContainer {
         margin-top: 2%; /* فاصله از بالای صفحه */
         width: 80%; /* عرض باکس */
@@ -105,12 +96,9 @@
         margin-bottom: 30px; /* فاصله از پایین */
         animation: glow 0.5s infinite alternate; /* انیمیشن */
     }
-}
 
-/* نسخه دسکتاپ کوچک و تبلت (عرض بین 768px تا 1024px) */
-@media (max-width: 1024px) and (min-width: 768px) {
     form {
-        margin-top: 10%; /* فاصله از بالای صفحه */
+        margin-top: 0; /* فرم بلافاصله بعد از باکس */
         width: 80%; /* عرض فرم */
         padding: 20px; /* فضای داخلی */
         background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
@@ -118,7 +106,10 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه */
         box-sizing: border-box; /* محاسبه دقیق */
     }
+}
 
+/* نسخه دسکتاپ کوچک و تبلت (عرض بین 768px تا 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
     #noteContainer {
         margin-top: 5%; /* فاصله از بالای صفحه */
         width: 80%; /* عرض باکس */
@@ -129,20 +120,20 @@
         margin-bottom: 30px; /* فاصله از پایین */
         animation: glow 0.5s infinite alternate; /* انیمیشن */
     }
+
+    form {
+        margin-top: 0; /* فرم بلافاصله بعد از باکس */
+        width: 80%; /* عرض فرم */
+        padding: 20px; /* فضای داخلی */
+        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
+        border-radius: 8px; /* گوشه‌های گرد */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه */
+        box-sizing: border-box; /* محاسبه دقیق */
+    }
 }
 
 /* نسخه دسکتاپ بزرگ (عرض بیشتر از 1024px) */
 @media (min-width: 1025px) {
-    form {
-        margin-top: 5%; /* فاصله از بالای صفحه */
-        width: 80%; /* عرض فرم */
-        padding: 20px; /* فضای داخلی */
-        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
-        border-radius: 10px; /* گوشه‌های گرد */
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* سایه */
-        box-sizing: border-box; /* محاسبه دقیق */
-    }
-
     #noteContainer {
         margin-top: 3%; /* فاصله از بالای صفحه */
         width: 80%; /* عرض باکس */
@@ -152,6 +143,16 @@
         box-shadow: 0 0 30px rgba(255, 255, 255, 0.8); /* سایه درخشش */
         margin-bottom: 40px; /* فاصله از پایین */
         animation: glow 0.5s infinite alternate; /* انیمیشن */
+    }
+
+    form {
+        margin-top: 0; /* فرم بلافاصله بعد از باکس */
+        width: 80%; /* عرض فرم */
+        padding: 20px; /* فضای داخلی */
+        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
+        border-radius: 10px; /* گوشه‌های گرد */
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* سایه */
+        box-sizing: border-box; /* محاسبه دقیق */
     }
 }
 
