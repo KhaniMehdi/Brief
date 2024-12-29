@@ -12,26 +12,32 @@
     margin: 0;
     padding: 0;
     padding-top: 20px;
-    height: 100vh;
     font-family: 'Arial', sans-serif;
     display: flex;
-    direction: rtl;
-    text-align: right;
-    justify-content: center;
-    align-items: flex-start;
-    overflow-y: auto; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    background: #0d1b2a;
     overflow-x: hidden;
 }
        #container {
-    display: flex; /* فعال کردن فلکس‌باکس */
-    flex-direction: column; /* چیدمان عمودی عناصر */
-    align-items: center; /* تراز کردن به مرکز افقی */
-    justify-content: flex-start; /* شروع از بالای صفحه */
-    gap: 30px; /* فاصله عمودی بین عناصر */
-    min-height: 100vh; /* حداقل ارتفاع برابر با کل صفحه */
-    padding: 20px; /* فضای داخلی برای والد */
-    box-sizing: border-box; /* محاسبه دقیق فاصله‌ها */
-    background: #0d1b2a; /* پس‌زمینه اصلی */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px; /* فاصله بین عناصر */
+    padding: 20px;
+    box-sizing: border-box;
+}
+        .common-box {
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: right;
 }
 .gradient-bg {
     position: fixed;
@@ -86,76 +92,37 @@
 /* نسخه موبایل (عرض کمتر از 768px) */
 /* نسخه موبایل (عرض کمتر از 768px) */
 @media (max-width: 768px) {
-    #noteContainer {
-        margin-top: 2%; /* فاصله از بالای صفحه */
-        width: 80%; /* عرض باکس */
-        padding: 20px; /* فضای داخلی */
-        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
-        border-radius: 8px; /* گوشه‌های گرد */
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* سایه درخشش */
-        margin-bottom: 30px; /* فاصله از پایین */
-        animation: glow 0.5s infinite alternate; /* انیمیشن */
+    #container {
+        gap: 20px;
     }
 
+    #noteContainer,
     form {
-        margin-top: 0; /* فرم بلافاصله بعد از باکس */
-        width: 80%; /* عرض فرم */
-        padding: 20px; /* فضای داخلی */
-        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
-        border-radius: 8px; /* گوشه‌های گرد */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه */
-        box-sizing: border-box; /* محاسبه دقیق */
+        width: 90%;
     }
 }
 
-/* نسخه دسکتاپ کوچک و تبلت (عرض بین 768px تا 1024px) */
-@media (max-width: 1024px) and (min-width: 768px) {
+/* نسخه دسکتاپ کوچک و تبلت (بین 768px و 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
     #noteContainer {
-        margin-top: 5%; /* فاصله از بالای صفحه */
-        width: 80%; /* عرض باکس */
-        padding: 20px; /* فضای داخلی */
-        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
-        border-radius: 8px; /* گوشه‌های گرد */
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* سایه درخشش */
-        margin-bottom: 30px; /* فاصله از پایین */
-        animation: glow 0.5s infinite alternate; /* انیمیشن */
+        margin-top: 3%;
     }
 
     form {
-        margin-top: 0; /* فرم بلافاصله بعد از باکس */
-        width: 80%; /* عرض فرم */
-        padding: 20px; /* فضای داخلی */
-        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
-        border-radius: 8px; /* گوشه‌های گرد */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه */
-        box-sizing: border-box; /* محاسبه دقیق */
+        margin-top: 0;
     }
 }
 
-/* نسخه دسکتاپ بزرگ (عرض بیشتر از 1024px) */
+/* نسخه دسکتاپ بزرگ (بیشتر از 1024px) */
 @media (min-width: 1025px) {
     #noteContainer {
-        margin-top: 3%; /* فاصله از بالای صفحه */
-        width: 80%; /* عرض باکس */
-        padding: 20px; /* فضای داخلی */
-        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
-        border-radius: 10px; /* گوشه‌های گرد */
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.8); /* سایه درخشش */
-        margin-bottom: 40px; /* فاصله از پایین */
-        animation: glow 0.5s infinite alternate; /* انیمیشن */
+        margin-top: 3%;
     }
 
     form {
-        margin-top: 0; /* فرم بلافاصله بعد از باکس */
-        width: 80%; /* عرض فرم */
-        padding: 20px; /* فضای داخلی */
-        background: rgba(255, 255, 255, 0.9); /* پس‌زمینه */
-        border-radius: 10px; /* گوشه‌های گرد */
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* سایه */
-        box-sizing: border-box; /* محاسبه دقیق */
+        margin-top: 0;
     }
 }
-
 
         label {
             display: block;
