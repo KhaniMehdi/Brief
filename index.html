@@ -58,8 +58,8 @@
 }
 
         form {
-    margin-top: 120px; /* فاصله بین فرم و باکس */
-    max-width: 600px; /* همان عرض فرم */
+    margin-top: 160px; /* فاصله مناسب از باکس */
+    max-width: 600px; /* عرض فرم */
     margin-left: auto; /* مرکز کردن فرم */
     margin-right: auto; /* مرکز کردن فرم */
     background: rgba(255, 255, 255, 0.9);
@@ -181,20 +181,21 @@
     position: absolute; /* موقعیت مطلق */
     top: 20px; /* فاصله از بالای صفحه */
     left: 50%; /* مرکز کردن به صورت افقی */
-    transform: translate(-50%, 0); /* حذف تنظیمات عمودی */
-    width: 100%; /* عرض 100 درصد */
-    max-width: 600px; /* حداکثر عرض با فرم یکسان */
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-family: 'Vazir', Arial, sans-serif;
-    font-size: 14px;
-    line-height: 2;
-    color: #333;
-    box-sizing: border-box;
-    animation: glow 0.8s infinite alternate;
+    transform: translate(-50%, 0); /* تنظیم دقیق مرکز */
+    width: 100%; /* عرض 100% برای تطابق با صفحه */
+    max-width: 600px; /* عرض دقیق برابر فرم */
+    padding: 20px; /* فاصله داخلی مناسب */
+    background: rgba(255, 255, 255, 0.9); /* پس‌زمینه شفاف */
+    border-radius: 8px; /* گوشه‌های گرد */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه نرم */
+    font-family: 'Vazir', Arial, sans-serif; /* فونت مناسب */
+    font-size: 14px; /* اندازه فونت */
+    line-height: 2; /* فاصله خطوط */
+    color: #333; /* رنگ متن */
+    box-sizing: border-box; /* محاسبه مرزها */
+    animation: glow 0.8s infinite alternate; /* انیمیشن */
 }
+
 
 
         @keyframes glow {
