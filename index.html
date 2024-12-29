@@ -392,11 +392,11 @@ let x = xColumn1;
 
 formData.forEach((value, key) => {
     if (value.trim() !== "") {
-        
+      
         if (y + 2 * lineHeight > pageHeight - margin) {
             column++;
             if (column > 1) {
-                pdf.addPage(); 
+                pdf.addPage(); /
                 column = 0; 
                 y = margin + 100; 
                 x = xColumn1; 
@@ -407,15 +407,14 @@ formData.forEach((value, key) => {
         }
 
         
-        pdf.text(`: ${key} `, x + columnWidth - 10, y, { align: 'right' });
-        y += lineHeight; 
-
-       
+        pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
+        
+        
         pdf.setFont("Vazir"); 
-        pdf.text(value, x + columnWidth - 10, y, { align: 'right' });
+        pdf.text(value, x + columnWidth - 120, y, { align: 'right' });
+        
         y += lineHeight + 5; 
 
-        
         pdf.setFont("IRANSansBold");
     }
 });
