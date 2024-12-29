@@ -360,7 +360,7 @@
 
     // **تنظیم موقعیت‌ها**
     let y = margin + 120; // فاصله اولیه پس از هدر بیشتر شده است
-    let xColumn1 = margin + columnGap + 20; // ستون اول با فاصله از راست
+    let xColumn1 = margin + columnGap + (-10); // ستون اول با فاصله از راست
     let xColumn2 = pageWidth / 2 + columnGap; // ستون دوم کمی فاصله از مرکز
 
 
@@ -404,9 +404,9 @@ formData.forEach((value, key) => {
                 pdf.addPage(); 
                 column = 0; 
                 y = margin + 120; // فاصله جدید در صفحه جدید
-                x = xColumn1; 
-            } else {
                 x = xColumn2; 
+            } else {
+                x = xColumn1; 
                 y = margin + 120; // فاصله جدید برای ستون دوم
             }
         }
