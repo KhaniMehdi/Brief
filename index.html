@@ -54,7 +54,30 @@ form {
     position: relative;
     z-index: 2; /* باکس بالاتر از پس‌زمینه */
 }
+.close-btn {
+    display: none; /* پیش‌فرض برای نسخه دسکتاپ */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8); /* پس‌زمینه نیمه‌شفاف */
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 30px;
+    cursor: pointer;
+    z-index: 4;
+    transition: all 0.3s ease;
+}
 
+.close-btn:hover {
+    background: rgba(255, 0, 0, 0.8); /* رنگ قرمز برای هاور */
+    color: #fff;
+}
 /* واکنش‌گرایی برای نسخه موبایل */
 @media (max-width: 768px) {
     body {
@@ -73,7 +96,9 @@ form {
         text-align: center;
         padding: 15px; /* کاهش فضای داخلی */
     }
-
+.close-btn {
+        display: block;
+    }
     form {
         margin-top: 150px; /* فاصله فرم از باکس */
     }
@@ -258,7 +283,10 @@ label {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
-
+<div class="box">
+    <button class="close-btn" onclick="closeBox()">×</button>
+    <!-- محتوا -->
+</div>
 <div class="gradient-bg"></div>
     <div id="noteContainer">
         <p class="bold">لطفاً جزئیات کلیدی یا نکاتی که به درک بهتر پروژه کمک می‌کنند را در بخش توضیحات وارد کنید.</p>
@@ -360,6 +388,10 @@ label {
     </form>
 
     <script>
+        function closeBox() {
+    const box = document.querySelector('.box');
+    box.style.display = 'none';
+}
         const saveButton = document.getElementById('saveButton');
         const popupBackground = document.getElementById('popupBackground');
         const popup = document.getElementById('popup');
