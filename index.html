@@ -176,15 +176,16 @@
         }
 
         #noteContainer {
-    position: absolute; /* موقعیت مطلق */
-    top: 50%; /* مرکز عمودی */
-    left: 50%; /* مرکز افقی */
-    transform: translate(-50%, -50%); /* مرکز کامل */
-    width: 300px;
+    position: absolute; /* برای تعیین موقعیت مطلق */
+    top: 20px; /* فاصله از بالای صفحه */
+    left: 50%; /* مرکز کردن به صورت افقی */
+    transform: translate(-50%, 0); /* حذف تنظیمات عمودی برای فاصله */
+    width: calc(100% - 60px); /* عرض برابر با فرم، با فاصله از لبه‌ها */
+    max-width: 600px; /* حداکثر عرض فرم */
     padding: 20px;
     background: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: 'Vazir', Arial, sans-serif;
     font-size: 14px;
     line-height: 2;
