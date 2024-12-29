@@ -390,32 +390,35 @@
 let column = 0; 
 let x = xColumn1; 
 
-formData.forEach((value, key) => {
+formData.forEach((value, key, index) => {
     if (value.trim() !== "") {
-      
+        // بررسی پر شدن ستون و انتقال به ستون بعدی
         if (y + 2 * lineHeight > pageHeight - margin) {
             column++;
             if (column > 1) {
-                pdf.addPage(); /
+                pdf.addPage(); // افزودن صفحه جدید
                 column = 0; 
                 y = margin + 100; 
-                x = xColumn1; 
+                x = xColumn1; // بازگشت به ستون اول
             } else {
-                x = xColumn2; 
+                x = xColumn2; // تغییر به ستون دوم
                 y = margin + 100; 
             }
         }
 
-        
-        pdf.text(`: ${key}`, x + columnWidth - 10, y, { align: 'right' });
-        
-        
-        pdf.setFont("Vazir"); 
-        pdf.text(value, x + columnWidth - 120, y, { align: 'right' });
-        
-        y += lineHeight + 5; 
+        // اضافه کردن فاصله و تنظیم کلید و مقدار
+        const keyText = `: ${key}`;
+        const valueText = value;
 
+        // چاپ تیتر (کلید)
         pdf.setFont("IRANSansBold");
+        pdf.text(keyText, x + columnWidth - 10, y, { align: 'right' });
+        y += lineHeight; 
+
+        // چاپ مقدار (مقدار متن)
+        pdf.setFont("Vazir");
+        pdf.text(valueText, x + columnWidth - 10, y, { align: 'right' });
+        y += lineHeight + 5; 
     }
 });
 
