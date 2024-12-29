@@ -9,7 +9,6 @@
        
 
         body {
-    
     margin: 0;
     padding: 0;
     padding-top: 20px;
@@ -21,6 +20,7 @@
     justify-content: center;
     align-items: flex-start;
     overflow-y: auto; 
+    overflow-x: hidden;
 }
 .gradient-bg {
     position: fixed;
@@ -58,16 +58,37 @@
 }
 
         form {
-            max-width: 600px;
-            margin: 20px auto;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            direction: rtl;
-            text-align: right;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-        }
+    max-width: 600px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    direction: rtl;
+    text-align: right;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    max-height: 90vh; /* ارتفاع فرم را محدود کنید */
+    overflow-y: auto; /* اضافه کردن اسکرول به فرم */
+}
+
+/* تنظیمات برای واکنش‌گرایی */
+@media (max-width: 768px) {
+    form {
+        width: 90%; /* عرض فرم برای دستگاه‌های کوچک */
+        padding: 20px; /* کاهش فضای داخلی فرم */
+    }
+
+    input, select, textarea {
+        width: calc(100% - 20px); /* اطمینان از تطابق عرض با فرم */
+        font-size: 14px; /* کاهش اندازه فونت در دستگاه‌های کوچک */
+        margin: 5px 0; /* تنظیم فاصله بین فیلدها */
+    }
+    
+    label {
+        font-size: 14px; /* اندازه کوچک‌تر برای لیبل */
+        margin-bottom: 5px; /* فاصله کمتر بین لیبل و فیلد */
+    }
+}
 
         label {
             display: block;
