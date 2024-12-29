@@ -8,7 +8,8 @@
     <style>
        
 
-      body {
+   /* تنظیمات کلی بدنه */
+body {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -19,8 +20,45 @@
     background: linear-gradient(180deg, #001f3f, #ffffff); /* گرادیانت از آبی به سفید */
     background-size: cover;
     overflow: hidden; /* حذف اسکرول اضافی */
-    position: relative; /* موقعیت بدنه */
+    position: relative;
+    direction: rtl; /* راست‌چین بودن کل صفحه */
 }
+
+/* تنظیمات فرم */
+form {
+    max-width: 600px;
+    width: 90%; /* عرض فرم برای واکنش‌گرایی */
+    background: rgba(255, 255, 255, 0.9); /* شیشه‌ای کردن پس‌زمینه فرم */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* ایجاد سایه */
+    box-sizing: border-box;
+    overflow-y: auto; /* اسکرول در صورت نیاز */
+    position: relative;
+    z-index: 2; /* فرم در لایه جلوتر */
+    text-align: right; /* متن‌ها راست‌چین */
+    direction: rtl; /* راست‌چین شدن متن داخل فرم */
+}
+
+/* تنظیمات مخصوص واکنش‌گرایی */
+@media (max-width: 768px) {
+    form {
+        width: 95%; /* عرض بیشتر برای دستگاه‌های کوچک */
+        padding: 20px;
+        margin: 20px auto;
+    }
+
+    input, select, textarea {
+        font-size: 14px; /* کاهش اندازه فونت */
+        width: calc(100% - 20px); /* عرض متناسب با فرم */
+    }
+
+    label {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+}
+        
 .gradient-bg {
     position: absolute;
     top: 0;
@@ -55,21 +93,7 @@
     z-index: 0;
 }
 
-        form {
-    max-width: 600px;
-    width: 90%; /* واکنش‌گرایی برای دستگاه‌های کوچک */
-    background: rgba(255, 255, 255, 0.85); /* شیشه‌ای کردن فرم */
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    max-height: 90vh; /* محدود کردن ارتفاع فرم */
-    overflow-y: auto; /* اسکرول برای متن‌های بلند */
-    position: relative;
-    z-index: 10; /* فرم بالاتر از پس‌زمینه */
-    margin: 20px auto; /* مرکز کردن فرم */
-}
-
+        
 /* تنظیم عرض ورودی‌ها */
 input, select, textarea {
     width: calc(100% - 20px); /* عرض ورودی‌ها */
@@ -78,6 +102,7 @@ input, select, textarea {
     border: 1px solid #ccc; /* رنگ حاشیه */
     border-radius: 4px; /* گوشه‌ها */
     margin-bottom: 10px; /* فاصله بین ورودی‌ها */
+    box-sizing: border-box;
 }
 
 /* تنظیم لیبل‌ها */
@@ -89,20 +114,7 @@ label {
 }
 
 /* واکنش‌گرایی */
-@media (max-width: 768px) {
-    form {
-        width: 90%; /* عرض فرم در دستگاه‌های کوچک */
-        padding: 20px;
-    }
 
-    input, select, textarea {
-        font-size: 14px; /* کاهش اندازه فونت */
-    }
-    
-    label {
-        font-size: 14px; /* کوچک‌تر کردن اندازه لیبل */
-    }
-}
 
         input.invalid {
             border-color: red;
