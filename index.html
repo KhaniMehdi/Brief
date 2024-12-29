@@ -347,15 +347,15 @@
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
 
-    const margin = 18 ; 
+    const margin = 20 ; 
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
     const columnGap = 10; 
     const columnWidth = (pageWidth - 2 * margin - columnGap) / 2; 
-    const lineHeight = 17; 
+    const lineHeight = 18; 
     const fontSizeHeader = 35; 
     const fontSizeText = 12; 
-    let y = margin + 60; 
+    let y = margin + 80; 
     let xColumn1 = margin + columnWidth + columnGap + (-25);
     let xColumn2 = margin + (-25);
 
@@ -407,7 +407,7 @@ formData.forEach((value, key) => {
         }
 
         
-        pdf.text(`${key} :`, x + columnWidth - 10, y, { align: 'right' });
+        pdf.text(`: ${key} `, x + columnWidth - 10, y, { align: 'right' });
         y += lineHeight; 
 
        
