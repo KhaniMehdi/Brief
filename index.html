@@ -23,14 +23,15 @@
     overflow-x: hidden;
 }
        #container {
-    display: flex; /* استفاده از فلکس‌باکس */
-    flex-direction: column; /* ترتیب عمودی */
-    align-items: center; /* تراز افقی مرکز */
-    justify-content: flex-start; /* تراز عمودی از بالا */
-    gap: 30px; /* فاصله بین باکس و فرم */
-    padding: 20px; /* فاصله داخلی */
-    min-height: 100vh; /* حداقل ارتفاع برابر کل صفحه */
+    display: flex; /* فعال کردن فلکس‌باکس */
+    flex-direction: column; /* چیدمان عمودی عناصر */
+    align-items: center; /* تراز کردن به مرکز افقی */
+    justify-content: flex-start; /* شروع از بالای صفحه */
+    gap: 30px; /* فاصله عمودی بین عناصر */
+    min-height: 100vh; /* حداقل ارتفاع برابر با کل صفحه */
+    padding: 20px; /* فضای داخلی برای والد */
     box-sizing: border-box; /* محاسبه دقیق فاصله‌ها */
+    background: #0d1b2a; /* پس‌زمینه اصلی */
 }
 .gradient-bg {
     position: fixed;
@@ -85,8 +86,8 @@
 @media (max-width: 768px) {
     form {
         margin-top: 10%; /* فاصله مناسب از بالای صفحه */
-        width: 90%; /* عرض بیشتر برای فرم */
-        padding: 15px; /* کاهش فضای داخلی */
+        width: 80%; /* عرض بیشتر برای فرم */
+        padding: 20px; /* کاهش فضای داخلی */
         background: rgba(255, 255, 255, 0.9); /* پس‌زمینه فرم */
         border-radius: 8px; /* گوشه‌های گرد */
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه فرم */
@@ -95,8 +96,8 @@
 
     #noteContainer {
         top: 2%; /* فاصله کمتر از بالای صفحه */
-        width: 90%; /* عرض بیشتر برای گوشی */
-        padding: 15px; /* کاهش فضای داخلی باکس */
+        width: 80%; /* عرض بیشتر برای گوشی */
+        padding: 20px; /* کاهش فضای داخلی باکس */
         background: rgba(255, 255, 255, 0.9); /* پس‌زمینه باکس */
         border-radius: 8px; /* گوشه‌های گرد */
         box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* سایه درخشش */
@@ -109,7 +110,7 @@
 @media (max-width: 1024px) and (min-width: 768px) {
     form {
         margin-top: 10%; /* فاصله مناسب از بالای صفحه */
-        width: 85%; /* عرض فرم */
+        width: 80%; /* عرض فرم */
         padding: 20px; /* فضای داخلی فرم */
         background: rgba(255, 255, 255, 0.9); /* پس‌زمینه فرم */
         border-radius: 8px; /* گوشه‌های گرد */
@@ -119,7 +120,7 @@
 
     #noteContainer {
         top: 5%; /* فاصله مناسب از بالای صفحه */
-        width: 85%; /* عرض باکس */
+        width: 80%; /* عرض باکس */
         padding: 20px; /* فضای داخلی باکس */
         background: rgba(255, 255, 255, 0.9); /* پس‌زمینه باکس */
         border-radius: 8px; /* گوشه‌های گرد */
@@ -133,8 +134,8 @@
 @media (min-width: 1025px) {
     form {
         margin-top: 5%; /* فاصله مناسب از بالای صفحه */
-        width: 70%; /* عرض فرم */
-        padding: 25px; /* فضای داخلی فرم */
+        width: 80%; /* عرض فرم */
+        padding: 20px; /* فضای داخلی فرم */
         background: rgba(255, 255, 255, 0.9); /* پس‌زمینه فرم */
         border-radius: 10px; /* گوشه‌های گرد */
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* سایه فرم */
@@ -143,8 +144,8 @@
 
     #noteContainer {
         top: 3%; /* فاصله مناسب از بالای صفحه */
-        width: 70%; /* عرض باکس */
-        padding: 25px; /* فضای داخلی باکس */
+        width: 80%; /* عرض باکس */
+        padding: 20px; /* فضای داخلی باکس */
         background: rgba(255, 255, 255, 0.9); /* پس‌زمینه باکس */
         border-radius: 10px; /* گوشه‌های گرد */
         box-shadow: 0 0 30px rgba(255, 255, 255, 0.8); /* سایه درخشش */
@@ -240,21 +241,19 @@
         }
 
      #noteContainer {
-    position: relative; /* موقعیت نسبی */
     width: 80%; /* عرض باکس */
     max-width: 600px; /* حداکثر عرض */
     padding: 20px; /* فاصله داخلی */
     background: rgba(255, 255, 255, 0.9); /* پس‌زمینه شفاف */
     border-radius: 8px; /* گوشه‌های گرد */
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.8); /* سایه */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* سایه */
     font-family: 'Vazir', Arial, sans-serif; /* فونت مناسب */
     font-size: 14px; /* اندازه فونت */
-    line-height: 2; /* فاصله خطوط */
+    line-height: 1.8; /* فاصله خطوط */
     color: #333; /* رنگ متن */
-    animation: glow 0.5s infinite alternate; /* انیمیشن */
+    text-align: right; /* ترازبندی متن */
 }
 #briefForm {
-    position: relative; /* موقعیت نسبی */
     width: 80%; /* عرض فرم */
     max-width: 600px; /* حداکثر عرض فرم */
     padding: 20px; /* فاصله داخلی فرم */
@@ -262,6 +261,8 @@
     border-radius: 8px; /* گوشه‌های گرد */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه فرم */
     box-sizing: border-box; /* محاسبه دقیق فاصله‌ها */
+    direction: rtl; /* راست به چپ */
+    text-align: right; /* ترازبندی متن */
 }
 
 
