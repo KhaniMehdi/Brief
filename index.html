@@ -58,8 +58,10 @@
 }
 
         form {
-    max-width: 600px;
-    margin: 20px auto;
+    margin-top: 120px; /* فاصله بین فرم و باکس */
+    max-width: 600px; /* همان عرض فرم */
+    margin-left: auto; /* مرکز کردن فرم */
+    margin-right: auto; /* مرکز کردن فرم */
     background: rgba(255, 255, 255, 0.9);
     padding: 30px;
     direction: rtl;
@@ -176,12 +178,12 @@
         }
 
         #noteContainer {
-    position: absolute; /* برای تعیین موقعیت مطلق */
+    position: absolute; /* موقعیت مطلق */
     top: 20px; /* فاصله از بالای صفحه */
     left: 50%; /* مرکز کردن به صورت افقی */
-    transform: translate(-50%, 0); /* حذف تنظیمات عمودی برای فاصله */
-    width: calc(100% - 60px); /* عرض برابر با فرم، با فاصله از لبه‌ها */
-    max-width: 600px; /* حداکثر عرض فرم */
+    transform: translate(-50%, 0); /* حذف تنظیمات عمودی */
+    width: 100%; /* عرض 100 درصد */
+    max-width: 600px; /* حداکثر عرض با فرم یکسان */
     padding: 20px;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
@@ -193,6 +195,7 @@
     box-sizing: border-box;
     animation: glow 0.8s infinite alternate;
 }
+
 
         @keyframes glow {
             0% {
